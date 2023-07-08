@@ -1,0 +1,121 @@
+<h2>Add tag</h2>
+<button (click)="openAddTagPopup('digitalInput')">Add DI tag</button>
+<button (click)="openAddTagPopup('digitalOutput')">Add DO tag</button>
+<button (click)="openAddTagPopup('analogInput')">Add AI tag</button>
+<button (click)="openAddTagPopup('analogOutput')">Add AO tag</button>
+
+<h2>Tags</h2>
+<h3>DI</h3>
+<ul>
+  <li *ngFor="let digitalInput of digitalInputs">
+    <p>{{ digitalInput.description }}</p>
+    <span [ngClass]="{'icon-green': digitalInput.isScanning, 'icon-red': !digitalInput.isScanning}"></span>
+    <button (click)="turnDigitalInput(digitalInput.id)">ON/OFF SCAN</button>
+    <button (click)="deleteDigitalInput(digitalInput.id)">Remove</button>
+  </li>
+</ul>
+
+<h3>DO</h3>
+<ul>
+  <li *ngFor="let digitalOutput of digitalOutputs">
+    <p>{{ digitalOutput.description }}</p>
+    <p>{{ digitalOutput.initialValue }}</p>
+    <button (click)="deleteDigitalOutput(digitalOutput.id)">Remove</button>
+  </li>
+</ul>
+
+<h3>AI</h3>
+<ul>
+  <li *ngFor="let analogInput of analogInputs">
+    <p>{{ analogInput.description }}</p>
+    <span [ngClass]="{'icon-green': analogInput.isScanning, 'icon-red': !analogInput.isScanning}"></span>
+    <button (click)="turnAnalogInput(analogInput.id)">ON/OFF SCAN</button>
+    <button (click)="deleteAnalogInput(analogInput.id)">Remove</button>
+  </li>
+</ul>
+
+<h3>AO</h3>
+<ul>
+  <li *ngFor="let analogOutput of analogOutputs">
+    <p>{{ analogOutput.description }}</p>
+    <p>{{ analogOutput.initialValue }}</p>
+    <button (click)="deleteAnalogOutput(analogOutput.id)">Remove</button>
+  </li>
+</ul>
+
+<!-- Popup forms -->
+
+<!-- Analog Input Form -->
+<div class="popup" *ngIf="showAddTagPopup && tagType === 'analogInput'">
+    <h3>Add Analog Input Tag</h3>
+    <form (ngSubmit)="createAnalogInput()">
+        <label for="analogInputDescription">Description:</label>
+        <input type="text" id="analogInputDescription" name="analogInputDescription"
+            [(ngModel)]="analogInputForm.description">
+
+        <label for="analogInputScanTime">Scan Time:</label>
+        <input type="number" id="analogInputScanTime" name="analogInputScanTime" [(ngModel)]="analogInputForm.scanTime">
+        <label for="analogInputLowLimit">Low Limit:</label>
+        <input type="number" id="analogInputLowLimit" name="analogInputLowLimit" [(ngModel)]="analogInputForm.lowLimit">
+        <label for="analogInputHighLimit">High Limit:</label>
+        <input type="number" id="analogInputHighLimit" name="analogInputHighLimit"
+            [(ngModel)]="analogInputForm.highLimit">
+        <label for="analogInputUnit">Unit:</label>
+        <input type="text" id="analogInputUnit" name="analogInputUnit" [(ngModel)]="analogInputForm.unit">
+
+        <button type="submit">Add Analog Input Tag</button>
+        <button (click)="closeAddTagPopup()">Cancel</button>
+    </form>
+</div>
+
+<!-- Analog Output Form -->
+<div class="popup" *ngIf="showAddTagPopup && tagType === 'analogOutput'">
+    <h3>Add Analog Output Tag</h3>
+    <form (ngSubmit)="createAnalogOutput()">
+      <label for="analogOutputDescription">Description:</label>
+      <input type="text" id="analogOutputDescription" name="analogOutputDescription" [(ngModel)]="analogOutputForm.description">
+  
+      <label for="analogOutputInitialValue">Initial Value:</label>
+      <input type="number" id="analogOutputInitialValue" name="analogOutputInitialValue" [(ngModel)]="analogOutputForm.initialValue">
+      <label for="analogOutputLowLimit">Low Limit:</label>
+      <input type="number" id="analogOutputLowLimit" name="analogOutputLowLimit" [(ngModel)]="analogOutputForm.lowLimit">
+      <label for="analogOutputHighLimit">High Limit:</label>
+      <input type="number" id="analogOutputHighLimit" name="analogOutputHighLimit" [(ngModel)]="analogOutputForm.highLimit">
+      <label for="analogOutputUnit">Unit:</label>
+      <input type="text" id="analogOutputUnit" name="analogOutputUnit" [(ngModel)]="analogOutputForm.unit">
+  
+      <button type="submit">Add Analog Output Tag</button>
+      <button (click)="closeAddTagPopup()">Cancel</button>
+    </form>
+  </div>
+  
+  <!-- Digital Input Form -->
+  <div class="popup" *ngIf="showAddTagPopup && tagType === 'digitalInput'">
+    <h3>Add Digital Input Tag</h3>
+    <form (ngSubmit)="createDigitalInput()">
+      <label for="digitalInputDescription">Description:</label>
+      <input type="text" id="digitalInputDescription" name="digitalInputDescription" [(ngModel)]="digitalInputForm.description">
+  
+      <label for="digitalInputScanTime">Scan Time:</label>
+      <input type="number" id="digitalInputScanTime" name="digitalInputScanTime" [(ngModel)]="digitalInputForm.scanTime">
+  
+      <button type="submit">Add Digital Input Tag</button>
+      <button (click)="closeAddTagPopup()">Cancel</button>
+    </form>
+  </div>
+  
+  <!-- Digital Output Form -->
+  <div class="popup" *ngIf="showAddTagPopup && tagType === 'digitalOutput'">
+    <h3>Add Digital Output Tag</h3>
+    <form (ngSubmit)="createDigitalOutput()">
+      <label for="digitalOutputDescription">Description:</label>
+      <input type="text" id="digitalOutputDescription" name="digitalOutputDescription" [(ngModel)]="digitalOutputForm.description">
+  
+      <label for="digitalOutputInitialValue">Initial Value:</label>
+      <input type="number" id="digitalOutputInitialValue" name="digitalOutputInitialValue" [(ngModel)]="digitalOutputForm.initialValue">
+  
+      <button type="submit">Add Digital Output Tag</button>
+      <button (click)="closeAddTagPopup()">Cancel</button>
+    </form>
+  </div>
+

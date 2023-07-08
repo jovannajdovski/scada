@@ -55,7 +55,7 @@ namespace webapi.Controllers
         {
             var ioAdress = new IOAdress
             {
-                Type = digitalInputDTO.ValueType
+                Type = "bool"
             };
 
             _ioAdressRepository.Add(ioAdress);
@@ -119,7 +119,7 @@ namespace webapi.Controllers
         {
             var ioAdress = new IOAdress
             {
-                Type = digitalOutputDTO.ValueType
+                Type = "bool"
             };
 
             _ioAdressRepository.Add(ioAdress);
@@ -167,7 +167,7 @@ namespace webapi.Controllers
         {
             var ioAdress = new IOAdress
             {
-                Type = analogInputDTO.ValueType
+                Type = "double"
             };
 
             _ioAdressRepository.Add(ioAdress);
@@ -235,7 +235,7 @@ namespace webapi.Controllers
         {
             var ioAdress = new IOAdress
             {
-                Type = analogOutputDTO.ValueType
+                Type = "double"
             };
 
             _ioAdressRepository.Add(ioAdress);
