@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using webapi.model;
+
 namespace webapi.Controllers;
 
 [ApiController]
@@ -32,7 +35,15 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("random", Name = "GetRandomWeatherForecast")]
     public object GetRandom()
     {
-        ScadaDBContext dBContext = new ScadaDBContext();
-        return dBContext.Alarms;
+        object lockObject=new object();
+        ScadaDBContext scadaDBContext = new ScadaDBContext();
+        IOAdress adress = new IOAdress(1, "double", "0505");
+        
+        
+        scadaDBContext.Adresses.Add(adress);
+        scadaDBContext.SaveChanges();
+        //SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(lockObject);
+        //simulationDriver.SimulateWaterFillingAsync();
+        return null;
     }
 }

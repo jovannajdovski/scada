@@ -25,6 +25,21 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AnalogInputs",
                 columns: table => new
                 {
@@ -117,6 +132,27 @@ namespace webapi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RealTimeUnits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    HighLimit = table.Column<double>(type: "REAL", nullable: false),
+                    LowLimit = table.Column<double>(type: "REAL", nullable: false),
+                    AdressId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RealTimeUnits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RealTimeUnits_Adresses_AdressId",
+                        column: x => x.AdressId,
+                        principalTable: "Adresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Alarms",
                 columns: table => new
                 {
@@ -137,7 +173,16 @@ namespace webapi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Username", "Password", "Type" },
+                values: new object[] { "admin", "admin", 0 });
 
+            // Add user user
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Username", "Password", "Type" },
+                values: new object[] { "user", "user", 1 });
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",
                 table: "Alarms",
@@ -162,6 +207,11 @@ namespace webapi.Migrations
                 name: "IX_DigitalOutputs_AdressId",
                 table: "DigitalOutputs",
                 column: "AdressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RealTimeUnits_AdressId",
+                table: "RealTimeUnits",
+                column: "AdressId");
         }
 
         /// <inheritdoc />
@@ -178,6 +228,12 @@ namespace webapi.Migrations
 
             migrationBuilder.DropTable(
                 name: "DigitalOutputs");
+
+            migrationBuilder.DropTable(
+                name: "RealTimeUnits");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "AnalogInputs");

@@ -178,6 +178,50 @@ namespace webapi.Migrations
                     b.ToTable("Adresses");
                 });
 
+            modelBuilder.Entity("webapi.model.RealTimeUnit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AdressId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("HighLimit")
+                        .HasColumnType("REAL");
+
+                    b.Property<double>("LowLimit")
+                        .HasColumnType("REAL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdressId");
+
+                    b.ToTable("RealTimeUnits");
+                });
+
+            modelBuilder.Entity("webapi.model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("webapi.model.Alarm", b =>
                 {
                     b.HasOne("webapi.model.AnalogInput", "AnalogInput")
@@ -223,6 +267,17 @@ namespace webapi.Migrations
                 });
 
             modelBuilder.Entity("webapi.model.DigitalOutput", b =>
+                {
+                    b.HasOne("webapi.model.IOAdress", "Adress")
+                        .WithMany()
+                        .HasForeignKey("AdressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adress");
+                });
+
+            modelBuilder.Entity("webapi.model.RealTimeUnit", b =>
                 {
                     b.HasOne("webapi.model.IOAdress", "Adress")
                         .WithMany()

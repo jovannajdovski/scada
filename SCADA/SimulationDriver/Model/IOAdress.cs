@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 
-namespace webapi.model
+namespace SimulationDriver.model
 {
 
     public class IOAdress
@@ -13,7 +13,7 @@ namespace webapi.model
         public int Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public IOAdress(int id, string type, string value)
+        public IOAdress(int id, string type, string value) 
         {
             Id = id;
             Type = type;

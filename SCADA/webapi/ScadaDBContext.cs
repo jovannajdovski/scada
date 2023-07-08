@@ -11,10 +11,13 @@ namespace webapi
         public DbSet<AnalogOutput> AnalogOutputs { get; set; }
         public DbSet<DigitalInput> DigitalInputs { get; set; }
         public DbSet<DigitalOutput> DigitalOutputs { get; set; }
+        public DbSet<RealTimeUnit> RealTimeUnits { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=database\\database.sqlite");
         }
+
     }
 }
