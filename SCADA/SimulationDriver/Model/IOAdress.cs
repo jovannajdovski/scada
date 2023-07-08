@@ -7,13 +7,13 @@ using System.Net;
 namespace SimulationDriver.model
 {
 
-    public class IOAdress
+    public class IOAddress
     {
         [Key]
         public int Id { get; set; }
         public string Type { get; set; }
         public string Value { get; set; }
-        public IOAdress(int id, string type, string value) 
+        public IOAddress(int id, string type, string value) 
         {
             Id = id;
             Type = type;

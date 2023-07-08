@@ -14,7 +14,7 @@ namespace SimulationDriver.model
         public int Id { get; set; }
         public double HighLimit { get; set; }
         public double LowLimit { get; set; }
-        public IOAdress Adress { get; set; }
+        public IOAddress Address { get; set; }
         
     }
 }

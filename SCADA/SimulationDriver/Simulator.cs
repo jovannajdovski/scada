@@ -17,9 +17,15 @@ namespace SimulationDriver
         public SimulationDriver(object lockObj) : base(lockObj)
         {
             dbContext = new SimulatorDBContext();
+            
         }
-
-        public void SimulateWaterFillingAsync()
+        public void StartSimulation()
+        {
+            SimulateWaterFillingAsync();
+            SimulateGasFillingAsync();
+            SimulateCoalFillingAsync();
+        }
+        private void SimulateWaterFillingAsync()
         {
             Task.Run(async () =>
             {
@@ -32,18 +38,16 @@ namespace SimulationDriver
                 {
                     double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
 
-                    IOAdress adress = new IOAdress(1, "double", value.ToString());
+                    IOAddress address = new IOAddress(1, "double", value.ToString());
 
                     lock (lockObj)
                     {
                         
-                        var existingEntity = dbContext.Adresses.FirstOrDefault(a => a.Id == adress.Id);
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
                         
                         if (existingEntity != null)
                         {
-                            Console.WriteLine(existingEntity.Id);
-                            Console.WriteLine(existingEntity.Value);
-                            existingEntity.Type = adress.Type;
+                            existingEntity.Type = address.Type;
                             double sin = Math.Sin(2 * Math.PI * new Random().NextDouble()*frequency * time);
                             if (sin < 0)
                                 existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
@@ -53,11 +57,10 @@ namespace SimulationDriver
                         }
                         else
                         {
-                            dbContext.Adresses.Add(adress);
+                            dbContext.Addresses.Add(address);
                         }
 
                         dbContext.SaveChanges();
-                        Console.WriteLine(existingEntity.Value);
                     }
 
                     time += 1;
@@ -68,7 +71,7 @@ namespace SimulationDriver
             });
             
         }
-        public void SimulateGasFillingAsync()
+        private void SimulateGasFillingAsync()
         {
             Task.Run(async () =>
             {
@@ -80,17 +83,15 @@ namespace SimulationDriver
                 while (true)
                 {
                     double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
-                    IOAdress adress = new IOAdress(2, "double", value.ToString());
+                    IOAddress address = new IOAddress(2, "double", value.ToString());
                     lock (lockObj)
                     {
 
-                        var existingEntity = dbContext.Adresses.FirstOrDefault(a => a.Id == adress.Id);
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
 
                         if (existingEntity != null)
                         {
-                            Console.WriteLine(existingEntity.Id);
-                            Console.WriteLine(existingEntity.Value);
-                            existingEntity.Type = adress.Type;
+                            existingEntity.Type = address.Type;
                             double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
                             if (sin < 0)
                                 existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
@@ -100,11 +101,10 @@ namespace SimulationDriver
                         }
                         else
                         {
-                            dbContext.Adresses.Add(adress);
+                            dbContext.Addresses.Add(address);
                         }
 
                         dbContext.SaveChanges();
-                        Console.WriteLine(existingEntity.Value);
                     }
 
                     time += 1;
@@ -113,7 +113,7 @@ namespace SimulationDriver
                 }
             });
         }
-        public void SimulateCoalFillingAsync()
+        private void SimulateCoalFillingAsync()
         {
             Task.Run(async () =>
             {
@@ -125,17 +125,15 @@ namespace SimulationDriver
                 while (true)
                 {
                     double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
-                    IOAdress adress = new IOAdress(3, "double", value.ToString());
+                    IOAddress address = new IOAddress(3, "double", value.ToString());
                     lock (lockObj)
                     {
 
-                        var existingEntity = dbContext.Adresses.FirstOrDefault(a => a.Id == adress.Id);
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
 
                         if (existingEntity != null)
                         {
-                            Console.WriteLine(existingEntity.Id);
-                            Console.WriteLine(existingEntity.Value);
-                            existingEntity.Type = adress.Type;
+                            existingEntity.Type = address.Type;
                             double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
                             if (sin < 0)
                                 existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
@@ -145,11 +143,10 @@ namespace SimulationDriver
                         }
                         else
                         {
-                            dbContext.Adresses.Add(adress);
+                            dbContext.Addresses.Add(address);
                         }
 
                         dbContext.SaveChanges();
-                        Console.WriteLine(existingEntity.Value);
                     }
 
 
@@ -159,25 +156,25 @@ namespace SimulationDriver
                 }
             });
         }
-        public async Task SimulatePoolValveAsync()
+        private async Task SimulatePoolValveAsync()
         {
             double time = 0;
 
             while (true)
             {
                 bool value = Math.Abs(Math.Sin(2 * Math.PI * time)) > 0.5 ? true:false ;
-                IOAdress adress = new IOAdress(4,"boolean", value.ToString());
+                IOAddress address = new IOAddress(4,"boolean", value.ToString());
                 lock (lockObj)
                 {
-                    var existingEntity = dbContext.Adresses.FirstOrDefault(a => a.Id == adress.Id);
+                    var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
                     if (existingEntity != null)
                     {
-                        existingEntity.Type = adress.Type;
-                        existingEntity.Value = adress.Value;
+                        existingEntity.Type = address.Type;
+                        existingEntity.Value = address.Value;
                     }
                     else
                     {
-                        dbContext.Adresses.Add(adress);
+                        dbContext.Addresses.Add(address);
                     }
 
                     dbContext.SaveChanges();

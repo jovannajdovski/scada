@@ -34,6 +34,7 @@ export class LoginComponent {
         }
       },
       error => {
+        alert("Invalid credentials")
         console.error('An error occurred during login:', error);
       }
     );

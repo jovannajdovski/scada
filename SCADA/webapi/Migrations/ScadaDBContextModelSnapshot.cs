@@ -47,7 +47,7 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -72,7 +72,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("AnalogInputs");
                 });
@@ -83,7 +83,7 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -105,7 +105,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("AnalogOutputs");
                 });
@@ -116,7 +116,7 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -131,7 +131,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("DigitalInputs");
                 });
@@ -142,7 +142,7 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -154,12 +154,12 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("DigitalOutputs");
                 });
 
-            modelBuilder.Entity("webapi.model.IOAdress", b =>
+            modelBuilder.Entity("webapi.model.IOAddress", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -175,7 +175,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Adresses");
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("webapi.model.RealTimeUnit", b =>
@@ -184,7 +184,7 @@ namespace webapi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AdressId")
+                    b.Property<int>("AddressId")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("HighLimit")
@@ -195,7 +195,7 @@ namespace webapi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdressId");
+                    b.HasIndex("AddressId");
 
                     b.ToTable("RealTimeUnits");
                 });
@@ -235,57 +235,57 @@ namespace webapi.Migrations
 
             modelBuilder.Entity("webapi.model.AnalogInput", b =>
                 {
-                    b.HasOne("webapi.model.IOAdress", "Adress")
+                    b.HasOne("webapi.model.IOAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("webapi.model.AnalogOutput", b =>
                 {
-                    b.HasOne("webapi.model.IOAdress", "Adress")
+                    b.HasOne("webapi.model.IOAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("webapi.model.DigitalInput", b =>
                 {
-                    b.HasOne("webapi.model.IOAdress", "Adress")
+                    b.HasOne("webapi.model.IOAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("webapi.model.DigitalOutput", b =>
                 {
-                    b.HasOne("webapi.model.IOAdress", "Adress")
+                    b.HasOne("webapi.model.IOAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("webapi.model.RealTimeUnit", b =>
                 {
-                    b.HasOne("webapi.model.IOAdress", "Adress")
+                    b.HasOne("webapi.model.IOAddress", "Address")
                         .WithMany()
-                        .HasForeignKey("AdressId")
+                        .HasForeignKey("AddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Adress");
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("webapi.model.AnalogInput", b =>

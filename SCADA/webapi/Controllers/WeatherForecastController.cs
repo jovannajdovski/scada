@@ -37,10 +37,10 @@ public class WeatherForecastController : ControllerBase
     {
         object lockObject=new object();
         ScadaDBContext scadaDBContext = new ScadaDBContext();
-        IOAdress adress = new IOAdress(1, "double", "0505");
+        IOAddress address = new IOAddress(1, "double", "0505");
         
         
-        scadaDBContext.Adresses.Add(adress);
+        scadaDBContext.Addresses.Add(address);
         scadaDBContext.SaveChanges();
         //SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(lockObject);
         //simulationDriver.SimulateWaterFillingAsync();

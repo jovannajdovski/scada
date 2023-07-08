@@ -1,3 +1,4 @@
+using SimulationDriver;
 using webapi;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,5 +30,6 @@ using (var db = new ScadaDBContext())
     db.Database.EnsureCreated();
     db.SaveChanges();
 }
-
+SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(new object());
+simulationDriver.StartSimulation();
 app.Run();

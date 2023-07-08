@@ -1,1 +1,31 @@
-<p>trending works!</p>
+<div class="trending-container">
+  <nav class="navbar">
+    <h2>Trending Data</h2>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </nav>
+  <div class="content">
+    <table class="trending-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Address</th>
+          <th>Value</th>
+          <th>Limit</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of trendingData">
+          <td>{{ item.id }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.address }}</td>
+          <td>{{ item.value }}</td>
+          <td>{{ item.limit }}</td>
+          <td>{{ item.unit }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+</div>

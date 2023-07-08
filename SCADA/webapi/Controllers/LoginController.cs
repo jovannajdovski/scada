@@ -20,8 +20,6 @@ public class LoginController : ControllerBase
     [HttpPost()]
     public IActionResult Login(LoginModel model)
     {
-        Console.WriteLine($"Username: {model.Username}");
-        Console.WriteLine($"Password: {model.Password}");
         DbSet<User> users = new ScadaDBContext().Users;
         User user = users.FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
 

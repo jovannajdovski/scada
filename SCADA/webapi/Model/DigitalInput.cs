@@ -12,7 +12,8 @@ namespace webapi.model
         [Key]
         public int Id { get; set; }
         public string Description { get; set; }
-        public IOAdress Adress { get; set; }
+        public int AddressId { get; set; }
+        public IOAddress Address { get; set; }
         public double ScanTime { get; set; }
         public bool IsScanning { get; set; }
 

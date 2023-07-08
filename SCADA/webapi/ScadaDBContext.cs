@@ -6,7 +6,7 @@ namespace webapi
     public class ScadaDBContext : DbContext
     {
         public DbSet<Alarm> Alarms { get; set; }
-        public DbSet<IOAdress> Adresses { get; set; }
+        public DbSet<IOAddress> Addresses { get; set; }
         public DbSet<AnalogInput> AnalogInputs { get; set; }
         public DbSet<AnalogOutput> AnalogOutputs { get; set; }
         public DbSet<DigitalInput> DigitalInputs { get; set; }
@@ -18,6 +18,26 @@ namespace webapi
         {
             optionsBuilder.UseSqlite("Data Source=database\\database.sqlite");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AnalogInput>()
+                .HasOne(ai => ai.Address)
+                .WithMany()
+                .HasForeignKey(ai => ai.AddressId);
+            modelBuilder.Entity<DigitalInput>()
+                .HasOne(ai => ai.Address)
+                .WithMany()
+                .HasForeignKey(ai => ai.AddressId);
+            modelBuilder.Entity<AnalogOutput>()
+                .HasOne(ai => ai.Address)
+                .WithMany()
+                .HasForeignKey(ai => ai.AddressId);
+            modelBuilder.Entity<DigitalOutput>()
+                .HasOne(ai => ai.Address)
+                .WithMany()
+                .HasForeignKey(ai => ai.AddressId);
+        }
+
 
     }
 }
