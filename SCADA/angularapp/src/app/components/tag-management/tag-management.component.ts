@@ -39,14 +39,14 @@ export class TagManagementComponent {
   }
 
   loadAnalogInputs() {
-    this.http.get<DigitalInput[]>('/api/Tag/AnalogInputs').subscribe(data => {
-      this.digitalInputs = data;
+    this.http.get<AnalogInput[]>('/api/Tag/AnalogInputs').subscribe(data => {
+      this.analogInputs = data;
     });
   }
 
   loadAnalogOutputs() {
-    this.http.get<DigitalOutput[]>('/api/Tag/AnalogOutputs').subscribe(data => {
-      this.digitalOutputs = data;
+    this.http.get<AnalogOutput[]>('/api/Tag/AnalogOutputs').subscribe(data => {
+      this.analogOutputs = data;
     });
   }
 
@@ -152,6 +152,7 @@ export class TagManagementComponent {
     this.http.post<AnalogInput>(url, this.analogInputForm).subscribe((response) => {
       console.log('Analog Input tag created successfully:', response);
       this.analogInputs.push(response); // Update the analogInputs list with the new tag
+      this.showAddTagPopup = false;
     }, (error) => {
       console.error('Error creating Analog Input tag:', error);
     });
@@ -170,6 +171,7 @@ export class TagManagementComponent {
     this.http.post<AnalogOutput>(url, this.analogOutputForm).subscribe((response) => {
       console.log('Analog Output tag created successfully:', response);
       this.analogOutputs.push(response); // Update the analogOutputs list with the new tag
+      this.showAddTagPopup = false;
     }, (error) => {
       console.error('Error creating Analog Output tag:', error);
     });
@@ -188,6 +190,7 @@ export class TagManagementComponent {
     this.http.post<DigitalInput>(url, this.digitalInputForm).subscribe((response) => {
       console.log('Digital Input tag created successfully:', response);
       this.digitalInputs.push(response); // Update the digitalInputs list with the new tag
+      this.showAddTagPopup = false;
     }, (error) => {
       console.error('Error creating Digital Input tag:', error);
     });
@@ -203,6 +206,7 @@ export class TagManagementComponent {
     this.http.post<DigitalOutput>(url, this.digitalOutputForm).subscribe((response) => {
       console.log('Digital Output tag created successfully:', response);
       this.digitalOutputs.push(response); // Update the digitalOutputs list with the new tag
+      this.showAddTagPopup = false;
     }, (error) => {
       console.error('Error creating Digital Output tag:', error);
     });
