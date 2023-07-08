@@ -15,7 +15,5 @@ namespace webapi.model
         public IOAdress Adress { get; set; }
         public double ScanTime { get; set; }
         public bool IsScanning { get; set; }
-
-
     }
 }
