@@ -30,7 +30,7 @@ export class LoginComponent {
         if (userType == 'user') {
           this.router.navigate(['/trending']);
         } else {
-          this.router.navigate(['/admin']);
+          this.router.navigate(['/tags']);
         }
       },
       error => {

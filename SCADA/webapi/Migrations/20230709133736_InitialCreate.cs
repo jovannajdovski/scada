@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitalCreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -161,7 +162,8 @@ namespace webapi.Migrations
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Limit = table.Column<double>(type: "REAL", nullable: false),
-                    AnalogInputId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AnalogInputId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,6 +174,46 @@ namespace webapi.Migrations
                         principalTable: "AnalogInputs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TagValues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TagId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
+                    Value = table.Column<string>(type: "TEXT", nullable: true),
+                    AnalogInputId = table.Column<int>(type: "INTEGER", nullable: true),
+                    AnalogOutputId = table.Column<int>(type: "INTEGER", nullable: true),
+                    DigitalInputId = table.Column<int>(type: "INTEGER", nullable: true),
+                    DigitalOutputId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagValues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TagValues_AnalogInputs_AnalogInputId",
+                        column: x => x.AnalogInputId,
+                        principalTable: "AnalogInputs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TagValues_AnalogOutputs_AnalogOutputId",
+                        column: x => x.AnalogOutputId,
+                        principalTable: "AnalogOutputs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TagValues_DigitalInputs_DigitalInputId",
+                        column: x => x.DigitalInputId,
+                        principalTable: "DigitalInputs",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TagValues_DigitalOutputs_DigitalOutputId",
+                        column: x => x.DigitalOutputId,
+                        principalTable: "DigitalOutputs",
+                        principalColumn: "Id");
                 });
             migrationBuilder.InsertData(
                 table: "Users",
@@ -205,7 +247,6 @@ namespace webapi.Migrations
                values: new object[] { "Coal amount in furnace", 3, 1.0, true, 0.0, 100.0, "kg" });
 
 
-
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",
                 table: "Alarms",
@@ -235,6 +276,26 @@ namespace webapi.Migrations
                 name: "IX_RealTimeUnits_AddressId",
                 table: "RealTimeUnits",
                 column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagValues_AnalogInputId",
+                table: "TagValues",
+                column: "AnalogInputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagValues_AnalogOutputId",
+                table: "TagValues",
+                column: "AnalogOutputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagValues_DigitalInputId",
+                table: "TagValues",
+                column: "DigitalInputId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TagValues_DigitalOutputId",
+                table: "TagValues",
+                column: "DigitalOutputId");
         }
 
         /// <inheritdoc />
@@ -244,6 +305,18 @@ namespace webapi.Migrations
                 name: "Alarms");
 
             migrationBuilder.DropTable(
+                name: "RealTimeUnits");
+
+            migrationBuilder.DropTable(
+                name: "TagValues");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "AnalogInputs");
+
+            migrationBuilder.DropTable(
                 name: "AnalogOutputs");
 
             migrationBuilder.DropTable(
@@ -251,15 +324,6 @@ namespace webapi.Migrations
 
             migrationBuilder.DropTable(
                 name: "DigitalOutputs");
-
-            migrationBuilder.DropTable(
-                name: "RealTimeUnits");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "AnalogInputs");
 
             migrationBuilder.DropTable(
                 name: "Addresses");

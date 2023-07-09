@@ -53,52 +53,58 @@ namespace webapi.Controllers
 
     }
     public class TrendingResponse
-{
-    public int id { get; set; }
-    public string description { get; set; }
-    public int address { get; set; }
-    public string value { get; set; }
-    public string limit { get; set; }
-    public string unit { get; set; }
-    public double scanTime { get; set; }
-    public TrendingResponse(int id, string description, int address, string value, string limit, string unit)
     {
-        this.id = id;
-        this.description = description;
-        this.address = address;
-        this.value = value;
-        this.limit = limit;
-        this.unit = unit;
+        public int id { get; set; }
+        public string description { get; set; }
+        public int address { get; set; }
+        public string value { get; set; }
+        public string limit { get; set; }
+        public string unit { get; set; }
+        public double scanTime { get; set; }
+        public TrendingResponse(int id, string description, int address, string value, string limit, string unit)
+        {
+            this.id = id;
+            this.description = description;
+            this.address = address;
+            this.value = value;
+            this.limit = limit;
+            this.unit = unit;
+        }
+        public TrendingResponse(AnalogInput analogInput)
+        {
+            this.id = analogInput.Id;
+            this.scanTime=analogInput.ScanTime;
+            this.description= analogInput.Description;
+            this.address = analogInput.Address.Id;
+            if (analogInput.Address.Type == "double")
+            {
+                Console.WriteLine(analogInput.Address.Id);
+
+                Console.WriteLine(analogInput.Address.Value);
+                this.value = Math.Round(Double.Parse(analogInput.Address.Value), 4).ToString();
+            }
+        
+            else if (analogInput.Address.Type == null)
+                this.value = "/";
+            else
+                this.value = analogInput.Address.Value;
+            this.limit=analogInput.LowLimit.ToString()+" - "+analogInput.HighLimit.ToString();
+            this.unit = analogInput.Unit;
+        }
+        public TrendingResponse(DigitalInput digitalInput)
+        {
+            this.id = digitalInput.Id;
+            this.scanTime= digitalInput.ScanTime;
+            this.description = digitalInput.Description;
+            this.address = digitalInput.Address.Id;
+            if (digitalInput.Address.Type == null)
+                this.value = "/";
+            else
+                this.value = digitalInput.Address.Value;
+            this.limit = "/";
+            this.unit = "/";
+        }
     }
-    public TrendingResponse(AnalogInput analogInput)
-    {
-        this.id = analogInput.Id;
-        this.scanTime=analogInput.ScanTime;
-        this.description= analogInput.Description;
-        this.address = analogInput.Address.Id;
-        if (analogInput.Address.Type == "double")
-            this.value = Math.Round(Double.Parse(analogInput.Address.Value), 4).ToString();
-        else if (analogInput.Address.Type == null)
-            this.value = "/";
-        else
-            this.value = analogInput.Address.Value;
-        this.limit=analogInput.LowLimit.ToString()+" - "+analogInput.HighLimit.ToString();
-        this.unit = analogInput.Unit;
-    }
-    public TrendingResponse(DigitalInput digitalInput)
-    {
-        this.id = digitalInput.Id;
-        this.scanTime= digitalInput.ScanTime;
-        this.description = digitalInput.Description;
-        this.address = digitalInput.Address.Id;
-        if (digitalInput.Address.Type == null)
-            this.value = "/";
-        else
-            this.value = digitalInput.Address.Value;
-        this.limit = "/";
-        this.unit = "/";
-    }
-}
 
 }
 

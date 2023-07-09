@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using webapi.model;
+using webapi.Model;
 
 namespace webapi
 {
@@ -13,6 +14,7 @@ namespace webapi
         public DbSet<DigitalOutput> DigitalOutputs { get; set; }
         public DbSet<RealTimeUnit> RealTimeUnits { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<TagValue> TagValues { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

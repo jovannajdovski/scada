@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using webapi.Enum;
+using webapi.Model;
 
 namespace webapi.model
 {
@@ -15,5 +16,7 @@ namespace webapi.model
         //public int AddressId { get; set; }
         public IOAddress Address { get; set; }
         public DigitalValueType InitialValue { get; set; }
+
+        public virtual List<TagValue> Values { get; set; }
     }
 }
