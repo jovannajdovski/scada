@@ -13,12 +13,14 @@ builder.Services.AddScoped<IDigitalOutputRepository, DigitalOutputRepository>();
 builder.Services.AddScoped<IAnalogInputRepository, AnalogInputRepository>();
 builder.Services.AddScoped<IAnalogOutputRepository, AnalogOutputRepository>();
 builder.Services.AddScoped<IIOAdressRepository, IOAdressRepository>();
+builder.Services.AddScoped<ITagValueRepository, TagValueRepository>();
 
 // Register services
 builder.Services.AddScoped<IDigitalInputService, DigitalInputService>();
 builder.Services.AddScoped<IDigitalOutputService, DigitalOutputService>();
 builder.Services.AddScoped<IAnalogInputService, AnalogInputService>();
 builder.Services.AddScoped<IAnalogOutputService, AnalogOutputService>();
+builder.Services.AddScoped<ITagValueService, TagValueService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

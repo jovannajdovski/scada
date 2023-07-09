@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using webapi.DTO;
 using webapi.model;
+using webapi.Model;
 using webapi.Repositories;
 using webapi.Services;
 
@@ -65,7 +66,8 @@ namespace webapi.Controllers
                 Description = digitalInputDTO.Description,
                 ScanTime = digitalInputDTO.ScanTime,
                 Adress = ioAdress,
-                IsScanning = true
+                IsScanning = true,
+                Values = new List<TagValue>()
             };
 
             _digitalInputService.CreateDigitalInput(digitalInput);
@@ -128,7 +130,8 @@ namespace webapi.Controllers
             {
                 Description = digitalOutputDTO.Description,
                 InitialValue = digitalOutputDTO.InitialValue,
-                Adress = ioAdress
+                Adress = ioAdress,
+                Values = new List<TagValue>()
             };
 
             _digitalOutputService.CreateDigitalOutput(digitalOutput);
@@ -180,7 +183,8 @@ namespace webapi.Controllers
                 HighLimit = analogInputDTO.HighLimit,
                 Unit = analogInputDTO.Unit,
                 Adress = ioAdress,
-                IsScanning = true
+                IsScanning = true,
+                Values = new List<TagValue>()
             };
 
             _analogInputService.CreateAnalogInput(analogInput);
@@ -247,7 +251,8 @@ namespace webapi.Controllers
                 LowLimit = analogOutputDTO.LowLimit,
                 HighLimit = analogOutputDTO.HighLimit,
                 Unit = analogOutputDTO.Unit,
-                Adress = ioAdress
+                Adress = ioAdress,
+                Values = new List<TagValue>()
             };
 
             _analogOutputService.CreateAnalogOutput(analogOutput);

@@ -16,6 +16,6 @@ namespace webapi.model
         public AlarmPriority Priority { get; set; }
         public double Limit { get; set; }
         public AnalogInput AnalogInput { get; set; }
-
+        public DateTime Date { get; set; }
     }
 }
