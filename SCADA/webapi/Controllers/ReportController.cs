@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using webapi.Enum;
 using webapi.model;
 using webapi.Model;
 using webapi.Services;
@@ -13,13 +14,37 @@ namespace webapi.Controllers
         private readonly IAnalogInputService _analogInputService;
         private readonly IDigitalInputService _digitalInputService;
         private readonly ITagValueService _tagValueService;
+        private readonly IAlarmService _alarmService;
 
-        public ReportController(IAnalogInputService analogInputService, IDigitalInputService digitalInputService, ITagValueService tagValueService)
+        public ReportController(IAnalogInputService analogInputService,
+            IDigitalInputService digitalInputService,
+            ITagValueService tagValueService,
+            IAlarmService alarmService)
         {
             _analogInputService = analogInputService;
             _digitalInputService = digitalInputService;
             _tagValueService = tagValueService;
+            _alarmService = alarmService;
         }
+
+        // Alarm reports
+
+        [HttpGet("alarms")]
+        public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        {
+            List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
+            return Ok(alarms);
+        }
+
+        [HttpGet("alarms/{priority}")]
+        public IActionResult GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true)
+        {
+            List<Alarm> alarms = _alarmService.GetAlarmsByPriority(priority, isAscending);
+            return Ok(alarms);
+        }
+
+
+        // Tag reports
 
         [HttpGet("tagvalues")]
         public IActionResult GetAllTagValues(DateTime startTime, DateTime endTime, bool isAscending = true)
