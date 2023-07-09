@@ -11,7 +11,7 @@ using webapi;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ScadaDBContext))]
-    [Migration("20230709133736_InitialCreate")]
+    [Migration("20230709161947_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

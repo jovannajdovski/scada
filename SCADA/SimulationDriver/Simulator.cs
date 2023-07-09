@@ -201,27 +201,29 @@ namespace SimulationDriver
         }
         public void StartSimulation()
         {
+            Console.WriteLine("rtu sim");
             Task.Run(async () =>
             {
-                DbSet<RealTimeUnit> realTimeUnits;
+                List<RealTimeUnit> realTimeUnits;
                 double time = 0;
-                
+                Random r = new Random();
                 while (true)
                 {
-                    realTimeUnits = dbContext.RealTimeUnits;
-                    foreach (RealTimeUnit realTimeUnit in realTimeUnits)
+                    
+                    realTimeUnits = dbContext.RealTimeUnits.Include(rt => rt.Address).ToList();
+                    foreach (var realTimeUnit in realTimeUnits)
                     {
                         lock (lockObj)
                         {
                             double min = realTimeUnit.LowLimit;
                             double max = realTimeUnit.HighLimit;
-                            double rand = (new Random().NextDouble() * 2 - 1) * (new Random().NextDouble() * (max - min) / 10);
+                            double rand = (r.NextDouble() * 2 - 1) * (r.NextDouble() * (max - min) / 10);
                             IOAddress address = dbContext.Addresses.FirstOrDefault(a => a.Id == realTimeUnit.Address.Id);
                             if (address != null)
                             {
                                 if (address.Type != null && address.Value != null)
                                 {
-                                    address.Value += rand;
+                                    address.Value = (double.Parse(address.Value)+rand).ToString();
                                     if (double.Parse(address.Value) > max)
                                         address.Value = max.ToString();
                                     if (double.Parse(address.Value) < min)
@@ -231,8 +233,6 @@ namespace SimulationDriver
                                 {
                                     address.Type = "double";
                                     address.Value = ((max+min)/2+rand).ToString();
-
-
                                 }
                                 dbContext.Update(address);
                             }
@@ -242,7 +242,6 @@ namespace SimulationDriver
                         }
                     }
                     time += 1;
-
                     await Task.Delay(1000);
 
                 }

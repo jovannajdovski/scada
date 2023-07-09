@@ -3,7 +3,8 @@ export interface AnalogInputCreateDTO {
     scanTime: number;
     lowLimit: number;
     highLimit: number;
-    unit: string;
+  unit: string;
+  AddressId: number;
   }
 
   export interface AnalogOutputCreateDTO {
@@ -12,14 +13,17 @@ export interface AnalogInputCreateDTO {
     lowLimit: number;
     highLimit: number;
     unit: string;
+    AddressId: number;
   }
 
   export interface DigitalInputCreateDTO {
     description: string;
     scanTime: number;
+    AddressId: number;
   }
 
   export interface DigitalOutputCreateDTO {
     description: string;
     initialValue: boolean;
+    AddressId: number;
   }

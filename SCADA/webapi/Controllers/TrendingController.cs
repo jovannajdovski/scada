@@ -77,13 +77,7 @@ namespace webapi.Controllers
             this.description= analogInput.Description;
             this.address = analogInput.Address.Id;
             if (analogInput.Address.Type == "double")
-            {
-                Console.WriteLine(analogInput.Address.Id);
-
-                Console.WriteLine(analogInput.Address.Value);
                 this.value = Math.Round(Double.Parse(analogInput.Address.Value), 4).ToString();
-            }
-        
             else if (analogInput.Address.Type == null)
                 this.value = "/";
             else

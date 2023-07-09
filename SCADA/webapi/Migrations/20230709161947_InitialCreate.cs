@@ -247,6 +247,7 @@ namespace webapi.Migrations
                values: new object[] { "Coal amount in furnace", 3, 1.0, true, 0.0, 100.0, "kg" });
 
 
+
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",
                 table: "Alarms",

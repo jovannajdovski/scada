@@ -14,7 +14,7 @@ namespace webapi.model
         public int Id { get; set; }
         public double HighLimit { get; set; }
         public double LowLimit { get; set; }
-        //public int AddressId { get; set; }
+        public int AddressId { get; set; }
         public IOAddress Address { get; set; }
         public RealTimeUnit()
         {
@@ -25,6 +25,8 @@ namespace webapi.model
             HighLimit = highLimit;
             LowLimit = lowLimit;
             Address = address;
+            Console.WriteLine("setovan" + address.Id);
+            AddressId = address.Id;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using webapi.DTO;
 using webapi.model;
 using webapi.Model;
@@ -54,25 +55,25 @@ namespace webapi.Controllers
         [HttpPost("DigitalInputs")]
         public ActionResult<DigitalInput> CreateDigitalInput(DigitalInputCreateDTO digitalInputDTO)
         {
-            var ioAddress = new IOAddress
+            IOAddress ioAddress = _ioAddressRepository.GetById(digitalInputDTO.AddressId);
+            if (ioAddress != null)
             {
-                Type = "bool"
-            };
 
-            _ioAddressRepository.Add(ioAddress);
+                var digitalInput = new DigitalInput
+                {
+                    Description = digitalInputDTO.Description,
+                    ScanTime = digitalInputDTO.ScanTime,
+                    Address = ioAddress,
+                    IsScanning = true,
+                    Values = new List<TagValue>()
+                };
 
-            var digitalInput = new DigitalInput
-            {
-                Description = digitalInputDTO.Description,
-                ScanTime = digitalInputDTO.ScanTime,
-                Address = ioAddress,
-                IsScanning = true,
-                Values = new List<TagValue>()
-            };
+                _digitalInputService.CreateDigitalInput(digitalInput);
 
-            _digitalInputService.CreateDigitalInput(digitalInput);
-
-            return Ok(digitalInput);
+                return Ok(digitalInput);
+            }
+            else
+                return NotFound("Address not found");
         }
 
         [HttpDelete("DigitalInputs/{id}")]
@@ -119,24 +120,25 @@ namespace webapi.Controllers
         [HttpPost("DigitalOutputs")]
         public ActionResult<DigitalOutput> CreateDigitalOutput(DigitalOutputCreateDTO digitalOutputDTO)
         {
-            var ioAddress = new IOAddress
+            IOAddress ioAddress = _ioAddressRepository.GetById(digitalOutputDTO.AddressId);
+            if (ioAddress != null)
             {
-                Type = "bool"
-            };
+                var digitalOutput = new DigitalOutput
+                {
+                    Description = digitalOutputDTO.Description,
+                    InitialValue = digitalOutputDTO.InitialValue,
+                    Address = ioAddress,
+                    Values = new List<TagValue>()
+                };
 
-            _ioAddressRepository.Add(ioAddress);
+                _digitalOutputService.CreateDigitalOutput(digitalOutput);
 
-            var digitalOutput = new DigitalOutput
-            {
-                Description = digitalOutputDTO.Description,
-                InitialValue = digitalOutputDTO.InitialValue,
-                Address = ioAddress,
-                Values = new List<TagValue>()
-            };
+                return Ok(digitalOutput);
+            }
+            else
+                return NotFound("Address not found");
 
-            _digitalOutputService.CreateDigitalOutput(digitalOutput);
 
-            return Ok(digitalOutput);
         }
 
         [HttpDelete("DigitalOutputs/{id}")]
@@ -168,28 +170,28 @@ namespace webapi.Controllers
         [HttpPost("AnalogInputs")]
         public ActionResult<AnalogInput> CreateAnalogInput(AnalogInputCreateDTO analogInputDTO)
         {
-            var ioAddress = new IOAddress
+            IOAddress ioAddress = _ioAddressRepository.GetById(analogInputDTO.AddressId);
+            if (ioAddress != null)
             {
-                Type = "double"
-            };
+                var analogInput = new AnalogInput
+                {
+                    Description = analogInputDTO.Description,
+                    ScanTime = analogInputDTO.ScanTime,
+                    LowLimit = analogInputDTO.LowLimit,
+                    HighLimit = analogInputDTO.HighLimit,
+                    Unit = analogInputDTO.Unit,
+                    Address = ioAddress,
+                    IsScanning = true,
+                    Values = new List<TagValue>()
+                };
 
-            _ioAddressRepository.Add(ioAddress);
+                _analogInputService.CreateAnalogInput(analogInput);
 
-            var analogInput = new AnalogInput
-            {
-                Description = analogInputDTO.Description,
-                ScanTime = analogInputDTO.ScanTime,
-                LowLimit = analogInputDTO.LowLimit,
-                HighLimit = analogInputDTO.HighLimit,
-                Unit = analogInputDTO.Unit,
-                Address = ioAddress,
-                IsScanning = true,
-                Values = new List<TagValue>()
-            };
-
-            _analogInputService.CreateAnalogInput(analogInput);
-
-            return Ok(analogInput);
+                return Ok(analogInput);
+            }
+            else
+                return NotFound("Address not found");
+            
         }
 
         [HttpDelete("AnalogInputs/{id}")]
@@ -237,28 +239,28 @@ namespace webapi.Controllers
         [HttpPost("AnalogOutputs")]
         public ActionResult<AnalogOutput> CreateAnalogOutput(AnalogOutputCreateDTO analogOutputDTO)
         {
-            var ioAddress = new IOAddress
+            IOAddress ioAddress = _ioAddressRepository.GetById(analogOutputDTO.AddressId);
+            if (ioAddress != null)
             {
-                Type = "double"
-            };
+                var analogOutput = new AnalogOutput
+                {
+                    Description = analogOutputDTO.Description,
+                    InitialValue = analogOutputDTO.InitialValue,
+                    LowLimit = analogOutputDTO.LowLimit,
+                    HighLimit = analogOutputDTO.HighLimit,
+                    Unit = analogOutputDTO.Unit,
+                    Address = ioAddress,
+                    Values = new List<TagValue>()
+                };
 
-            _ioAddressRepository.Add(ioAddress);
+                _analogOutputService.CreateAnalogOutput(analogOutput);
 
-            var analogOutput = new AnalogOutput
-            {
-                Description = analogOutputDTO.Description,
-                InitialValue = analogOutputDTO.InitialValue,
-                LowLimit = analogOutputDTO.LowLimit,
-                HighLimit = analogOutputDTO.HighLimit,
-                Unit = analogOutputDTO.Unit,
-                Address = ioAddress,
-                Values = new List<TagValue>()
-            };
 
-            _analogOutputService.CreateAnalogOutput(analogOutput);
-
-            return Ok(analogOutput);
-
+                return Ok(analogOutput);
+            }
+            else
+                return NotFound("Address not found");
+            
         }
 
         [HttpDelete("AnalogOutputs/{id}")]

@@ -36,6 +36,8 @@ namespace webapi.Controllers
                 return BadRequest();
             RealTimeUnit realTimeUnit = new RealTimeUnit();
             realTimeUnit.SetProperties(model.HighLimit, model.LowLimit, address);
+            Console.WriteLine(address.Id);
+            
             dbc.RealTimeUnits.Add(realTimeUnit);
             dbc.SaveChanges();
             return Ok();
