@@ -1,1 +1,5 @@
-<p>admin works!</p>
+<div class="admin-container">
+  <h2>Admin Page</h2>
+  <button class="open-popup-button" (click)="openPopup()">Open Popup</button>
+</div>
+<app-rtu-popup *ngIf="showPopup" (submit)="addRTU($event)" (close)="closePopup()"></app-rtu-popup>

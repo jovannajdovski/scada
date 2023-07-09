@@ -10,6 +10,7 @@ interface TrendingResponse {
   value: string;
   limit: string;
   unit: string;
+  scanTime: number;
 }
 
 @Component({
@@ -31,7 +32,7 @@ export class TrendingComponent implements OnInit {
   }
 
   logout(): void {
-    //this.webSocketService.disconnect();
+    this.webSocketService.disconnect();
     this.router.navigate(['/login']);
   }
 }

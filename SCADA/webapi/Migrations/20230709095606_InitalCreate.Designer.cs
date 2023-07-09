@@ -10,8 +10,8 @@ using webapi;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ScadaDBContext))]
-    [Migration("20230708225918_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230709095606_InitalCreate")]
+    partial class InitalCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,11 +169,9 @@ namespace webapi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Type")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

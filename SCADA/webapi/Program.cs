@@ -32,4 +32,7 @@ using (var db = new ScadaDBContext())
 }
 SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(new object());
 simulationDriver.StartSimulation();
+RealTimeDriver realTimeDriver = new RealTimeDriver(new object());
+simulationDriver.StartSimulation();
+realTimeDriver.StartSimulation();
 app.Run();

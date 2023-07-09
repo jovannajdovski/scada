@@ -5,7 +5,7 @@
 namespace webapi.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,8 +16,8 @@ namespace webapi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Type = table.Column<string>(type: "TEXT", nullable: false),
-                    Value = table.Column<string>(type: "TEXT", nullable: false)
+                    Type = table.Column<string>(type: "TEXT", nullable: true),
+                    Value = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -182,21 +182,14 @@ namespace webapi.Migrations
                 columns: new[] { "Username", "Password", "Type" },
                 values: new object[] { "user", "user", 1 });
 
-            migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "Type", "Value" },
-                values: new object[] { "double", "200.0" }
+            for (int i = 0; i < 100; i++)
+            {
+                migrationBuilder.InsertData(
+                    table: "Addresses",
+                    columns: new[] { "Type", "Value" },
+                    values: new object[] { default(string?), default(string?) }
                 );
-            migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "Type", "Value" },
-                values: new object[] { "double", "200.0" }
-                );
-            migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "Type", "Value" },
-                values: new object[] { "double", "20.0" }
-                );
+            }
 
             migrationBuilder.InsertData(
                table: "AnalogInputs",
@@ -210,6 +203,8 @@ namespace webapi.Migrations
                table: "AnalogInputs",
                columns: new[] { "Description", "AddressId", "ScanTime", "IsScanning", "LowLimit", "HighLimit", "Unit" },
                values: new object[] { "Coal amount in furnace", 3, 1.0, true, 0.0, 100.0, "kg" });
+
+
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",

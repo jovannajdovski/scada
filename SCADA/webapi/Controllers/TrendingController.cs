@@ -20,8 +20,6 @@ namespace webapi.Controllers
     [Route("scada/trending")]
     public class TrendingWebSocketController : ControllerBase
     {
-        private static readonly ConcurrentDictionary<string, WebSocket> _sockets =
-            new ConcurrentDictionary<string, WebSocket>();
 
         private readonly ILogger<TrendingWebSocketController> _logger;
 
@@ -33,8 +31,10 @@ namespace webapi.Controllers
         public IActionResult GetAllTrending()
         {
             ScadaDBContext dBContext = new ScadaDBContext();
-            List<AnalogInput> analogInputs = dBContext.AnalogInputs.Include(ai => ai.Address).ToList(); ;
-            List<DigitalInput> digitalInputs = dBContext.DigitalInputs.Include(ai => ai.Address).ToList();;
+            List<AnalogInput> analogInputs = dBContext.AnalogInputs.Include(ai => ai.Address)
+                .Where(ai => ai.IsScanning).ToList(); 
+            List<DigitalInput> digitalInputs = dBContext.DigitalInputs.Include(ai => ai.Address)
+                .Where(di => di.IsScanning).ToList();;
 
             List<TrendingResponse> trendingData = new List<TrendingResponse>();
 
@@ -52,10 +52,7 @@ namespace webapi.Controllers
         }
 
     }
-}
-
-
-public class TrendingResponse
+    public class TrendingResponse
 {
     public int id { get; set; }
     public string description { get; set; }
@@ -63,6 +60,7 @@ public class TrendingResponse
     public string value { get; set; }
     public string limit { get; set; }
     public string unit { get; set; }
+    public double scanTime { get; set; }
     public TrendingResponse(int id, string description, int address, string value, string limit, string unit)
     {
         this.id = id;
@@ -75,10 +73,13 @@ public class TrendingResponse
     public TrendingResponse(AnalogInput analogInput)
     {
         this.id = analogInput.Id;
+        this.scanTime=analogInput.ScanTime;
         this.description= analogInput.Description;
         this.address = analogInput.Address.Id;
-        if(analogInput.Address.Type=="double")
-            this.value = Math.Round(Double.Parse(analogInput.Address.Value),4).ToString();
+        if (analogInput.Address.Type == "double")
+            this.value = Math.Round(Double.Parse(analogInput.Address.Value), 4).ToString();
+        else if (analogInput.Address.Type == null)
+            this.value = "/";
         else
             this.value = analogInput.Address.Value;
         this.limit=analogInput.LowLimit.ToString()+" - "+analogInput.HighLimit.ToString();
@@ -87,10 +88,18 @@ public class TrendingResponse
     public TrendingResponse(DigitalInput digitalInput)
     {
         this.id = digitalInput.Id;
+        this.scanTime= digitalInput.ScanTime;
         this.description = digitalInput.Description;
         this.address = digitalInput.Address.Id;
-        this.value = digitalInput.Address.Value;
+        if (digitalInput.Address.Type == null)
+            this.value = "/";
+        else
+            this.value = digitalInput.Address.Value;
         this.limit = "/";
         this.unit = "/";
     }
 }
+
+}
+
+

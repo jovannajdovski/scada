@@ -20,22 +20,22 @@ namespace webapi
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<AnalogInput>()
-                .HasOne(ai => ai.Address)
-                .WithMany()
-                .HasForeignKey(ai => ai.AddressId);
-            modelBuilder.Entity<DigitalInput>()
-                .HasOne(ai => ai.Address)
-                .WithMany()
-                .HasForeignKey(ai => ai.AddressId);
-            modelBuilder.Entity<AnalogOutput>()
-                .HasOne(ai => ai.Address)
-                .WithMany()
-                .HasForeignKey(ai => ai.AddressId);
-            modelBuilder.Entity<DigitalOutput>()
-                .HasOne(ai => ai.Address)
-                .WithMany()
-                .HasForeignKey(ai => ai.AddressId);
+            //modelBuilder.Entity<AnalogInput>()
+            //    .HasOne(ai => ai.Address)
+            //    .WithMany()
+            //    .HasForeignKey(ai => ai.AddressId);
+            //modelBuilder.Entity<DigitalInput>()
+            //    .HasOne(ai => ai.Address)
+            //    .WithMany()
+            //    .HasForeignKey(ai => ai.AddressId);
+            //modelBuilder.Entity<AnalogOutput>()
+            //    .HasOne(ai => ai.Address)
+            //    .WithMany()
+            //    .HasForeignKey(ai => ai.AddressId);
+            //modelBuilder.Entity<DigitalOutput>()
+            //    .HasOne(ai => ai.Address)
+            //    .WithMany()
+            //    .HasForeignKey(ai => ai.AddressId);
         }
 
 

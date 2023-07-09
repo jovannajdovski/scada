@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { TrendingComponent } from './components/trending/trending.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { RtuPopupComponent } from './components/rtu-popup/rtu-popup.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -21,7 +22,8 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     TrendingComponent,
-    AdminComponent
+    AdminComponent,
+    RtuPopupComponent
   ],
   imports: [
     BrowserModule, HttpClientModule, RouterModule.forRoot(routes), FormsModule

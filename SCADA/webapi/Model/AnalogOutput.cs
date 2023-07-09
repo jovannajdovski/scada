@@ -12,7 +12,7 @@ namespace webapi.model
         [Key]
         public int Id { get; set; }
         public string Description { get; set; }
-        public int AddressId { get; set; }
+        //public int AddressId { get; set; }
         public IOAddress Address { get; set; }
         public double InitialValue { get; set; }
         public double LowLimit { get; set; }

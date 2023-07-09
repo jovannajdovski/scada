@@ -17,7 +17,6 @@ namespace SimulationDriver
         public SimulationDriver(object lockObj) : base(lockObj)
         {
             dbContext = new SimulatorDBContext();
-            
         }
         public void StartSimulation()
         {
@@ -36,29 +35,30 @@ namespace SimulationDriver
 
                 while (true)
                 {
-                    double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
-
-                    IOAddress address = new IOAddress(1, "double", value.ToString());
-
                     lock (lockObj)
                     {
                         
-                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
-                        
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == 1);
                         if (existingEntity != null)
                         {
-                            existingEntity.Type = address.Type;
-                            double sin = Math.Sin(2 * Math.PI * new Random().NextDouble()*frequency * time);
-                            if (sin < 0)
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                            if (existingEntity.Type != null && existingEntity.Value != null)
+                            {
+                                double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
+                                if (sin < 0)
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                                else
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+                                
+                            }
                             else
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+                            {
+                                existingEntity.Type = "double";
+                                existingEntity.Value = (MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel)).ToString();
+
+                            }
                             dbContext.Update(existingEntity);
                         }
-                        else
-                        {
-                            dbContext.Addresses.Add(address);
-                        }
+                        
 
                         dbContext.SaveChanges();
                     }
@@ -82,27 +82,30 @@ namespace SimulationDriver
 
                 while (true)
                 {
-                    double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
-                    IOAddress address = new IOAddress(2, "double", value.ToString());
                     lock (lockObj)
                     {
 
-                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
-
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == 2);
                         if (existingEntity != null)
                         {
-                            existingEntity.Type = address.Type;
-                            double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
-                            if (sin < 0)
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                            if (existingEntity.Type != null && existingEntity.Value != null)
+                            {
+                                double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
+                                if (sin < 0)
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                                else
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+
+                            }
                             else
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+                            {
+                                existingEntity.Type = "double";
+                                existingEntity.Value = (MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel)).ToString();
+
+                            }
                             dbContext.Update(existingEntity);
                         }
-                        else
-                        {
-                            dbContext.Addresses.Add(address);
-                        }
+
 
                         dbContext.SaveChanges();
                     }
@@ -124,27 +127,31 @@ namespace SimulationDriver
 
                 while (true)
                 {
-                    double value = MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel);
-                    IOAddress address = new IOAddress(3, "double", value.ToString());
+                    
                     lock (lockObj)
                     {
 
-                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
-
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == 3);
                         if (existingEntity != null)
                         {
-                            existingEntity.Type = address.Type;
-                            double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
-                            if (sin < 0)
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                            if (existingEntity.Type != null && existingEntity.Value != null)
+                            {
+                                double sin = Math.Sin(2 * Math.PI * new Random().NextDouble() * frequency * time);
+                                if (sin < 0)
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (double.Parse(existingEntity.Value) - MinLevel) * sin).ToString();
+                                else
+                                    existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+
+                            }
                             else
-                                existingEntity.Value = (double.Parse(existingEntity.Value) + (MaxLevel - double.Parse(existingEntity.Value)) * sin).ToString();
+                            {
+                                existingEntity.Type = "double";
+                                existingEntity.Value = (MinLevel + Math.Abs(Math.Sin(2 * Math.PI * frequency * time)) * (MaxLevel - MinLevel)).ToString();
+
+                            }
                             dbContext.Update(existingEntity);
                         }
-                        else
-                        {
-                            dbContext.Addresses.Add(address);
-                        }
+
 
                         dbContext.SaveChanges();
                     }
@@ -191,6 +198,55 @@ namespace SimulationDriver
         public RealTimeDriver(object lockObj) : base(lockObj)
         {
             dbContext = new SimulatorDBContext();
+        }
+        public void StartSimulation()
+        {
+            Task.Run(async () =>
+            {
+                DbSet<RealTimeUnit> realTimeUnits;
+                double time = 0;
+                
+                while (true)
+                {
+                    realTimeUnits = dbContext.RealTimeUnits;
+                    foreach (RealTimeUnit realTimeUnit in realTimeUnits)
+                    {
+                        lock (lockObj)
+                        {
+                            double min = realTimeUnit.LowLimit;
+                            double max = realTimeUnit.HighLimit;
+                            double rand = (new Random().NextDouble() * 2 - 1) * (new Random().NextDouble() * (max - min) / 10);
+                            IOAddress address = dbContext.Addresses.FirstOrDefault(a => a.Id == realTimeUnit.Address.Id);
+                            if (address != null)
+                            {
+                                if (address.Type != null && address.Value != null)
+                                {
+                                    address.Value += rand;
+                                    if (double.Parse(address.Value) > max)
+                                        address.Value = max.ToString();
+                                    if (double.Parse(address.Value) < min)
+                                        address.Value = min.ToString();
+                                }
+                                else
+                                {
+                                    address.Type = "double";
+                                    address.Value = ((max+min)/2+rand).ToString();
+
+
+                                }
+                                dbContext.Update(address);
+                            }
+
+
+                            dbContext.SaveChanges();
+                        }
+                    }
+                    time += 1;
+
+                    await Task.Delay(1000);
+
+                }
+            });
         }
     }
 }

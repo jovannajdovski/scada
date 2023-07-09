@@ -14,6 +14,17 @@ namespace webapi.model
         public int Id { get; set; }
         public double HighLimit { get; set; }
         public double LowLimit { get; set; }
+        //public int AddressId { get; set; }
         public IOAddress Address { get; set; }
+        public RealTimeUnit()
+        {
+        }
+
+        public void SetProperties(double highLimit, double lowLimit, IOAddress address)
+        {
+            HighLimit = highLimit;
+            LowLimit = lowLimit;
+            Address = address;
+        }
     }
 }
