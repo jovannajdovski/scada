@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AnalogInputCreateDTO, AnalogOutputCreateDTO, DigitalInputCreateDTO, DigitalOutputCreateDTO } from 'src/app/models/createTags';
 import { AnalogInput, AnalogOutput, DigitalInput, DigitalOutput } from 'src/app/models/tags';
 
@@ -11,6 +12,7 @@ import { AnalogInput, AnalogOutput, DigitalInput, DigitalOutput } from 'src/app/
 export class TagManagementComponent {
 
   showAddTagPopup: boolean = false;
+  showRtuPopup: boolean = false;
   showUpdateOutputValuePopup: boolean = false;
   tagType: string = '';
 
@@ -19,13 +21,15 @@ export class TagManagementComponent {
   analogInputs: AnalogInput[] = [];
   analogOutputs: AnalogOutput[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.loadDigitalInputs();
     this.loadDigitalOutputs();
     this.loadAnalogInputs();
     this.loadAnalogOutputs();
   }
-
+  logout(): void {
+    this.router.navigate(['/login']);
+  }
   loadDigitalInputs() {
     this.http.get<DigitalInput[]>('/api/Tag/DigitalInputs').subscribe(data => {
       this.digitalInputs = data;
@@ -51,11 +55,30 @@ export class TagManagementComponent {
   }
 
 
+  openRtuPopup() {
+    this.showRtuPopup = true;
+  }
 
+  closeRtuPopup() {
+    this.showRtuPopup = false;
+  }
+
+  addRTU(formData: any) {
+    this.http.post('/scada/rtu', formData).subscribe(
+      response => {
+        console.log("Successfull");
+      },
+      error => {
+        console.error('An error occurred during creating rtu:', error);
+      }
+    );
+    this.closeRtuPopup();
+  }
   openAddTagPopup(tagType: string) {
     this.tagType = tagType;
     this.showAddTagPopup = true;
   }
+
 
   closeAddTagPopup() {
     this.showAddTagPopup = false;
@@ -127,28 +150,31 @@ export class TagManagementComponent {
   }
 
 
-
   analogInputForm: AnalogInputCreateDTO = {
     description: '',
     scanTime: 0,
     lowLimit: 0,
     highLimit: 0,
-    unit: ''
+    unit: '',
+    AddressId: 10
   };
   analogOutputForm: AnalogOutputCreateDTO = {
     description: '',
     initialValue: 0,
     lowLimit: 0,
     highLimit: 0,
-    unit: ''
+    unit: '',
+    AddressId: 10
   };
   digitalInputForm: DigitalInputCreateDTO = {
     description: '',
-    scanTime: 0
+    scanTime: 0,
+    AddressId: 10
   };
   digitalOutputForm: DigitalOutputCreateDTO = {
     description: '',
-    initialValue: false
+    initialValue: false,
+    AddressId: 10
   };
 
   createAnalogInput() {
@@ -166,7 +192,8 @@ export class TagManagementComponent {
       scanTime: 0,
       lowLimit: 0,
       highLimit: 0,
-      unit: ''
+      unit: '',
+      AddressId: 0
     };
   }
 
@@ -185,7 +212,8 @@ export class TagManagementComponent {
       initialValue: 0,
       lowLimit: 0,
       highLimit: 0,
-      unit: ''
+      unit: '',
+      AddressId: 0
     };
   }
 
@@ -201,7 +229,8 @@ export class TagManagementComponent {
     // Reset the form inputs
     this.digitalInputForm = {
       description: '',
-      scanTime: 0
+      scanTime: 0,
+      AddressId: 0
     };
   }
 
@@ -217,7 +246,8 @@ export class TagManagementComponent {
     // Reset the form inputs
     this.digitalOutputForm = {
       description: '',
-      initialValue: false
+      initialValue: false,
+      AddressId: 0
     };
   }
 }

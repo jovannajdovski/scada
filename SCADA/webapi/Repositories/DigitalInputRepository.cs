@@ -10,6 +10,7 @@ namespace webapi.Repositories
         void Add(DigitalInput digitalInput);
         void Update(DigitalInput digitalInput);
         void Delete(DigitalInput digitalInput);
+        List<DigitalInput> GetAllScanningDigitalInputs();
     }
 
     public class DigitalInputRepository : IDigitalInputRepository
@@ -47,6 +48,10 @@ namespace webapi.Repositories
         {
             _context.DigitalInputs.Remove(digitalInput);
             _context.SaveChanges();
+        }
+        public List<DigitalInput> GetAllScanningDigitalInputs()
+        {
+            return _context.DigitalInputs.Include(ai => ai.Values).Include(ai => ai.Address).Where(ai => ai.IsScanning).ToList();
         }
     }
 }

@@ -8,15 +8,7 @@ using webapi.Model;
 namespace webapi.model
 {
 
-    public class DigitalInput
+    public class DigitalInput: InputTagBase
     {
-        [Key]
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public IOAdress Adress { get; set; }
-        public double ScanTime { get; set; }
-        public bool IsScanning { get; set; }
-
-        public virtual List<TagValue> Values { get; set; }
     }
 }

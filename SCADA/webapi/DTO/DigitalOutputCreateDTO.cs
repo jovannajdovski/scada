@@ -6,6 +6,7 @@ namespace webapi.DTO
     {
         public string Description { get; set; }
         //public string ValueType { get; set; }
+        public int AddressId { get; set; }
         public DigitalValueType InitialValue { get; set; }
     }
 }

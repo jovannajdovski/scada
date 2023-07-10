@@ -10,6 +10,7 @@ namespace webapi.Services
         void CreateDigitalInput(DigitalInput digitalInput);
         void UpdateDigitalInput(DigitalInput digitalInput);
         void DeleteDigitalInput(int id);
+        List<DigitalInput> GetAllScanningDigitalInputs();
     }
 
     public class DigitalInputService : IDigitalInputService
@@ -48,6 +49,11 @@ namespace webapi.Services
             {
                 _digitalInputRepository.Delete(digitalInput);
             }
+        }
+
+        public List<DigitalInput> GetAllScanningDigitalInputs()
+        {
+            return _digitalInputRepository.GetAllScanningDigitalInputs();
         }
     }
 }

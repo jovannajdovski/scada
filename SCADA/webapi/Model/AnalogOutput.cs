@@ -8,17 +8,11 @@ using webapi.Model;
 namespace webapi.model
 {
 
-    public class AnalogOutput
+    public class AnalogOutput:OutputTagBase
     {
-        [Key]
-        public int Id { get; set; }
-        public string Description { get; set; }
-        public IOAdress Adress { get; set; }
-        public double InitialValue { get; set; }
         public double LowLimit { get; set; }
         public double HighLimit { get; set; }
         public string Unit { get; set; }
-        public virtual List<TagValue> Values { get; set; }
 
     }
 }

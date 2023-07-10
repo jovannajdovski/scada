@@ -10,6 +10,7 @@ namespace webapi.Repositories
         void Add(AnalogInput analogInput);
         void Update(AnalogInput analogInput);
         void Delete(AnalogInput analogInput);
+        List<AnalogInput> GetAllScanningAnalogInputs();
     }
 
     public class AnalogInputRepository : IAnalogInputRepository
@@ -46,6 +47,11 @@ namespace webapi.Repositories
         {
             _context.AnalogInputs.Remove(analogInput);
             _context.SaveChanges();
+        }
+
+        public List<AnalogInput> GetAllScanningAnalogInputs()
+        {
+            return _context.AnalogInputs.Include(ai => ai.Values).Include(ai => ai.Address).Where(ai => ai.IsScanning).ToList();
         }
     }
 }

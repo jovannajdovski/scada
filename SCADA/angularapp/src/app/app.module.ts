@@ -8,6 +8,9 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
+import { TrendingComponent } from './components/trending/trending.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { RtuPopupComponent } from './components/rtu-popup/rtu-popup.component';
 import { TagManagementComponent } from './components/tag-management/tag-management.component';
 import { ReportComponent } from './components/report/report.component';
 
@@ -15,7 +18,8 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'tags', component: TagManagementComponent },
-  { path: 'reports', component: ReportComponent }
+  { path: 'reports', component: ReportComponent },
+  { path: 'trending', component: TrendingComponent },
 ];
 
 @NgModule({
@@ -23,7 +27,10 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     TagManagementComponent,
-    ReportComponent
+    ReportComponent,
+    TrendingComponent,
+    AdminComponent,
+    RtuPopupComponent
   ],
   imports: [
     BrowserModule,

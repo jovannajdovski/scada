@@ -1,44 +1,46 @@
-﻿using webapi.model;
+﻿
+
+using webapi.model;
 
 namespace webapi.Repositories
 {
 
-    public interface IIOAdressRepository
+    public interface IIOAddressRepository
     {
-        List<IOAdress> GetAll();
-        IOAdress GetById(int id);
-        void Add(IOAdress ioAdress);
-        void Delete(IOAdress ioAdress);
+        List<IOAddress> GetAll();
+        IOAddress GetById(int id);
+        void Add(IOAddress ioAddress);
+        void Delete(IOAddress ioAddress);
     }
 
-    public class IOAdressRepository : IIOAdressRepository
+    public class IOAddressRepository : IIOAddressRepository
     {
         private readonly ScadaDBContext _context;
 
-        public IOAdressRepository(ScadaDBContext context)
+        public IOAddressRepository(ScadaDBContext context)
         {
             _context = context;
         }
 
-        public List<IOAdress> GetAll()
+        public List<IOAddress> GetAll()
         {
-            return _context.Adresses.ToList();
+            return _context.Addresses.ToList();
         }
 
-        public IOAdress GetById(int id)
+        public IOAddress GetById(int id)
         {
-            return _context.Adresses.Find(id);
+            return _context.Addresses.Find(id);
         }
 
-        public void Add(IOAdress ioAdress)
+        public void Add(IOAddress ioAddress)
         {
-            _context.Adresses.Add(ioAdress);
+            _context.Addresses.Add(ioAddress);
             _context.SaveChanges();
         }
 
-        public void Delete(IOAdress ioAdress)
+        public void Delete(IOAddress ioAddress)
         {
-            _context.Adresses.Remove(ioAdress);
+            _context.Addresses.Remove(ioAddress);
             _context.SaveChanges();
         }
     }

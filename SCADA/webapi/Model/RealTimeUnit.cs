@@ -6,14 +6,27 @@ using System.Linq;
 using System.Net;
 using webapi.model;
 
-namespace webapi.Enum
+namespace webapi.model
 {
-    public class DigitalOutput
+    public class RealTimeUnit
     {
         [Key]
         public int Id { get; set; }
         public double HighLimit { get; set; }
         public double LowLimit { get; set; }
-        public IOAdress Adress { get; set; }
+        public int AddressId { get; set; }
+        public IOAddress Address { get; set; }
+        public RealTimeUnit()
+        {
+        }
+
+        public void SetProperties(double highLimit, double lowLimit, IOAddress address)
+        {
+            HighLimit = highLimit;
+            LowLimit = lowLimit;
+            Address = address;
+            Console.WriteLine("setovan" + address.Id);
+            AddressId = address.Id;
+        }
     }
 }

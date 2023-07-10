@@ -22,12 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="database\" />
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\SimulationDriver\SimulationDriver.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimulationDriver\SimulationDriver.csproj" />
+    <Folder Include="database\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

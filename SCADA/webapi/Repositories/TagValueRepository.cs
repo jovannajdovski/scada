@@ -31,14 +31,14 @@ namespace webapi.Repositories
         public List<TagValue> GetTagValuesByTagId(int tagId)
         {
             return _context.TagValues
-                .Where(tv => tv.TagId == tagId)
+                .Where(tv => tv.TagBaseId == tagId)
                 .ToList();
         }
 
         public TagValue GetLastTagValue(int tagId)
         {
             return _context.TagValues
-                .Where(tv => tv.TagId == tagId)
+                .Where(tv => tv.TagBaseId == tagId)
                 .OrderByDescending(tv => tv.Date)
                 .FirstOrDefault();
         }

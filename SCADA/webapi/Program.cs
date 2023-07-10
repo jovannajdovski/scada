@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Configuration;
+using SimulationDriver;
 using webapi;
 using webapi.Repositories;
 using webapi.Services;
@@ -12,10 +13,11 @@ builder.Services.AddScoped<IDigitalInputRepository, DigitalInputRepository>();
 builder.Services.AddScoped<IDigitalOutputRepository, DigitalOutputRepository>();
 builder.Services.AddScoped<IAnalogInputRepository, AnalogInputRepository>();
 builder.Services.AddScoped<IAnalogOutputRepository, AnalogOutputRepository>();
-builder.Services.AddScoped<IIOAdressRepository, IOAdressRepository>();
+builder.Services.AddScoped<IIOAddressRepository, IOAddressRepository>();
+builder.Services.AddScoped<IRealTimeUnitRepository, RealTimeUnitRepository>();
 builder.Services.AddScoped<ITagValueRepository, TagValueRepository>();
 builder.Services.AddScoped<IAlarmRepository, AlarmRepository>();
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register services
 builder.Services.AddScoped<IDigitalInputService, DigitalInputService>();
@@ -24,6 +26,8 @@ builder.Services.AddScoped<IAnalogInputService, AnalogInputService>();
 builder.Services.AddScoped<IAnalogOutputService, AnalogOutputService>();
 builder.Services.AddScoped<ITagValueService, TagValueService>();
 builder.Services.AddScoped<IAlarmService, AlarmService>();
+builder.Services.AddScoped<ITagProcessingService, TagProcessingService>();
+builder.Services.AddScoped<IConfigurationFileService, ConfigurationFileService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -50,5 +54,17 @@ using (var db = new ScadaDBContext())
     db.Database.EnsureCreated();
     db.SaveChanges();
 }
+using (var serviceProvider = builder.Services.BuildServiceProvider())
+{
+    var tagProcessingService = serviceProvider.GetService<ITagProcessingService>();
 
+    // Call the method from TagValueService
+    tagProcessingService.Process();
+}
+SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(new object());
+simulationDriver.StartSimulation();
+RealTimeDriver realTimeDriver = new RealTimeDriver(new object());
+realTimeDriver.StartSimulation();
+//TagProcessing tagProcessing = new TagProcessing(new object(), new object());
+//tagProcessing.Process();
 app.Run();
