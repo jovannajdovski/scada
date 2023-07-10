@@ -23,6 +23,7 @@ namespace SimulationDriver
             SimulateWaterFillingAsync();
             SimulateGasFillingAsync();
             SimulateCoalFillingAsync();
+            SimulatePoolValveAsync();
         }
         private void SimulateWaterFillingAsync()
         {
@@ -162,34 +163,34 @@ namespace SimulationDriver
                 }
             });
         }
-        private async Task SimulatePoolValveAsync()
+        private void SimulatePoolValveAsync()
         {
-            double time = 0;
-
-            while (true)
+            Task.Run(async () =>
             {
-                bool value = Math.Abs(Math.Sin(2 * Math.PI * time)) > 0.5 ? true:false ;
-                IOAddress address = new IOAddress(4,"boolean", value.ToString());
-                lock (lockObj)
+                double time = 0;
+                double frequency = 0.1;
+                while (true)
                 {
-                    var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == address.Id);
-                    if (existingEntity != null)
+
+                    lock (lockObj)
                     {
-                        existingEntity.Type = address.Type;
-                        existingEntity.Value = address.Value;
-                    }
-                    else
-                    {
-                        dbContext.Addresses.Add(address);
+                        var existingEntity = dbContext.Addresses.FirstOrDefault(a => a.Id == 4);
+                        if (existingEntity != null)
+                        {
+                            existingEntity.Type = "boolean";
+                            existingEntity.Value = Math.Abs(Math.Sin(2 * Math.PI * time * frequency)) > 0.5 ? "ON" : "OFF";
+                            dbContext.Update(existingEntity);
+                        }
+
+                        dbContext.SaveChanges();
                     }
 
-                    dbContext.SaveChanges();
+
+                    time += 1;
+
+                    await Task.Delay(1000);
                 }
-
-                time += 1;
-
-                await Task.Delay(1000);
-            }
+            });
         }
     }
     public class RealTimeDriver : Driver

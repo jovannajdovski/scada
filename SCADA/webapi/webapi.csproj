@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <Folder Include="database\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 
 </Project>

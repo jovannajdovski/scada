@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Scada>
+  <digitalInput>
+    <Id>5</Id>
+    <Description>digitalni</Description>
+    <Value>True</Value>
+    <Timestamp>19:34:36:015 10.07.2023</Timestamp>
+  </digitalInput>
+  <analogInput>
+    <Id>1</Id>
+    <Description>Water level in pool</Description>
+    <Value>974.8009765737434</Value>
+    <Timestamp>19:34:50:866 10.07.2023</Timestamp>
+  </analogInput>
+  <analogInput>
+    <Id>3</Id>
+    <Description>Coal amount in furnace</Description>
+    <Value>99.9999995738594</Value>
+    <Timestamp>19:34:51:869 10.07.2023</Timestamp>
+  </analogInput>
+  <analogInput>
+    <Id>2</Id>
+    <Description>Gas volume in pool</Description>
+    <Value>864.485613682524</Value>
+    <Timestamp>19:34:51:877 10.07.2023</Timestamp>
+  </analogInput>
+</Scada>
