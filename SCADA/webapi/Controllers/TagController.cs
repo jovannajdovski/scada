@@ -19,6 +19,7 @@ namespace webapi.Controllers
         private readonly IAnalogOutputService _analogOutputService;
         private readonly IIOAddressRepository _ioAddressRepository;
         private readonly ITagValueService _tagValueService;
+        private readonly ITagProcessingService _tagProcessingService;
 
         public TagController(
             IDigitalInputService digitalInputService,
@@ -26,7 +27,8 @@ namespace webapi.Controllers
             IAnalogInputService analogInputService,
             IAnalogOutputService analogOutputService,
             IIOAddressRepository ioAddressRepository,
-            ITagValueService tagValueService)
+            ITagValueService tagValueService,
+            ITagProcessingService tagProcessingService)
         {
             _digitalInputService = digitalInputService;
             _digitalOutputService = digitalOutputService;
@@ -34,6 +36,7 @@ namespace webapi.Controllers
             _analogOutputService = analogOutputService;
             _ioAddressRepository = ioAddressRepository;
             _tagValueService = tagValueService;
+            _tagProcessingService = tagProcessingService;
         }
 
         // DigitalInput
@@ -72,7 +75,7 @@ namespace webapi.Controllers
                 };
 
                 _digitalInputService.CreateDigitalInput(digitalInput);
-
+                _tagProcessingService.CreateDigitalTimer(digitalInput);
                 return Ok(digitalInput);
             }
             else
@@ -83,6 +86,7 @@ namespace webapi.Controllers
         public IActionResult DeleteDigitalInput(int id)
         {
             _digitalInputService.DeleteDigitalInput(id);
+            _tagProcessingService.QuitTimer(id);
             return NoContent();
         }
 
@@ -194,7 +198,7 @@ namespace webapi.Controllers
                 };
 
                 _analogInputService.CreateAnalogInput(analogInput);
-
+                _tagProcessingService.CreateAnalogTimer(analogInput);
                 return Ok(analogInput);
             }
             else
@@ -206,6 +210,7 @@ namespace webapi.Controllers
         public IActionResult DeleteAnalogInput(int id)
         {
             _analogInputService.DeleteAnalogInput(id);
+            _tagProcessingService.QuitTimer(id);
             return NoContent();
         }
 

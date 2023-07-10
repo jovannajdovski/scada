@@ -26,6 +26,7 @@ builder.Services.AddScoped<IAnalogInputService, AnalogInputService>();
 builder.Services.AddScoped<IAnalogOutputService, AnalogOutputService>();
 builder.Services.AddScoped<ITagValueService, TagValueService>();
 builder.Services.AddScoped<IAlarmService, AlarmService>();
+builder.Services.AddScoped<ITagProcessingService, TagProcessingService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -52,11 +53,17 @@ using (var db = new ScadaDBContext())
     db.Database.EnsureCreated();
     db.SaveChanges();
 }
-object analogInputLock=new object();
+using (var serviceProvider = builder.Services.BuildServiceProvider())
+{
+    var tagProcessingService = serviceProvider.GetService<ITagProcessingService>();
+
+    // Call the method from TagValueService
+    tagProcessingService.Process();
+}
 SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(new object());
 simulationDriver.StartSimulation();
 RealTimeDriver realTimeDriver = new RealTimeDriver(new object());
 realTimeDriver.StartSimulation();
-TagProcessing tagProcessing = new TagProcessing(new object(), new object());
-tagProcessing.Process();
+//TagProcessing tagProcessing = new TagProcessing(new object(), new object());
+//tagProcessing.Process();
 app.Run();
