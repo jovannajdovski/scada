@@ -29,3 +29,11 @@ export interface DigitalInput {
     highLimit: number;
     unit: string;
   }
+
+  export interface TagValue {
+    id: number;
+    tagId: number;
+    date: Date;
+    type: string;
+    value?: string;
+  }

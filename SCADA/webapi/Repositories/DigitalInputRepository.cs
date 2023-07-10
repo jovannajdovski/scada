@@ -23,7 +23,7 @@ namespace webapi.Repositories
 
         public List<DigitalInput> GetAll()
         {
-            return _context.DigitalInputs.ToList();
+            return _context.DigitalInputs.Include(di => di.Values).ToList();
         }
 
         public DigitalInput GetById(int id)
@@ -38,7 +38,7 @@ namespace webapi.Repositories
         }
 
         public void Update(DigitalInput digitalInput)
-        {
+        {          
             _context.DigitalInputs.Update(digitalInput);
             _context.SaveChanges();
         }

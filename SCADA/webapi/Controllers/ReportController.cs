@@ -37,9 +37,20 @@ namespace webapi.Controllers
         }
 
         [HttpGet("alarms/{priority}")]
-        public IActionResult GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true)
+        public IActionResult GetAlarmsByPriority(string priority, bool isAscending = true)
         {
-            List<Alarm> alarms = _alarmService.GetAlarmsByPriority(priority, isAscending);
+            AlarmPriority priorityEnum;
+            if (priority == "noraml")
+            {
+                priorityEnum = AlarmPriority.NORMAL_PRIORITY;
+            } else if (priority == "high")
+            {
+                priorityEnum = AlarmPriority.HIGH_PRIORITY;
+            } else
+            {
+                priorityEnum = AlarmPriority.LOW_PRIORITY;
+            }
+            List <Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum, isAscending);
             return Ok(alarms);
         }
 
@@ -67,6 +78,7 @@ namespace webapi.Controllers
         public IActionResult GetLastAnalogInputs(bool isAscending = true)
         {
             List<AnalogInput> analogInputs = _analogInputService.GetAllAnalogInputs();
+            analogInputs = analogInputs.Where(ai => GetLastTagValue(ai.Id) != null).ToList();
 
             if (isAscending)
             {
@@ -84,6 +96,7 @@ namespace webapi.Controllers
         public IActionResult GetLastDigitalInputs(bool isAscending = true)
         {
             List<DigitalInput> digitalInputs = _digitalInputService.GetAllDigitalInputs();
+            digitalInputs = digitalInputs.Where(di => GetLastTagValue(di.Id) != null).ToList();
 
             if (isAscending)
             {

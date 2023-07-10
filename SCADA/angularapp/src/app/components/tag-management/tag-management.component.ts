@@ -103,8 +103,10 @@ export class TagManagementComponent {
     }
   
     const isScanning = !digitalInput.isScanning;
-  
-    this.http.put(`/api/Tag/DigitalInputs/${id}/IsScanning`, isScanning).subscribe(() => {
+    const scan: any = {
+      isScanning: isScanning
+    };
+    this.http.put(`/api/Tag/DigitalInputs/${id}/IsScanning`, scan).subscribe(() => {
       digitalInput.isScanning = isScanning;
     });
   }
@@ -116,8 +118,10 @@ export class TagManagementComponent {
     }
   
     const isScanning = !analogInput.isScanning;
-  
-    this.http.put(`/api/Tag/AnalogInputs/${id}/IsScanning`, isScanning).subscribe(() => {
+    const scan: any = {
+      isScanning: isScanning
+    };
+    this.http.put(`/api/Tag/AnalogInputs/${id}/IsScanning`, scan).subscribe(() => {
       analogInput.isScanning = isScanning;
     });
   }

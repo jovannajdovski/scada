@@ -83,7 +83,7 @@ namespace webapi.Controllers
         }
 
         [HttpPut("DigitalInputs/{id}/IsScanning")]
-        public IActionResult UpdateDigitalInputScanning(int id, bool isScanning)
+        public IActionResult UpdateDigitalInputScanning(int id, ScanDTO scan)
         {
             var digitalInput = _digitalInputService.GetDigitalInputById(id);
             if (digitalInput == null)
@@ -91,7 +91,7 @@ namespace webapi.Controllers
                 return NotFound();
             }
 
-            digitalInput.IsScanning = isScanning;
+            digitalInput.IsScanning = scan.IsScanning;
             _digitalInputService.UpdateDigitalInput(digitalInput);
 
             return NoContent();
@@ -200,7 +200,7 @@ namespace webapi.Controllers
         }
 
         [HttpPut("AnalogInputs/{id}/IsScanning")]
-        public IActionResult UpdateAnalogInputScanning(int id, bool isScanning)
+        public IActionResult UpdateAnalogInputScanning(int id, ScanDTO scan)
         {
             var analogInput = _analogInputService.GetAnalogInputById(id);
             if (analogInput == null)
@@ -208,7 +208,7 @@ namespace webapi.Controllers
                 return NotFound();
             }
 
-            analogInput.IsScanning = isScanning;
+            analogInput.IsScanning = scan.IsScanning;
             _analogInputService.UpdateAnalogInput(analogInput);
 
             return NoContent();

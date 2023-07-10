@@ -9,18 +9,21 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { TagManagementComponent } from './components/tag-management/tag-management.component';
+import { ReportComponent } from './components/report/report.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'tags', component: TagManagementComponent }
+  { path: 'tags', component: TagManagementComponent },
+  { path: 'reports', component: ReportComponent }
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    TagManagementComponent
+    TagManagementComponent,
+    ReportComponent
   ],
   imports: [
     BrowserModule,

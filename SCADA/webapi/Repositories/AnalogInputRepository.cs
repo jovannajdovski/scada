@@ -23,7 +23,7 @@ namespace webapi.Repositories
 
         public List<AnalogInput> GetAll()
         {
-            return _context.AnalogInputs.ToList();
+            return _context.AnalogInputs.Include(ai => ai.Values).ToList();
         }
 
         public AnalogInput GetById(int id)

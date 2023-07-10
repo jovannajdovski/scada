@@ -1,0 +1,158 @@
+<div class="report-container">
+    <h2>Alarm reports</h2>
+    <div class="report-buttons">
+      <button (click)="openDialog('getAllAlarms')">Get All Alarms</button>
+      <button (click)="openDialog('getAlarmsByPriority')">Get Alarms By Priority</button>
+    </div>
+    
+    <h2>Tag reports</h2>
+    <div class="report-buttons">
+      <button (click)="openDialog('getAllTagValues')">Get All Tag Values</button>
+      <button (click)="openDialog('getLastAnalogInputs')">Get Last Analog Inputs</button>
+      <button (click)="openDialog('getLastDigitalInputs')">Get Last Digital Inputs</button>
+      <button (click)="openDialog('getTagValuesById')">Get Tag Values By ID</button>
+    </div>
+  </div>
+  
+  <div class="results-container">
+    <h3>Report</h3>
+    
+    <div *ngIf="reportType === 'alarms'">
+      <h4>All Alarms:</h4>
+      <ul>
+        <li *ngFor="let alarm of alarms">{{ alarm | json }}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="reportType === 'alarmsByPriority'">
+      <h4>Alarms By Priority:</h4>
+      <ul>
+        <li *ngFor="let alarm of alarms">{{ alarm | json }}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="reportType === 'tagValues'">
+      <h4>All Tag Values:</h4>
+      <ul>
+        <li *ngFor="let tagValue of tagValues">{{ tagValue | json }}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="reportType === 'lastAnalogInputs'">
+      <h4>Last Analog Inputs:</h4>
+      <ul>
+        <li *ngFor="let analogInput of analogInputs">{{ analogInput | json }}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="reportType === 'lastDigitalInputs'">
+      <h4>Last Digital Inputs:</h4>
+      <ul>
+        <li *ngFor="let digitalInput of digitalInputs">{{ digitalInput | json }}</li>
+      </ul>
+    </div>
+    
+    <div *ngIf="reportType === 'tagValuesById'">
+      <h4>Tag Values By ID:</h4>
+      <ul>
+        <li *ngFor="let tagValue of tagValues">{{ tagValue | json }}</li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- Popup forms -->
+
+<!--  Get All Alarms Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAllAlarms'">
+    <h3>Get All Alarms </h3>
+    <form (ngSubmit)="getAllAlarms()">
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" name="startTime" id="startTime" [(ngModel)]="getAllAlarmsForm.startTime" required>
+        <label for="endTime">End Time:</label>
+        <input type="datetime-local" name="endTime" id="endTime" [(ngModel)]="getAllAlarmsForm.endTime" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllAlarmsForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get All Alarms By Priority Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAlarmsByPriority'">
+    <h3>Get All Alarms By Priority</h3>
+    <form (ngSubmit)="getAlarmsByPriority()">
+        <label for="priority">Priority:</label>
+        <select class="priority-select" name="priority" id="priority" [(ngModel)]="getAlarmsByPriorityForm.priority" required>
+        <option [value]="AlarmPriority.HIGH_PRIORITY">High Priority</option>
+        <option [value]="AlarmPriority.NORMAL_PRIORITY">Normal Priority</option>
+        <option [value]="AlarmPriority.LOW_PRIORITY">Low Priority</option>
+        </select>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAlarmsByPriorityForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get All Tag Values Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAllTagValues'">
+    <h3>Get All Tag Values </h3>
+    <form (ngSubmit)="getAllTagValues()">
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" name="startTime" id="startTime" [(ngModel)]="getAllTagValuesForm.startTime" required>
+        <label for="endTime">End Time:</label>
+        <input type="datetime-local" name="endTime" id="endTime" [(ngModel)]="getAllTagValuesForm.endTime" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllTagValuesForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Last Analog Inputs Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getLastAnalogInputs'">
+    <h3>Get Last Analog Inputs </h3>
+    <form (ngSubmit)="getLastAnalogInputs()">
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllTagValuesForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Last Digital Inputs Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getLastDigitalInputs'">
+    <h3>Get Last Digital Inputs </h3>
+    <form (ngSubmit)="getLastDigitalInputs()">
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getLastDigitalInputsForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Tag Values By ID Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getTagValuesById'">
+    <h3>Get Tag Values By ID </h3>
+    <form (ngSubmit)="getTagValuesById()">
+        <label for="diId">Tag ID:</label>
+        <input type="number" name="diId" id="diId" [(ngModel)]="getTagValuesByIdForm.id" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getTagValuesByIdForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
