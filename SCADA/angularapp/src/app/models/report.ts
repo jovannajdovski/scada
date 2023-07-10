@@ -18,14 +18,14 @@ export interface DigitalInputReportDTO {
 }
 
 export interface AlarmReportDTO {
-    Id: number;
-    Type: AlarmType;
-    Priority: AlarmPriority;
-    Limit: number;
-    Date: Date;
-    AnalogInputId: number;
-    AnalogInputDescription: string;
-    AnalogInputLowLimit: number;
-    AnalogInputHighLimit: number;
-    AnalogInputUnit: string;
+    id: number;
+    type: AlarmType;
+    priority: AlarmPriority;
+    limit: number;
+    date: Date;
+    analogInputId: number;
+    analogInputDescription: string;
+    analogInputLowLimit: number;
+    analogInputHighLimit: number;
+    analogInputUnit: string;
   }

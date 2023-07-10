@@ -23,7 +23,8 @@ export class ReportService {
     return this.http.get<AlarmReportDTO[]>(`${this.baseUrl}/alarms`, { params });
   }
 
-  getAlarmsByPriority(priority: AlarmPriority, isAscending: boolean): Observable<AlarmReportDTO[]> {
+  getAlarmsByPriority(priority: number, isAscending: boolean): Observable<AlarmReportDTO[]> {
+    console.log(priority);
     const params = new HttpParams()
       .set('priority', priority)
       .set('isAscending', isAscending.toString());

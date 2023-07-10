@@ -10,9 +10,9 @@ export interface Alarm {
   }
   
   export enum AlarmPriority {
-    HIGH_PRIORITY = 'high',
-    NORMAL_PRIORITY = 'normal',
-    LOW_PRIORITY = 'low'
+    HIGH_PRIORITY = 2,
+    NORMAL_PRIORITY = 1,
+    LOW_PRIORITY = 0
   }
   
   export enum AlarmType {

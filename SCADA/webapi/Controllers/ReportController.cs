@@ -45,19 +45,22 @@ namespace webapi.Controllers
             return Ok(reportDTOs);
         }
 
-        [HttpGet("alarms/{priority}")]
-        public IActionResult GetAlarmsByPriority(string priority, bool isAscending = true)
+        [HttpGet("alarms/priority")]
+        public IActionResult GetAlarmsByPriority(int priority, bool isAscending = true)
         {
             AlarmPriority priorityEnum;
-            if (priority == "noraml")
+            if (priority == 1)
             {
                 priorityEnum = AlarmPriority.NORMAL_PRIORITY;
-            } else if (priority == "high")
+            } else if (priority == 2)
             {
                 priorityEnum = AlarmPriority.HIGH_PRIORITY;
-            } else
+            } else if (priority == 0)
             {
                 priorityEnum = AlarmPriority.LOW_PRIORITY;
+            } else
+            {
+                return BadRequest();
             }
             List <Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum, isAscending);
             List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();

@@ -1,66 +1,204 @@
 <div class="report-container">
-    <h2>Alarm reports</h2>
+  <div class="nav-container">
+    <div class="nav-title">Alarm Reports</div>
+    <div class="nav-line"></div>
     <div class="report-buttons">
-      <button (click)="openDialog('getAllAlarms')">Get All Alarms</button>
-      <button (click)="openDialog('getAlarmsByPriority')">Get Alarms By Priority</button>
+      <button class="nav-button alarm-button" (click)="openDialog('getAllAlarms')">Get All Alarms</button>
+      <button class="nav-button alarm-button" (click)="openDialog('getAlarmsByPriority')">Get Alarms By Priority</button>
     </div>
-    
-    <h2>Tag reports</h2>
+    <div class="nav-line"></div>
+    <div class="nav-title">Tag Reports</div>
+    <div class="nav-line"></div>
     <div class="report-buttons">
-      <button (click)="openDialog('getAllTagValues')">Get All Tag Values</button>
-      <button (click)="openDialog('getLastAnalogInputs')">Get Last Analog Inputs</button>
-      <button (click)="openDialog('getLastDigitalInputs')">Get Last Digital Inputs</button>
-      <button (click)="openDialog('getTagValuesById')">Get Tag Values By ID</button>
+      <button class="nav-button" (click)="openDialog('getAllTagValues')">Get All Tag Values</button>
+      <button class="nav-button" (click)="openDialog('getLastAnalogInputs')">Get Last Analog Inputs</button>
+      <button class="nav-button" (click)="openDialog('getLastDigitalInputs')">Get Last Digital Inputs</button>
+      <button class="nav-button" (click)="openDialog('getTagValuesById')">Get Tag Values By ID</button>
     </div>
   </div>
+
   
   <div class="results-container">
     <h3>Report</h3>
     
     <div *ngIf="reportType === 'alarms'">
       <h4>All Alarms:</h4>
-      <ul>
-        <li *ngFor="let alarm of alarms">{{ alarm | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Limit</th>
+            <th>Analog Input ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Input Unit</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alarm of alarms">
+            <td>{{ alarm.id }}</td>
+            <td>{{ alarm.type }}</td>
+            <td>{{ alarm.priority }}</td>
+            <td>{{ alarm.limit }}</td>
+            <td>{{ alarm.analogInputId }}</td>
+            <td>{{ alarm.analogInputDescription }}</td>
+            <td>{{ alarm.analogInputLowLimit }}</td>
+            <td>{{ alarm.analogInputHighLimit }}</td>
+            <td>{{ alarm.analogInputUnit }}</td>
+            <td>{{ alarm.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ alarm.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
+
     <div *ngIf="reportType === 'alarmsByPriority'">
       <h4>Alarms By Priority:</h4>
-      <ul>
-        <li *ngFor="let alarm of alarms">{{ alarm | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Limit</th>
+            <th>Analog Input ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Input Unit</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alarm of alarms">
+            <td>{{ alarm.id }}</td>
+            <td>{{ alarm.type }}</td>
+            <td>{{ alarm.priority }}</td>
+            <td>{{ alarm.limit }}</td>
+            <td>{{ alarm.analogInputId }}</td>
+            <td>{{ alarm.analogInputDescription }}</td>
+            <td>{{ alarm.analogInputLowLimit }}</td>
+            <td>{{ alarm.analogInputHighLimit }}</td>
+            <td>{{ alarm.analogInputUnit }}</td>
+            <td>{{ alarm.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ alarm.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     
     <div *ngIf="reportType === 'tagValues'">
       <h4>All Tag Values:</h4>
-      <ul>
-        <li *ngFor="let tagValue of tagValues">{{ tagValue | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Tag ID</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tagValue of tagValues">
+            <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.type }}</td>
+            <td>{{ tagValue.value }}</td>
+            <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ tagValue.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     
     <div *ngIf="reportType === 'lastAnalogInputs'">
       <h4>Last Analog Inputs:</h4>
-      <ul>
-        <li *ngFor="let analogInput of analogInputs">{{ analogInput | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Unit</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let analogInput of analogInputs">
+            <td>{{ analogInput.id }}</td>
+            <td>{{ analogInput.description }}</td>
+            <td>{{ analogInput.lowLimit }}</td>
+            <td>{{ analogInput.highLimit }}</td>
+            <td>{{ analogInput.unit }}</td>
+            <td>{{ analogInput.value }}</td>
+            <td>{{ analogInput.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ analogInput.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     
     <div *ngIf="reportType === 'lastDigitalInputs'">
       <h4>Last Digital Inputs:</h4>
-      <ul>
-        <li *ngFor="let digitalInput of digitalInputs">{{ digitalInput | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let digitalInput of digitalInputs">
+            <td>{{ digitalInput.id }}</td>
+            <td>{{ digitalInput.description }}</td>
+            <td>{{ digitalInput.value }}</td>
+            <td>{{ digitalInput.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ digitalInput.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     
     <div *ngIf="reportType === 'tagValuesById'">
       <h4>Tag Values By ID:</h4>
-      <ul>
-        <li *ngFor="let tagValue of tagValues">{{ tagValue | json }}</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Tag ID</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tagValue of tagValues">
+            <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.type }}</td>
+            <td>{{ tagValue.value }}</td>
+            <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ tagValue.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
-
-
+  <div class="charts">
+  <canvas id="canvas" width="400" height="500">{{chart}}</canvas>
+  </div>
+</div>
   <!-- Popup forms -->
 
 <!--  Get All Alarms Form -->
