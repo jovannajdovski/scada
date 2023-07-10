@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Alarm, AlarmPriority } from '../models/alarm';
 import { AnalogInput, DigitalInput, TagValue } from '../models/tags';
-import { AlarmReportDTO, AnalogInputReportDTO, DigitalInputReportDTO } from '../models/report';
+import { AlarmReportDTO, AnalogInputReportDTO, DigitalInputReportDTO, TagValueReportDTO } from '../models/report';
 
 @Injectable({
   providedIn: 'root'
@@ -32,13 +32,13 @@ export class ReportService {
     return this.http.get<AlarmReportDTO[]>(`${this.baseUrl}/alarms/priority`, { params });
   }
 
-  getAllTagValues(startTime: Date, endTime: Date, isAscending: boolean): Observable<TagValue[]> {
+  getAllTagValues(startTime: Date, endTime: Date, isAscending: boolean): Observable<TagValueReportDTO[]> {
     const params = new HttpParams()
       .set('startTime', startTime.toString())
       .set('endTime', endTime.toString())
       .set('isAscending', isAscending.toString());
 
-    return this.http.get<TagValue[]>(`${this.baseUrl}/tagvalues`, { params });
+    return this.http.get<TagValueReportDTO[]>(`${this.baseUrl}/tagvalues`, { params });
   }
 
   getLastAnalogInputs(isAscending: boolean): Observable<AnalogInputReportDTO[]> {
@@ -51,8 +51,8 @@ export class ReportService {
     return this.http.get<DigitalInputReportDTO[]>(`${this.baseUrl}/digitalinputs/last`, { params });
   }
 
-  getTagValuesById(id: number, isAscending: boolean): Observable<TagValue[]> {
+  getTagValuesById(id: number, isAscending: boolean): Observable<TagValueReportDTO[]> {
     const params = new HttpParams().set('isAscending', isAscending.toString());
-    return this.http.get<TagValue[]>(`${this.baseUrl}/tagvalues/${id}`, { params });
+    return this.http.get<TagValueReportDTO[]>(`${this.baseUrl}/tagvalues/${id}`, { params });
   }
 }

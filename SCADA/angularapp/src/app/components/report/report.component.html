@@ -20,7 +20,12 @@
   
   <div class="results-container">
     <h3>Report</h3>
-    
+
+    <div [class.hide]="!chartDisplay"
+    [class.show]="chartDisplay" class="charts">
+      <canvas id="canvas" width="400" height="500">{{chart}}</canvas>
+    </div>
+      
     <div *ngIf="reportType === 'alarms'">
       <h4>All Alarms:</h4>
       <table>
@@ -99,6 +104,8 @@
         <thead>
           <tr>
             <th>Tag ID</th>
+            <th>Tag Type</th>
+            <th>Description</th>
             <th>Type</th>
             <th>Value</th>
             <th>Date</th>
@@ -108,6 +115,8 @@
         <tbody>
           <tr *ngFor="let tagValue of tagValues">
             <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.tagType }}</td>
+            <td>{{ tagValue.description }}</td>
             <td>{{ tagValue.type }}</td>
             <td>{{ tagValue.value }}</td>
             <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
@@ -177,6 +186,8 @@
         <thead>
           <tr>
             <th>Tag ID</th>
+            <th>Tag Type</th>
+            <th>Tag Description</th>
             <th>Type</th>
             <th>Value</th>
             <th>Date</th>
@@ -186,6 +197,8 @@
         <tbody>
           <tr *ngFor="let tagValue of tagValues">
             <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.tagType }}</td>
+            <td>{{ tagValue.description }}</td>
             <td>{{ tagValue.type }}</td>
             <td>{{ tagValue.value }}</td>
             <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
@@ -194,9 +207,6 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <div class="charts">
-  <canvas id="canvas" width="400" height="500">{{chart}}</canvas>
   </div>
 </div>
   <!-- Popup forms -->

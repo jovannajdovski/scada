@@ -13,12 +13,16 @@ namespace webapi.Controllers
     public class ReportController : ControllerBase
     {
         private readonly IAnalogInputService _analogInputService;
+        private readonly IAnalogOutputService _analogOutputService;
+        private readonly IDigitalOutputService _digitalOutputService;
         private readonly IDigitalInputService _digitalInputService;
         private readonly ITagValueService _tagValueService;
         private readonly IAlarmService _alarmService;
 
         public ReportController(IAnalogInputService analogInputService,
             IDigitalInputService digitalInputService,
+            IAnalogOutputService analogOutputService,
+            IDigitalOutputService digitalOutputService,
             ITagValueService tagValueService,
             IAlarmService alarmService)
         {
@@ -26,6 +30,8 @@ namespace webapi.Controllers
             _digitalInputService = digitalInputService;
             _tagValueService = tagValueService;
             _alarmService = alarmService;
+            _analogOutputService = analogOutputService;
+            _digitalOutputService = digitalOutputService;
         }
 
         // Alarm reports
@@ -90,7 +96,42 @@ namespace webapi.Controllers
                 tagValues.Sort((x, y) => y.Date.CompareTo(x.Date));
             }
 
-            return Ok(tagValues);
+            List<TagValueReportDTO> reportDTOs = new List<TagValueReportDTO>();
+
+            foreach (TagValue tagValue in tagValues)
+            {
+                TagBase tag;
+                tag = _digitalInputService.GetDigitalInputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Digital Input", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _digitalOutputService.GetDigitalOutputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Digital Output", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _analogOutputService.GetAnalogOutputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Analog Output", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _analogInputService.GetAnalogInputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Analog Input", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+            }
+
+            return Ok(reportDTOs);
         }
 
         [HttpGet("analoginputs/last")]
@@ -163,7 +204,42 @@ namespace webapi.Controllers
                 tagValues.Sort((x, y) => y.Value.CompareTo(x.Value));
             }
 
-            return Ok(tagValues);
+            List<TagValueReportDTO> reportDTOs = new List<TagValueReportDTO>();
+
+            foreach (TagValue tagValue in tagValues)
+            {
+                TagBase tag;
+                tag = _digitalInputService.GetDigitalInputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Digital Input", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _digitalOutputService.GetDigitalOutputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Digital Output", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _analogOutputService.GetAnalogOutputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Analog Output", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+                tag = _analogInputService.GetAnalogInputById(tagValue.TagBaseId);
+                if (tag != null)
+                {
+                    TagValueReportDTO reportDTO = new TagValueReportDTO(tagValue, "Analog Input", tag.Description);
+                    reportDTOs.Add(reportDTO);
+                    continue;
+                }
+            }
+
+            return Ok(reportDTOs);
         }
 
         private TagValue GetLastTagValue(int tagId)
