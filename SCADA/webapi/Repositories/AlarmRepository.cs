@@ -1,4 +1,5 @@
-﻿using webapi.Enum;
+﻿using Microsoft.EntityFrameworkCore;
+using webapi.Enum;
 using webapi.model;
 
 namespace webapi.Repositories
@@ -21,6 +22,7 @@ namespace webapi.Repositories
         public List<Alarm> GetAlarms(DateTime startTime, DateTime endTime)
         {
             return _context.Alarms
+                .Include(alarm => alarm.AnalogInput)
                 .Where(alarm => alarm.Date >= startTime && alarm.Date <= endTime)
                 .ToList();
         }
@@ -28,6 +30,7 @@ namespace webapi.Repositories
         public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
         {
             return _context.Alarms
+                .Include(alarm => alarm.AnalogInput)
                 .Where(alarm => alarm.Priority == priority)
                 .ToList();
         }

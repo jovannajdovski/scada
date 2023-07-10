@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Alarm, AlarmPriority } from 'src/app/models/alarm';
+import { AlarmReportDTO, AnalogInputReportDTO, DigitalInputReportDTO } from 'src/app/models/report';
 import { AnalogInput, DigitalInput, TagValue } from 'src/app/models/tags';
 import { ReportService } from 'src/app/services/report.service';
 
@@ -11,10 +12,10 @@ import { ReportService } from 'src/app/services/report.service';
 export class ReportComponent {
   AlarmPriority = AlarmPriority;
 
-  alarms: Alarm[] = [];
+  alarms: AlarmReportDTO[] = [];
   tagValues: TagValue[] = [];
-  analogInputs: AnalogInput[] = [];
-  digitalInputs: DigitalInput[] = [];
+  analogInputs: AnalogInputReportDTO[] = [];
+  digitalInputs: DigitalInputReportDTO[] = [];
   reportType: string = '';
 
   constructor(private reportService: ReportService) { }

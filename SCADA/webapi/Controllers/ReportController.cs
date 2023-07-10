@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using webapi.DTO;
 using webapi.Enum;
 using webapi.model;
 using webapi.Model;
@@ -33,7 +34,15 @@ namespace webapi.Controllers
         public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
         {
             List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
-            return Ok(alarms);
+
+            List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
+
+            foreach (Alarm alarm in alarms)
+            {
+                AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
+                reportDTOs.Add(reportDTO);
+            }
+            return Ok(reportDTOs);
         }
 
         [HttpGet("alarms/{priority}")]
@@ -51,7 +60,14 @@ namespace webapi.Controllers
                 priorityEnum = AlarmPriority.LOW_PRIORITY;
             }
             List <Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum, isAscending);
-            return Ok(alarms);
+            List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
+
+            foreach (Alarm alarm in alarms)
+            {
+                AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
+                reportDTOs.Add(reportDTO);
+            }
+            return Ok(reportDTOs);
         }
 
 
@@ -80,16 +96,26 @@ namespace webapi.Controllers
             List<AnalogInput> analogInputs = _analogInputService.GetAllAnalogInputs();
             analogInputs = analogInputs.Where(ai => GetLastTagValue(ai.Id) != null).ToList();
 
+            List<AnalogInputReportDTO> reportDTOs = new List<AnalogInputReportDTO>();
+
+            foreach (AnalogInput analogInput in analogInputs)
+            {
+                TagValue lastTagValue = GetLastTagValue(analogInput.Id);
+
+                AnalogInputReportDTO reportDTO = new AnalogInputReportDTO(analogInput, lastTagValue);
+                reportDTOs.Add(reportDTO);
+            }
+
             if (isAscending)
             {
-                analogInputs.Sort((x, y) => GetLastTagValue(x.Id).Date.CompareTo(GetLastTagValue(y.Id).Date));
+                reportDTOs.Sort((x, y) => x.Date.CompareTo(y.Date));
             }
             else
             {
-                analogInputs.Sort((x, y) => GetLastTagValue(y.Id).Date.CompareTo(GetLastTagValue(x.Id).Date));
+                reportDTOs.Sort((x, y) => y.Date.CompareTo(x.Date));
             }
 
-            return Ok(analogInputs);
+            return Ok(reportDTOs);
         }
 
         [HttpGet("digitalinputs/last")]
@@ -98,16 +124,26 @@ namespace webapi.Controllers
             List<DigitalInput> digitalInputs = _digitalInputService.GetAllDigitalInputs();
             digitalInputs = digitalInputs.Where(di => GetLastTagValue(di.Id) != null).ToList();
 
+            List<DigitalInputReportDTO> reportDTOs = new List<DigitalInputReportDTO>();
+
+            foreach (DigitalInput digitalInput in digitalInputs)
+            {
+                TagValue lastTagValue = GetLastTagValue(digitalInput.Id);
+
+                DigitalInputReportDTO reportDTO = new DigitalInputReportDTO(digitalInput, lastTagValue);
+                reportDTOs.Add(reportDTO);
+            }
+
             if (isAscending)
             {
-                digitalInputs.Sort((x, y) => GetLastTagValue(x.Id).Date.CompareTo(GetLastTagValue(y.Id).Date));
+                reportDTOs.Sort((x, y) => x.Date.CompareTo(y.Date));
             }
             else
             {
-                digitalInputs.Sort((x, y) => GetLastTagValue(y.Id).Date.CompareTo(GetLastTagValue(x.Id).Date));
+                reportDTOs.Sort((x, y) => y.Date.CompareTo(x.Date));
             }
 
-            return Ok(digitalInputs);
+            return Ok(reportDTOs);
         }
 
         [HttpGet("tagvalues/{id}")]
