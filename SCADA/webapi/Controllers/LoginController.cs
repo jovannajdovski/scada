@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using webapi.Enum;
 using webapi.model;
+using webapi.Repositories;
 
 namespace webapi.Controllers;
 
@@ -9,27 +10,24 @@ namespace webapi.Controllers;
 [Route("scada/login")]
 public class LoginController : ControllerBase
 {
-    
-    private readonly ILogger<LoginController> _logger;
 
-    public LoginController(ILogger<LoginController> logger)
+    private readonly IUserRepository _userRepository;
+
+    public LoginController(IUserRepository userRepository)
     {
-        _logger = logger;
+        _userRepository = userRepository;
     }
 
     [HttpPost()]
     public IActionResult Login(LoginModel model)
     {
-        DbSet<User> users = new ScadaDBContext().Users;
-        User user = users.FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
+
+        User user = _userRepository.GetUserByCredentials(model.Username, model.Password);
 
         if (user == null)
-        {
             return Unauthorized();
-        }
 
         var userType = user.Type == UserType.ADMIN ? "admin" : "user";
-
         var response = new { UserType = userType };
         return Ok(response);
     }

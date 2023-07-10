@@ -8,21 +8,11 @@ using webapi.Model;
 namespace webapi.model
 {
 
-    public class AnalogInput
+    public class AnalogInput : InputTagBase
     {
-        [Key]
-        public int Id { get; set; }
-        public string Description { get; set; }
-        //public int AddressId { get; set; }
-        public IOAddress Address { get; set; }
-        public double ScanTime { get; set; }
-        public bool IsScanning { get; set; }
         public virtual List<Alarm> Alarms { get; set; }
         public double LowLimit { get; set; }
         public double HighLimit { get; set; }
         public string Unit { get; set; }
-
-        public virtual List<TagValue> Values { get; set; }
-
     }
 }

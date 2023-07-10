@@ -58,7 +58,6 @@ namespace SimulationDriver
                             }
                             dbContext.Update(existingEntity);
                         }
-                        
 
                         dbContext.SaveChanges();
                     }

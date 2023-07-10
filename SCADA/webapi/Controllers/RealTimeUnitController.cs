@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using webapi.Enum;
 using webapi.model;
 using Microsoft.EntityFrameworkCore;
+using webapi.Repositories;
+using webapi.Services;
 
 namespace webapi.Controllers
 {
@@ -20,26 +22,25 @@ namespace webapi.Controllers
     [Route("scada/rtu")]
     public class RealTimeUnitController : ControllerBase
     {
-        private readonly ILogger<RealTimeUnitController> _logger;
+        private readonly IIOAddressRepository _ioAddressRepository;
+        private readonly IRealTimeUnitRepository _realTimeUnitRepository;
 
-        public RealTimeUnitController(ILogger<RealTimeUnitController> logger)
+        public RealTimeUnitController(
+            IIOAddressRepository ioAddressRepository, IRealTimeUnitRepository realTimeUnitRepository)
         {
-            _logger = logger;
+            _ioAddressRepository = ioAddressRepository;
+            _realTimeUnitRepository = realTimeUnitRepository;
         }
         [HttpPost()]
         public IActionResult AddRTU(RtuModel model)
         {
-            ScadaDBContext dbc = new ScadaDBContext();
-            DbSet<IOAddress> addresses = dbc.Addresses;
-            IOAddress address = addresses.FirstOrDefault(a=> a.Id==model.AddressId);
+            IOAddress address = _ioAddressRepository.GetById(model.AddressId);
             if (address == null)
                 return BadRequest();
+
             RealTimeUnit realTimeUnit = new RealTimeUnit();
             realTimeUnit.SetProperties(model.HighLimit, model.LowLimit, address);
-            Console.WriteLine(address.Id);
-            
-            dbc.RealTimeUnits.Add(realTimeUnit);
-            dbc.SaveChanges();
+            _realTimeUnitRepository.Add(realTimeUnit);
             return Ok();
         }
 

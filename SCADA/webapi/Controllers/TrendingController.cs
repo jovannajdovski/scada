@@ -13,92 +13,55 @@ using Microsoft.Extensions.Logging;
 using webapi.Enum;
 using webapi.model;
 using Microsoft.EntityFrameworkCore;
+using webapi.Repositories;
+using webapi.Services;
 
 namespace webapi.Controllers
 {
     [ApiController]
     [Route("scada/trending")]
-    public class TrendingWebSocketController : ControllerBase
+    public class TrendingController : ControllerBase
     {
 
-        private readonly ILogger<TrendingWebSocketController> _logger;
+        private readonly IDigitalInputService _digitalInputService;
+        private readonly IDigitalOutputService _digitalOutputService;
+        private readonly IAnalogInputService _analogInputService;
+        private readonly IAnalogOutputService _analogOutputService;
+        private readonly IIOAddressRepository _ioAddressRepository;
 
-        public TrendingWebSocketController(ILogger<TrendingWebSocketController> logger)
+        public TrendingController(
+            IDigitalInputService digitalInputService,
+            IDigitalOutputService digitalOutputService,
+            IAnalogInputService analogInputService,
+            IAnalogOutputService analogOutputService,
+            IIOAddressRepository ioAddressRepository)
         {
-            _logger = logger;
+            _digitalInputService = digitalInputService;
+            _digitalOutputService = digitalOutputService;
+            _analogInputService = analogInputService;
+            _analogOutputService = analogOutputService;
+            _ioAddressRepository = ioAddressRepository;
         }
         [HttpGet()]
         public IActionResult GetAllTrending()
         {
-            ScadaDBContext dBContext = new ScadaDBContext();
-            List<AnalogInput> analogInputs = dBContext.AnalogInputs.Include(ai => ai.Address)
-                .Where(ai => ai.IsScanning).ToList(); 
-            List<DigitalInput> digitalInputs = dBContext.DigitalInputs.Include(ai => ai.Address)
-                .Where(di => di.IsScanning).ToList();;
+            
+            List<AnalogInput> analogInputs = _analogInputService.GetAllScanningAnalogInputs();
+            List<DigitalInput> digitalInputs = _digitalInputService.GetAllScanningDigitalInputs();
 
-            List<TrendingResponse> trendingData = new List<TrendingResponse>();
+            List<TrendingResponseDTO> trendingData = new List<TrendingResponseDTO>();
 
             foreach (var analogInput in analogInputs)
-            {
-                trendingData.Add(new TrendingResponse(analogInput));
-            }
+                trendingData.Add(new TrendingResponseDTO(analogInput));
 
             foreach (var digitalInput in digitalInputs)
-            {
-                trendingData.Add(new TrendingResponse(digitalInput));
-            }
+                trendingData.Add(new TrendingResponseDTO(digitalInput));
             
             return Ok(trendingData);
         }
 
     }
-    public class TrendingResponse
-    {
-        public int id { get; set; }
-        public string description { get; set; }
-        public int address { get; set; }
-        public string value { get; set; }
-        public string limit { get; set; }
-        public string unit { get; set; }
-        public double scanTime { get; set; }
-        public TrendingResponse(int id, string description, int address, string value, string limit, string unit)
-        {
-            this.id = id;
-            this.description = description;
-            this.address = address;
-            this.value = value;
-            this.limit = limit;
-            this.unit = unit;
-        }
-        public TrendingResponse(AnalogInput analogInput)
-        {
-            this.id = analogInput.Id;
-            this.scanTime=analogInput.ScanTime;
-            this.description= analogInput.Description;
-            this.address = analogInput.Address.Id;
-            if (analogInput.Address.Type == "double")
-                this.value = Math.Round(Double.Parse(analogInput.Address.Value), 4).ToString();
-            else if (analogInput.Address.Type == null)
-                this.value = "/";
-            else
-                this.value = analogInput.Address.Value;
-            this.limit=analogInput.LowLimit.ToString()+" - "+analogInput.HighLimit.ToString();
-            this.unit = analogInput.Unit;
-        }
-        public TrendingResponse(DigitalInput digitalInput)
-        {
-            this.id = digitalInput.Id;
-            this.scanTime= digitalInput.ScanTime;
-            this.description = digitalInput.Description;
-            this.address = digitalInput.Address.Id;
-            if (digitalInput.Address.Type == null)
-                this.value = "/";
-            else
-                this.value = digitalInput.Address.Value;
-            this.limit = "/";
-            this.unit = "/";
-        }
-    }
+
 
 }
 

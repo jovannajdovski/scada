@@ -5,6 +5,7 @@ namespace webapi.Services
 {
     public interface IAnalogInputService
     {
+        List<AnalogInput> GetAllScanningAnalogInputs();
         List<AnalogInput> GetAllAnalogInputs();
         AnalogInput GetAnalogInputById(int id);
         void CreateAnalogInput(AnalogInput analogInput);
@@ -20,7 +21,10 @@ namespace webapi.Services
         {
             _analogInputRepository = analogInputRepository;
         }
-
+        public List<AnalogInput> GetAllScanningAnalogInputs()
+        {
+            return _analogInputRepository.GetAllScanningAnalogInputs();
+        }
         public List<AnalogInput> GetAllAnalogInputs()
         {
             return _analogInputRepository.GetAll();

@@ -14,9 +14,10 @@ builder.Services.AddScoped<IDigitalOutputRepository, DigitalOutputRepository>();
 builder.Services.AddScoped<IAnalogInputRepository, AnalogInputRepository>();
 builder.Services.AddScoped<IAnalogOutputRepository, AnalogOutputRepository>();
 builder.Services.AddScoped<IIOAddressRepository, IOAddressRepository>();
+builder.Services.AddScoped<IRealTimeUnitRepository, RealTimeUnitRepository>();
 builder.Services.AddScoped<ITagValueRepository, TagValueRepository>();
 builder.Services.AddScoped<IAlarmRepository, AlarmRepository>();
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Register services
 builder.Services.AddScoped<IDigitalInputService, DigitalInputService>();
@@ -51,9 +52,11 @@ using (var db = new ScadaDBContext())
     db.Database.EnsureCreated();
     db.SaveChanges();
 }
+object analogInputLock=new object();
 SimulationDriver.SimulationDriver simulationDriver = new SimulationDriver.SimulationDriver(new object());
 simulationDriver.StartSimulation();
 RealTimeDriver realTimeDriver = new RealTimeDriver(new object());
-simulationDriver.StartSimulation();
 realTimeDriver.StartSimulation();
+TagProcessing tagProcessing = new TagProcessing(new object(), new object());
+tagProcessing.Process();
 app.Run();

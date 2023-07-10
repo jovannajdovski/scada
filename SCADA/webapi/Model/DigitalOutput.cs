@@ -8,15 +8,8 @@ using webapi.Model;
 namespace webapi.model
 {
 
-    public class DigitalOutput
+    public class DigitalOutput:OutputTagBase
     {
-        [Key]
-        public int Id { get; set; }
-        public string Description { get; set; }
-        //public int AddressId { get; set; }
-        public IOAddress Address { get; set; }
-        public DigitalValueType InitialValue { get; set; }
-
-        public virtual List<TagValue> Values { get; set; }
+        
     }
 }

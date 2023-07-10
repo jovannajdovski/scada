@@ -46,13 +46,13 @@ namespace webapi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    LowLimit = table.Column<double>(type: "REAL", nullable: false),
+                    HighLimit = table.Column<double>(type: "REAL", nullable: false),
+                    Unit = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     AddressId = table.Column<int>(type: "INTEGER", nullable: false),
                     ScanTime = table.Column<double>(type: "REAL", nullable: false),
-                    IsScanning = table.Column<bool>(type: "INTEGER", nullable: false),
-                    LowLimit = table.Column<double>(type: "REAL", nullable: false),
-                    HighLimit = table.Column<double>(type: "REAL", nullable: false),
-                    Unit = table.Column<string>(type: "TEXT", nullable: false)
+                    IsScanning = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,12 +71,11 @@ namespace webapi.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Description = table.Column<string>(type: "TEXT", nullable: false),
-                    AddressId = table.Column<int>(type: "INTEGER", nullable: false),
-                    InitialValue = table.Column<double>(type: "REAL", nullable: false),
                     LowLimit = table.Column<double>(type: "REAL", nullable: false),
                     HighLimit = table.Column<double>(type: "REAL", nullable: false),
-                    Unit = table.Column<string>(type: "TEXT", nullable: false)
+                    Unit = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -118,8 +117,7 @@ namespace webapi.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
-                    AddressId = table.Column<int>(type: "INTEGER", nullable: false),
-                    InitialValue = table.Column<int>(type: "INTEGER", nullable: false)
+                    AddressId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {

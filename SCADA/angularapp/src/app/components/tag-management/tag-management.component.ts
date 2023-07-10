@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { AnalogInputCreateDTO, AnalogOutputCreateDTO, DigitalInputCreateDTO, DigitalOutputCreateDTO } from 'src/app/models/createTags';
 import { AnalogInput, AnalogOutput, DigitalInput, DigitalOutput } from 'src/app/models/tags';
 
@@ -20,13 +21,15 @@ export class TagManagementComponent {
   analogInputs: AnalogInput[] = [];
   analogOutputs: AnalogOutput[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     this.loadDigitalInputs();
     this.loadDigitalOutputs();
     this.loadAnalogInputs();
     this.loadAnalogOutputs();
   }
-
+  logout(): void {
+    this.router.navigate(['/login']);
+  }
   loadDigitalInputs() {
     this.http.get<DigitalInput[]>('/api/Tag/DigitalInputs').subscribe(data => {
       this.digitalInputs = data;

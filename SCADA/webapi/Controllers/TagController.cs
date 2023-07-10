@@ -18,19 +18,22 @@ namespace webapi.Controllers
         private readonly IAnalogInputService _analogInputService;
         private readonly IAnalogOutputService _analogOutputService;
         private readonly IIOAddressRepository _ioAddressRepository;
+        private readonly ITagValueService _tagValueService;
 
         public TagController(
             IDigitalInputService digitalInputService,
             IDigitalOutputService digitalOutputService,
             IAnalogInputService analogInputService,
             IAnalogOutputService analogOutputService,
-            IIOAddressRepository ioAddressRepository)
+            IIOAddressRepository ioAddressRepository,
+            ITagValueService tagValueService)
         {
             _digitalInputService = digitalInputService;
             _digitalOutputService = digitalOutputService;
             _analogInputService = analogInputService;
             _analogOutputService = analogOutputService;
             _ioAddressRepository = ioAddressRepository;
+            _tagValueService = tagValueService;
         }
 
         // DigitalInput
@@ -123,12 +126,17 @@ namespace webapi.Controllers
             IOAddress ioAddress = _ioAddressRepository.GetById(digitalOutputDTO.AddressId);
             if (ioAddress != null)
             {
+                List<TagValue> tagValues = new List<TagValue>();
+                TagValue tagValue = new TagValue();
+                tagValue.Date = DateTime.Now;
+                tagValue.Value = digitalOutputDTO.InitialValue == Enum.DigitalValueType.ON ? "true" : "false";  
+                tagValue.Type = "boolean";
+                tagValues.Add(tagValue);
                 var digitalOutput = new DigitalOutput
                 {
                     Description = digitalOutputDTO.Description,
-                    InitialValue = digitalOutputDTO.InitialValue,
                     Address = ioAddress,
-                    Values = new List<TagValue>()
+                    Values = tagValues
                 };
 
                 _digitalOutputService.CreateDigitalOutput(digitalOutput);
@@ -242,15 +250,20 @@ namespace webapi.Controllers
             IOAddress ioAddress = _ioAddressRepository.GetById(analogOutputDTO.AddressId);
             if (ioAddress != null)
             {
+                List<TagValue> tagValues = new List<TagValue>();
+                TagValue tagValue = new TagValue();
+                tagValue.Date = DateTime.Now;
+                tagValue.Value = analogOutputDTO.InitialValue.ToString();
+                tagValue.Type = "double";
+                tagValues.Add(tagValue);
                 var analogOutput = new AnalogOutput
                 {
                     Description = analogOutputDTO.Description,
-                    InitialValue = analogOutputDTO.InitialValue,
                     LowLimit = analogOutputDTO.LowLimit,
                     HighLimit = analogOutputDTO.HighLimit,
                     Unit = analogOutputDTO.Unit,
                     Address = ioAddress,
-                    Values = new List<TagValue>()
+                    Values = tagValues
                 };
 
                 _analogOutputService.CreateAnalogOutput(analogOutput);

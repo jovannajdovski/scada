@@ -141,9 +141,6 @@ namespace webapi.Migrations
                     b.Property<double>("HighLimit")
                         .HasColumnType("REAL");
 
-                    b.Property<double>("InitialValue")
-                        .HasColumnType("REAL");
-
                     b.Property<double>("LowLimit")
                         .HasColumnType("REAL");
 
@@ -196,9 +193,6 @@ namespace webapi.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("InitialValue")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

@@ -11,7 +11,7 @@ using webapi;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ScadaDBContext))]
-    [Migration("20230709161947_InitialCreate")]
+    [Migration("20230710003544_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -144,9 +144,6 @@ namespace webapi.Migrations
                     b.Property<double>("HighLimit")
                         .HasColumnType("REAL");
 
-                    b.Property<double>("InitialValue")
-                        .HasColumnType("REAL");
-
                     b.Property<double>("LowLimit")
                         .HasColumnType("REAL");
 
@@ -199,9 +196,6 @@ namespace webapi.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("InitialValue")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 

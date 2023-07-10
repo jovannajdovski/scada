@@ -1,116 +1,122 @@
-<div class="navbar">
-  <button (click)="openAddTagPopup('digitalInput')">Add DI Tag</button>
-  <button (click)="openAddTagPopup('digitalOutput')">Add DO Tag</button>
-  <button (click)="openAddTagPopup('analogInput')">Add AI Tag</button>
-  <button (click)="openAddTagPopup('analogOutput')">Add AO Tag</button>
-  <button (click)="openRtuPopup()">Add RTU</button>
-</div>
+<div class="db-manager-container">
+  <nav class="navbar">
+    <h2>Database Manager</h2>
+    <div class="midDiv">
+      <button (click)="openAddTagPopup('digitalInput')">Add DI Tag</button>
+      <button (click)="openAddTagPopup('digitalOutput')">Add DO Tag</button>
+      <button (click)="openAddTagPopup('analogInput')">Add AI Tag</button>
+      <button (click)="openAddTagPopup('analogOutput')">Add AO Tag</button>
+      <button (click)="openRtuPopup()">Add RTU</button>
+    </div>
+    <button id="logout-button" (click)="logout()">Logout</button>
+  </nav>
 
-<div class="table-container">
-  <table>
-    <caption class="header">Tags</caption>
-    <thead>
-      <tr>
-        <th>Tag Type</th>
-        <th>Description</th>
-        <th>Value</th>
-        <th>Low Limit</th>
-        <th>High Limit</th>
-        <th>Unit</th>
-        <th>Scan Time</th>
-        <th>Scan Status</th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <ng-container *ngFor="let digitalInput of digitalInputs">
+  <div class="content">
+    <table>
+      <thead>
         <tr>
-          <td>DI</td>
-          <td>{{ digitalInput.description }}</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>{{ digitalInput.scanTime }}</td>
-          <td>
-            <div class="turn">
-              <span [ngClass]="{'icon-green': digitalInput.isScanning, 'icon-red': !digitalInput.isScanning}"></span>
-              <span class="turntxt"> {{digitalInput.isScanning ? 'ON' : 'OFF' }}</span>
-            </div>
-          </td>
-          <td>
-            <button class="scan" (click)="turnDigitalInput(digitalInput.id)">
-              {{ digitalInput.isScanning ? 'Turn Scan OFF' : 'Turn Scan ON' }}
-            </button>
-          </td>
-          <td>
-            <button class="remove" (click)="deleteDigitalInput(digitalInput.id)">Remove</button>
-          </td>
+          <th>Tag Type</th>
+          <th>Description</th>
+          <th>Value</th>
+          <th>Low Limit</th>
+          <th>High Limit</th>
+          <th>Unit</th>
+          <th>Scan Time</th>
+          <th>Scan Status</th>
+          <th></th>
+          <th></th>
         </tr>
-      </ng-container>
-      <ng-container *ngFor="let digitalOutput of digitalOutputs">
-        <tr>
-          <td>DO</td>
-          <td>{{ digitalOutput.description }}</td>
-          <td>{{ digitalOutput.initialValue }}</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td>-</td>
-          <td style="text-align: center;">-</td>
-          <td></td>
-          <td>
-            <button class="remove" (click)="deleteDigitalOutput(digitalOutput.id)">Remove</button>
-          </td>
-        </tr>
-      </ng-container>
-      <ng-container *ngFor="let analogInput of analogInputs">
-        <tr>
-          <td>AI</td>
-          <td>{{ analogInput.description }}</td>
-          <td>-</td>
-          <td>{{ analogInput.lowLimit }}</td>
-          <td>{{ analogInput.highLimit }}</td>
-          <td>{{ analogInput.unit }}</td>
-          <td>{{ analogInput.scanTime }}</td>
-          <td>
-            <div class="turn">
-              <span [ngClass]="{'icon-green': analogInput.isScanning, 'icon-red': !analogInput.isScanning}"></span>
-              <span class="turntxt">{{ analogInput.isScanning ? 'ON' : 'OFF' }}</span>
-            </div>
-          </td>
-          <td>
-            <button class="scan" (click)="turnAnalogInput(analogInput.id)">
-              {{ analogInput.isScanning ? 'Turn Scan OFF' : 'Turn Scan ON' }}
-            </button>
-          </td>
-          <td>
-            <button class="remove" (click)="deleteAnalogInput(analogInput.id)">Remove</button>
-          </td>
-        </tr>
-      </ng-container>
-      <ng-container *ngFor="let analogOutput of analogOutputs">
-        <tr>
-          <td>AO</td>
-          <td>{{ analogOutput.description }}</td>
-          <td>{{ analogOutput.initialValue }}</td>
-          <td>{{ analogOutput.lowLimit }}</td>
-          <td>{{ analogOutput.highLimit }}</td>
-          <td>{{ analogOutput.unit }}</td>
-          <td>-</td>
-          <td style="text-align: center;">-</td>
-          <td></td>
-          <td>
-            <button class="remove" (click)="deleteAnalogOutput(analogOutput.id)">Remove</button>
-          </td>
-        </tr>
-      </ng-container>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let digitalInput of digitalInputs">
+          <tr>
+            <td>DI</td>
+            <td>{{ digitalInput.description }}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>{{ digitalInput.scanTime }}</td>
+            <td>
+              <div class="turn">
+                <span [ngClass]="{'icon-green': digitalInput.isScanning, 'icon-red': !digitalInput.isScanning}"></span>
+                <span class="turntxt"> {{digitalInput.isScanning ? 'ON' : 'OFF' }}</span>
+              </div>
+            </td>
+            <td>
+              <button class="scan" (click)="turnDigitalInput(digitalInput.id)">
+                {{ digitalInput.isScanning ? 'Turn Scan OFF' : 'Turn Scan ON' }}
+              </button>
+            </td>
+            <td>
+              <button class="remove" (click)="deleteDigitalInput(digitalInput.id)">Remove</button>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngFor="let digitalOutput of digitalOutputs">
+          <tr>
+            <td>DO</td>
+            <td>{{ digitalOutput.description }}</td>
+            <td>{{ digitalOutput.initialValue }}</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td style="text-align: center;">-</td>
+            <td></td>
+            <td>
+              <button class="remove" (click)="deleteDigitalOutput(digitalOutput.id)">Remove</button>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngFor="let analogInput of analogInputs">
+          <tr>
+            <td>AI</td>
+            <td>{{ analogInput.description }}</td>
+            <td>-</td>
+            <td>{{ analogInput.lowLimit }}</td>
+            <td>{{ analogInput.highLimit }}</td>
+            <td>{{ analogInput.unit }}</td>
+            <td>{{ analogInput.scanTime }}</td>
+            <td>
+              <div class="turn">
+                <span [ngClass]="{'icon-green': analogInput.isScanning, 'icon-red': !analogInput.isScanning}"></span>
+                <span class="turntxt">{{ analogInput.isScanning ? 'ON' : 'OFF' }}</span>
+              </div>
+            </td>
+            <td>
+              <button class="scan" (click)="turnAnalogInput(analogInput.id)">
+                {{ analogInput.isScanning ? 'Turn Scan OFF' : 'Turn Scan ON' }}
+              </button>
+            </td>
+            <td>
+              <button class="remove" (click)="deleteAnalogInput(analogInput.id)">Remove</button>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-container *ngFor="let analogOutput of analogOutputs">
+          <tr>
+            <td>AO</td>
+            <td>{{ analogOutput.description }}</td>
+            <td>{{ analogOutput.initialValue }}</td>
+            <td>{{ analogOutput.lowLimit }}</td>
+            <td>{{ analogOutput.highLimit }}</td>
+            <td>{{ analogOutput.unit }}</td>
+            <td>-</td>
+            <td style="text-align: center;">-</td>
+            <td></td>
+            <td>
+              <button class="remove" (click)="deleteAnalogOutput(analogOutput.id)">Remove</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
 </div>
 <!-- Popup forms -->
 <!-- Analog Input Form -->
+<div class="popup-background" *ngIf="showAddTagPopup"></div>
 <div class="popup" *ngIf="showAddTagPopup && tagType === 'analogInput'">
   <h3>Add Analog Input Tag</h3>
   <form (ngSubmit)="createAnalogInput()">
