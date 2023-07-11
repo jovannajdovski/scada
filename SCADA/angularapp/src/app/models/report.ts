@@ -29,3 +29,13 @@ export interface AlarmReportDTO {
     analogInputHighLimit: number;
     analogInputUnit: string;
   }
+
+  export interface TagValueReportDTO {
+    id: number;
+    tagId: number;
+    tagType: string;
+    description: string;
+    date: Date;
+    type: string;
+    value?: string;
+  }

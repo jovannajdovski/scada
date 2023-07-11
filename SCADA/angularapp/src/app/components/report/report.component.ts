@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Alarm, AlarmPriority, AlarmType } from 'src/app/models/alarm';
-import { AlarmReportDTO, AnalogInputReportDTO, DigitalInputReportDTO } from 'src/app/models/report';
+import { AlarmReportDTO, AnalogInputReportDTO, DigitalInputReportDTO, TagValueReportDTO } from 'src/app/models/report';
 import { AnalogInput, DigitalInput, TagValue } from 'src/app/models/tags';
 import { ReportService } from 'src/app/services/report.service';
 import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
+import 'chartjs-adapter-date-fns';
+import { enUS } from 'date-fns/locale';
 
 @Component({
   selector: 'app-report',
@@ -13,11 +15,11 @@ import { Chart, ChartData, ChartOptions } from 'chart.js/auto';
 export class ReportComponent {
 
   chart: any;
-
+  chartDisplay: boolean = false;
   AlarmPriority = AlarmPriority;
 
   alarms: AlarmReportDTO[] = [];
-  tagValues: TagValue[] = [];
+  tagValues: TagValueReportDTO[] = [];
   analogInputs: AnalogInputReportDTO[] = [];
   digitalInputs: DigitalInputReportDTO[] = [];
   reportType: string = '';
@@ -27,52 +29,134 @@ export class ReportComponent {
 
 
   initializeCharts() {
-    const chartData: ChartData<'bar', any, string> = {
-      labels: this.alarms.map(alarm => alarm.id.toString()), // Use alarm ID as labels
-      datasets: [
-        {
-          label: 'Type',
-          data: this.alarms.map(alarm => alarm.type), // Use alarm type as dataset values
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
+    this.chartDisplay = true;
+    let titleTxt;
+    let dates: Date[] = [];
+    const colors = ['rgba(20, 0, 255, 1)', 'rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 1)', 'rgba(230, 255, 0, 1)', 'rgba(255, 0, 255, 1)', , 'rgba(0, 255, 255, 1)'];
+    let datasets: any;
+    if (this.reportType === "tagValues"){
+      titleTxt = "Tag Values Chart";
+      dates = this.tagValues.map(tagValue => new Date(tagValue.date));
+
+      const tagIds = Array.from(new Set(this.tagValues.map(tagValue => tagValue.tagId)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.tagValues.filter(tagValue => tagValue.tagId === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
           borderWidth: 1,
-         },
-        {
-          label: 'Priority',
-          data: this.alarms.map(alarm => alarm.priority), // Use alarm priority as dataset values
-          backgroundColor: 'rgba(192, 75, 75, 0.2)',
-          borderColor: 'rgba(192, 75, 75, 1)',
+        };
+      });
+
+    } else if (this.reportType === "lastAnalogInputs"){
+      titleTxt = "Last Values Analog Input Chart";
+      dates = this.analogInputs.map(analogInput => new Date(analogInput.date));
+
+      const tagIds = Array.from(new Set(this.analogInputs.map(analogInput => analogInput.id)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.analogInputs.filter(tagValue => tagValue.id === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
           borderWidth: 1,
-        },
-        {
-          label: 'Limit',
-          data: this.alarms.map(alarm => alarm.limit), // Use alarm limit as dataset values
-          backgroundColor: 'rgba(192, 192, 75, 0.2)',
-          borderColor: 'rgba(192, 192, 75, 1)',
+        };
+      });
+
+    } else if (this.reportType === "lastDigitalInputs"){
+      titleTxt = "Last Values Digital Input Chart";
+      dates = this.digitalInputs.map(digitalInput => new Date(digitalInput.date));
+
+      const tagIds = Array.from(new Set(this.digitalInputs.map(tagValue => tagValue.id)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.digitalInputs.filter(tagValue => tagValue.id === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
           borderWidth: 1,
-        },
-        // {
-        //   label: 'Date',
-        //   data: this.alarms.map(alarm => alarm.date), // Use alarm date as dataset values
-        //   backgroundColor: 'rgba(75, 75, 192, 0.2)',
-        //   borderColor: 'rgba(75, 75, 192, 1)',
-        //   borderWidth: 1,
-        // },
-      ],
+        };
+      });
+
+    } else if (this.reportType === "tagValuesById"){
+      dates = this.tagValues.map(tagValue => new Date(tagValue.date));
+      titleTxt = "Tag Values By ID Chart";
+
+      const tagIds = Array.from(new Set(this.tagValues.map(tagValue => tagValue.tagId)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.tagValues.filter(tagValue => tagValue.tagId === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
+          borderWidth: 1,
+        };
+      });
+    }
+
+    const formattedDates = dates.map(date => date.toISOString());
+    // dates.map((date, index) => ({ t: date.toISOString(), y: values[index] }))
+    // const chartData: ChartData<'line', any, string> = {
+    //   labels: formattedDates, 
+    //   datasets: [
+    //     {
+    //       label: 'Tag Value',
+    //       data: values,
+    //       backgroundColor: 'rgba(20, 0, 255, 0.2)',
+    //       borderColor: 'rgba(20, 0, 255, 1)',
+    //       borderWidth: 1,
+    //     }
+    //   ],
+    // };
+
+    const chartData: ChartData<'line', any, string> = {
+      labels: formattedDates, 
+      datasets: datasets
     };
     
-    const chartOptions: ChartOptions<'bar'> = {
+    const chartOptions: ChartOptions<'line'> = {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
         },
+        x: {
+          type: 'time',
+          adapters: { 
+            date: {
+              locale: enUS, 
+            },
+          }, 
+        }
       },
       plugins: {
         title: {
           display: true,
-          text: 'Alarms Chart',
+          text: titleTxt,
         },
       },
     };
@@ -82,7 +166,7 @@ export class ReportComponent {
     }
     
     this.chart = new Chart('canvas', {
-      type: 'bar',
+      type: 'line',
       data: chartData,
       options: chartOptions
     });
@@ -140,7 +224,7 @@ export class ReportComponent {
         console.log(this.alarms);
         this.reportType = 'alarms';
         this.showPopup = false;
-        this.initializeCharts();
+        this.chartDisplay = false;
       },
       (error) => {
         console.log(error);
@@ -159,7 +243,7 @@ export class ReportComponent {
         console.log(this.alarms);
         this.reportType = 'alarmsByPriority';
         this.showPopup = false;
-        this.initializeCharts();
+        this.chartDisplay = false;
       },
       (error) => {
         console.log(error);
@@ -180,6 +264,7 @@ export class ReportComponent {
         console.log(this.tagValues);
         this.reportType = 'tagValues';
         this.showPopup = false;
+        this.initializeCharts();
       },
       (error) => {
         console.log(error);
@@ -198,6 +283,7 @@ export class ReportComponent {
         console.log(this.analogInputs);
         this.reportType = 'lastAnalogInputs';
         this.showPopup = false;
+        this.initializeCharts();
       },
       (error) => {
         console.log(error);
@@ -216,6 +302,7 @@ export class ReportComponent {
         console.log(this.digitalInputs);
         this.reportType = 'lastDigitalInputs';
         this.showPopup = false;
+        this.initializeCharts();
       },
       (error) => {
         console.log(error);
@@ -235,6 +322,7 @@ export class ReportComponent {
         console.log(this.tagValues);
         this.reportType = 'tagValuesById';
         this.showPopup = false;
+        this.initializeCharts();
       },
       (error) => {
         console.log(error);

@@ -7,27 +7,51 @@
     <Timestamp>19:34:36:015 10.07.2023</Timestamp>
   </digitalInput>
   <analogInput>
-    <Id>7</Id>
-    <Description>vodaaaa</Description>
-    <Value>10</Value>
-    <Timestamp>22:58:22:671 10.07.2023</Timestamp>
-  </analogInput>
-  <analogInput>
-    <Id>3</Id>
-    <Description>Coal amount in furnace</Description>
-    <Value>99.81285221093272</Value>
-    <Timestamp>02:37:15:010 11.07.2023</Timestamp>
-  </analogInput>
-  <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>758.5993351549957</Value>
-    <Timestamp>02:37:16:964 11.07.2023</Timestamp>
+    <Value>105.18333508125116</Value>
+    <Timestamp>03:22:08:377 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>2</Id>
     <Description>Gas volume in pool</Description>
-    <Value>866.9003239274849</Value>
-    <Timestamp>02:37:18:957 11.07.2023</Timestamp>
+    <Value>299.38097042190293</Value>
+    <Timestamp>03:22:08:509 11.07.2023</Timestamp>
   </analogInput>
+  <analogInput>
+    <Id>8</Id>
+    <Description>neka voda25</Description>
+    <Value>100</Value>
+    <Timestamp>03:22:09:437 11.07.2023</Timestamp>
+  </analogInput>
+  <analogOutput>
+    <Id>9</Id>
+    <Description>ventili za neku vodu25</Description>
+    <Value>5</Value>
+    <Timestamp>03:22:09:440 11.07.2023</Timestamp>
+  </analogOutput>
+  <analogInput>
+    <Id>3</Id>
+    <Description>Coal amount in furnace</Description>
+    <Value>99.47569573956868</Value>
+    <Timestamp>03:22:09:535 11.07.2023</Timestamp>
+  </analogInput>
+  <analogInput>
+    <Id>7</Id>
+    <Description>neka voda</Description>
+    <Value>100</Value>
+    <Timestamp>03:22:09:592 11.07.2023</Timestamp>
+  </analogInput>
+  <analogOutput>
+    <Id>6</Id>
+    <Description>ventili za neku vodu</Description>
+    <Value>20</Value>
+    <Timestamp>03:22:09:594 11.07.2023</Timestamp>
+  </analogOutput>
+  <digitalInput>
+    <Id>11</Id>
+    <Description>digitalni4</Description>
+    <Value>true</Value>
+    <Timestamp>03:22:09:638 11.07.2023</Timestamp>
+  </digitalInput>
 </Scada>
