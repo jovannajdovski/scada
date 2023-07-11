@@ -252,9 +252,9 @@ namespace webapi.Controllers
                 return NotFound();
             }
 
-            
-            _analogInputService.UpdateAnalogInput(analogInput);
+
             analogInput.IsScanning = scan.IsScanning;
+            _analogInputService.UpdateAnalogInput(analogInput);
             if (scan.IsScanning)
                 _tagProcessingService.CreateAnalogTimer(analogInput);
             else

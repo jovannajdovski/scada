@@ -91,15 +91,11 @@ namespace webapi.Services
         }
         public void CreateAnalogTimer(AnalogInput analogInput, IConfigurationFileService _configuationFileService)
         {
-            Console.WriteLine(analogInput.Address.Id + " " + analogInput.Id + " " + _configuationFileService + " " + analogInput.ScanTime);
             Timer timer = new Timer(state =>
             {
                 AnalogTimerCallback(analogInput.Address.Id, analogInput.Id, _configuationFileService);
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(analogInput.ScanTime));
             timers.Add(analogInput.Id, timer);
-            Console.WriteLine("\nCreate analog: ");
-            foreach (var k in timers.Keys)
-                Console.WriteLine(k);
                 
         }
         public void CreateDigitalTimer(DigitalInput digitalInput, IConfigurationFileService _configuationFileService)
@@ -225,9 +221,6 @@ namespace webapi.Services
         {
             this.timers[tagId].Dispose();
             this.timers.Remove(tagId);
-            Console.WriteLine("\nRemove timer: ");
-            foreach (var k in timers.Keys)
-                Console.WriteLine(k);
         }
         public void QuitTimers()
         {

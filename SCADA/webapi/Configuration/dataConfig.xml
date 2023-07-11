@@ -1,21 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Scada>
+  <analogOutput>
+    <Id>6</Id>
+    <Description>ventili za neku vodu</Description>
+    <Value>5</Value>
+    <Timestamp>11:16:19:372 11.07.2023</Timestamp>
+  </analogOutput>
   <analogInput>
-    <Id>2</Id>
-    <Description>Gas volume in pool</Description>
-    <Value>140.99348089185708</Value>
-    <Timestamp>04:49:45:052 11.07.2023</Timestamp>
+    <Id>5</Id>
+    <Description>neka voda</Description>
+    <Value>45.207767193620164</Value>
+    <Timestamp>11:16:29:377 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>208.19531916033205</Value>
-    <Timestamp>04:49:46:051 11.07.2023</Timestamp>
+    <Value>748.0718627308339</Value>
+    <Timestamp>11:17:02:264 11.07.2023</Timestamp>
+  </analogInput>
+  <analogInput>
+    <Id>2</Id>
+    <Description>Gas volume in pool</Description>
+    <Value>857.0866773597564</Value>
+    <Timestamp>11:17:05:233 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>3</Id>
     <Description>Coal amount in furnace</Description>
-    <Value>92.8582989348564</Value>
-    <Timestamp>04:49:46:070 11.07.2023</Timestamp>
+    <Value>35.79152325858162</Value>
+    <Timestamp>11:17:05:253 11.07.2023</Timestamp>
   </analogInput>
 </Scada>

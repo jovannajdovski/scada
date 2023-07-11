@@ -48,7 +48,6 @@ namespace webapi.Controllers
             
             List<AnalogInput> analogInputs = _analogInputService.GetAllScanningAnalogInputs();
             List<DigitalInput> digitalInputs = _digitalInputService.GetAllScanningDigitalInputs();
-            Console.WriteLine("trending " + analogInputs.Count);
             List<TrendingResponseDTO> trendingData = new List<TrendingResponseDTO>();
 
             foreach (var analogInput in analogInputs)
