@@ -15,13 +15,13 @@
   <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>357.78004087897017</Value>
-    <Timestamp>02:35:19:838 11.07.2023</Timestamp>
+    <Value>997.5407167842167</Value>
+    <Timestamp>02:42:06:841 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>2</Id>
     <Description>Gas volume in pool</Description>
-    <Value>127.73311828870979</Value>
-    <Timestamp>02:35:22:900 11.07.2023</Timestamp>
+    <Value>125.83132028609714</Value>
+    <Timestamp>02:42:07:910 11.07.2023</Timestamp>
   </analogInput>
 </Scada>

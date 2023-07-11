@@ -224,6 +224,7 @@ export class ReportComponent {
         console.log(this.alarms);
         this.reportType = 'alarms';
         this.showPopup = false;
+        this.chartDisplay = false;
       },
       (error) => {
         console.log(error);
@@ -242,6 +243,7 @@ export class ReportComponent {
         console.log(this.alarms);
         this.reportType = 'alarmsByPriority';
         this.showPopup = false;
+        this.chartDisplay = false;
       },
       (error) => {
         console.log(error);
