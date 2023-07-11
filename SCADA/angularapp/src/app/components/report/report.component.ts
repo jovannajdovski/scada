@@ -32,41 +32,109 @@ export class ReportComponent {
     this.chartDisplay = true;
     let titleTxt;
     let dates: Date[] = [];
-    let values;
+    const colors = ['rgba(20, 0, 255, 1)', 'rgba(255, 0, 0, 1)', 'rgba(0, 255, 0, 1)', 'rgba(230, 255, 0, 1)', 'rgba(255, 0, 255, 1)', , 'rgba(0, 255, 255, 1)'];
+    let datasets: any;
     if (this.reportType === "tagValues"){
       titleTxt = "Tag Values Chart";
       dates = this.tagValues.map(tagValue => new Date(tagValue.date));
-      values = this.tagValues.map(tagValue => tagValue.value);
+
+      const tagIds = Array.from(new Set(this.tagValues.map(tagValue => tagValue.tagId)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.tagValues.filter(tagValue => tagValue.tagId === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
+          borderWidth: 1,
+        };
+      });
 
     } else if (this.reportType === "lastAnalogInputs"){
       titleTxt = "Last Values Analog Input Chart";
-      dates = this.tagValues.map(analogInputs => new Date(analogInputs.date));
-      values = this.tagValues.map(analogInputs => analogInputs.value);
+      dates = this.analogInputs.map(analogInput => new Date(analogInput.date));
+
+      const tagIds = Array.from(new Set(this.analogInputs.map(analogInput => analogInput.id)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.analogInputs.filter(tagValue => tagValue.id === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
+          borderWidth: 1,
+        };
+      });
 
     } else if (this.reportType === "lastDigitalInputs"){
       titleTxt = "Last Values Digital Input Chart";
-      dates = this.digitalInputs.map(digitalInputs => new Date(digitalInputs.date));
-      values = this.digitalInputs.map(digitalInputs => digitalInputs.value);
+      dates = this.digitalInputs.map(digitalInput => new Date(digitalInput.date));
+
+      const tagIds = Array.from(new Set(this.digitalInputs.map(tagValue => tagValue.id)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.digitalInputs.filter(tagValue => tagValue.id === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
+          borderWidth: 1,
+        };
+      });
 
     } else if (this.reportType === "tagValuesById"){
       dates = this.tagValues.map(tagValue => new Date(tagValue.date));
-      values = this.tagValues.map(tagValue => tagValue.value);
       titleTxt = "Tag Values By ID Chart";
+
+      const tagIds = Array.from(new Set(this.tagValues.map(tagValue => tagValue.tagId)));
+
+      datasets = tagIds.map((tagId, index) => {
+        const tagValuesForTag = this.tagValues.filter(tagValue => tagValue.tagId === tagId);
+        const tagDates = tagValuesForTag.map(tagValue => new Date(tagValue.date));
+        const tagValues = tagValuesForTag.map(tagValue => tagValue.value);
+        const dataPoints = tagDates.map((date, index) => ({ x: date.toISOString(), y: tagValues[index] }));
+        return {
+          label: `Tag ${tagId}`,
+          data: dataPoints,
+          backgroundColor: colors[index % colors.length], 
+          borderColor: colors[index % colors.length], 
+          borderWidth: 1,
+        };
+      });
     }
 
     const formattedDates = dates.map(date => date.toISOString());
     // dates.map((date, index) => ({ t: date.toISOString(), y: values[index] }))
+    // const chartData: ChartData<'line', any, string> = {
+    //   labels: formattedDates, 
+    //   datasets: [
+    //     {
+    //       label: 'Tag Value',
+    //       data: values,
+    //       backgroundColor: 'rgba(20, 0, 255, 0.2)',
+    //       borderColor: 'rgba(20, 0, 255, 1)',
+    //       borderWidth: 1,
+    //     }
+    //   ],
+    // };
+
     const chartData: ChartData<'line', any, string> = {
       labels: formattedDates, 
-      datasets: [
-        {
-          label: 'Tag Value',
-          data: values,
-          backgroundColor: 'rgba(20, 0, 255, 0.2)',
-          borderColor: 'rgba(20, 0, 255, 1)',
-          borderWidth: 1,
-        }
-      ],
+      datasets: datasets
     };
     
     const chartOptions: ChartOptions<'line'> = {

@@ -94,6 +94,10 @@
   h3,h4{
     color: white;
   }
+
+  .popup h3, .popup h4{
+    color: black;
+  }
   
   .results-container h4 {
     margin-top: 0;
