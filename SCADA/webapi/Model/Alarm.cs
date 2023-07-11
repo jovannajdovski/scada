@@ -7,15 +7,15 @@ using webapi.Enum;
 
 namespace webapi.model
 {
-
     public class Alarm
     {
         [Key]
         public int Id { get; set; }
-        public AlarmType Type {get; set;}
+
+        public AlarmType Type { get; set; }
         public AlarmPriority Priority { get; set; }
         public double Limit { get; set; }
         public AnalogInput AnalogInput { get; set; }
-        public DateTime Date { get; set; }
+        public bool isMuted { get; set; }
     }
 }

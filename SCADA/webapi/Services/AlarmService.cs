@@ -1,4 +1,5 @@
-﻿using webapi.Enum;
+﻿using webapi.DTO;
+using webapi.Enum;
 using webapi.model;
 using webapi.Repositories;
 
@@ -6,65 +7,53 @@ namespace webapi.Services
 {
     public interface IAlarmService
     {
-        List<Alarm> GetAlarms(DateTime startTime, DateTime endTime, bool isAscending = true);
-        List<Alarm> GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true);
+        List<Alarm> GetAlarmsByPriority(AlarmPriority priority);
+
+        public Alarm Mute(int id);
+
+        Alarm Create(AlarmDTO alarmDTO);
     }
 
     public class AlarmService : IAlarmService
     {
         private readonly IAlarmRepository _alarmRepository;
+        private readonly IAnalogInputService _analogInputService;
 
-        public AlarmService(IAlarmRepository alarmRepository)
+        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputService analogInputService)
         {
             _alarmRepository = alarmRepository;
+            _analogInputService = analogInputService;
         }
 
-        public List<Alarm> GetAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
         {
-            List<Alarm> alarms = _alarmRepository.GetAlarms(startTime, endTime);
-
-            if (isAscending)
-            {
-                alarms.Sort((x, y) =>
-                {
-                    int priorityComparison = x.Priority.CompareTo(y.Priority);
-                    if (priorityComparison != 0)
-                    {
-                        return priorityComparison;
-                    }
-                    return x.Date.CompareTo(y.Date);
-                });
-            }
-            else
-            {
-                alarms.Sort((x, y) =>
-                {
-                    int priorityComparison = y.Priority.CompareTo(x.Priority);
-                    if (priorityComparison != 0)
-                    {
-                        return priorityComparison;
-                    }
-                    return y.Date.CompareTo(x.Date);
-                });
-            }
-
-            return alarms;
+            return _alarmRepository.GetAlarmsByPriority(priority);
         }
 
-        public List<Alarm> GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true)
+        public Alarm Mute(int id)
         {
-            List<Alarm> alarms = _alarmRepository.GetAlarmsByPriority(priority);
-
-            if (isAscending)
+            var alarm = _alarmRepository.GetAlarmById(id);
+            if (alarm != null)
             {
-                alarms.Sort((x, y) => x.Date.CompareTo(y.Date));
+                alarm.isMuted = true;
+                _alarmRepository.UpdateAlarm(alarm);
             }
-            else
-            {
-                alarms.Sort((x, y) => y.Date.CompareTo(x.Date));
-            }
+            return alarm;
+        }
 
-            return alarms;
+        public Alarm Create(AlarmDTO alarmDTO)
+        {
+            Alarm alarm = null;
+            AnalogInput analogInput = _analogInputService.GetAnalogInputById(alarmDTO.AnalogInputId);
+            if (analogInput != null)
+            {
+                alarm = new Alarm();
+                alarm.AnalogInput = analogInput;
+                alarm.isMuted = false;
+                alarm.Priority = alarmDTO.Priority;
+                alarm.Limit = alarmDTO.Limit;
+                alarm.Type = alarmDTO.Type;
+            }
         }
     }
 }

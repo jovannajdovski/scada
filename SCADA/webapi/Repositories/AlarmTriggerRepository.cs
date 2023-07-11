@@ -1,0 +1,49 @@
+﻿using Microsoft.EntityFrameworkCore;
+using webapi.Enum;
+using webapi.model;
+using webapi.Model;
+
+namespace webapi.Repositories
+{
+    public interface IAlarmTriggerRepository
+    {
+        List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime);
+
+        List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority);
+    }
+
+    public class AlarmTriggerRepository : IAlarmTriggerRepository
+    {
+        private readonly ScadaDBContext _context;
+
+        public AlarmTriggerRepository(ScadaDBContext context)
+        {
+            _context = context;
+        }
+
+        public List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority)
+        {
+            return _context.AlarmsTriggers
+                .Include(trigger => trigger.Alarm)
+                .Where(trigger => trigger.Alarm.Priority == priority)
+                .ToList();
+        }
+
+        public List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime)
+        {
+            return _context.AlarmsTriggers
+                .Include(alarm => alarm.Alarm)
+                .Where(alarm => alarm.DateTime >= startTime && alarm.DateTime <= endTime)
+                .ToList();
+        }
+
+        public AlarmTrigger GetLatestAlarmTriggerForAnalogInput(AnalogInput analogInput)
+        {
+            return _context.AlarmsTriggers
+                .Include(trigger => trigger.Alarm)
+                .Where(trigger => trigger.Alarm.AnalogInput == analogInput)
+                .OrderByDescending(trigger => trigger.DateTime)
+                .ToList().First();
+        }
+    }
+}

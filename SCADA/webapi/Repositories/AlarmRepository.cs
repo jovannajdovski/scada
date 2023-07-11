@@ -6,8 +6,13 @@ namespace webapi.Repositories
 {
     public interface IAlarmRepository
     {
-        List<Alarm> GetAlarms(DateTime startTime, DateTime endTime);
         List<Alarm> GetAlarmsByPriority(AlarmPriority priority);
+
+        void Add(Alarm alarm);
+
+        Alarm GetAlarmById(int alarmId);
+
+        void UpdateAlarm(Alarm alarm);
     }
 
     public class AlarmRepository : IAlarmRepository
@@ -19,12 +24,10 @@ namespace webapi.Repositories
             _context = context;
         }
 
-        public List<Alarm> GetAlarms(DateTime startTime, DateTime endTime)
+        public Alarm GetAlarmById(int alarmId)
         {
-            return _context.Alarms
-                .Include(alarm => alarm.AnalogInput)
-                .Where(alarm => alarm.Date >= startTime && alarm.Date <= endTime)
-                .ToList();
+            return _context.Alarms.Include(alarm => alarm.AnalogInput)
+                .Where(alarm => alarm.Id == alarmId).First();
         }
 
         public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
@@ -33,6 +36,18 @@ namespace webapi.Repositories
                 .Include(alarm => alarm.AnalogInput)
                 .Where(alarm => alarm.Priority == priority)
                 .ToList();
+        }
+
+        public void UpdateAlarm(Alarm alarm)
+        {
+            _context.Alarms.Update(alarm);
+            _context.SaveChanges();
+        }
+
+        public void Add(Alarm alarm)
+        {
+            _context.Alarms.Add(alarm);
+            _context.SaveChanges();
         }
     }
 }
