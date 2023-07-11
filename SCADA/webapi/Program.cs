@@ -57,7 +57,6 @@ using (var db = new ScadaDBContext())
 using (var serviceProvider = builder.Services.BuildServiceProvider())
 {
     var tagProcessingService = serviceProvider.GetService<ITagProcessingService>();
-
     // Call the method from TagValueService
     tagProcessingService.Process();
 }

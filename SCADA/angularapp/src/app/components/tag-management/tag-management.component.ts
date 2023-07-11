@@ -50,6 +50,7 @@ export class TagManagementComponent {
 
   loadAnalogOutputs() {
     this.http.get<AnalogOutput[]>('/api/Tag/AnalogOutputs').subscribe(data => {
+      console.log(data);
       this.analogOutputs = data;
     });
   }
@@ -249,5 +250,60 @@ export class TagManagementComponent {
       initialValue: false,
       AddressId: 0
     };
+  }
+  changeDigitalOutput(digitalOutput: DigitalOutput) {
+    if (digitalOutput.lastValue === 'true' || digitalOutput.lastValue === 'false') {
+      const payload = {
+        id: digitalOutput.id,
+        value: digitalOutput.lastValue === 'true'? 'false':'true'
+      };
+      this.http.post("/api/Tag/DigitalOutputs/value", payload)
+        .subscribe(
+          (data: any) => {
+            digitalOutput.lastValue = digitalOutput.lastValue === 'true' ? 'false' : 'true';
+          },
+          (error: any) => {
+            console.error("Error:", error);
+          }
+        ); 
+    }
+  }
+  plus(analogOutput: AnalogOutput) {
+    const value: number = parseFloat(analogOutput.lastValue);
+
+    if (!isNaN(value) && value < analogOutput.highLimit) {
+      const payload = {
+        id: analogOutput.id,
+        value: (value + 1).toString()
+      };
+      this.http.post("/api/Tag/AnalogOutputs/value", payload)
+        .subscribe(
+          (data: any) => {
+            analogOutput.lastValue = (value + 1).toString();
+          },
+          (error: any) => {
+            console.error("Error:", error);
+          }
+        ); 
+    }
+  }
+  minus(analogOutput: AnalogOutput) {
+    const value: number = parseFloat(analogOutput.lastValue);
+
+    if (!isNaN(value) && value > analogOutput.lowLimit) {
+      const payload = {
+        id: analogOutput.id,
+        value: (value - 1).toString()
+      };
+      this.http.post("/api/Tag/AnalogOutputs/value", payload)
+        .subscribe(
+          (data: any) => {
+            analogOutput.lastValue = (value - 1).toString();
+          },
+          (error: any) => {
+            console.error("Error:", error);
+          }
+        );
+    }
   }
 }

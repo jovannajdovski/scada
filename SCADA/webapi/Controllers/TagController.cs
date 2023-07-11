@@ -110,7 +110,14 @@ namespace webapi.Controllers
         public ActionResult<IEnumerable<DigitalOutput>> GetDigitalOutputs()
         {
             var digitalOutputs = _digitalOutputService.GetAllDigitalOutputs();
-            return Ok(digitalOutputs);
+            var digitalOutputsToSend = digitalOutputs.Select(d => new
+            {
+                description = d.Description,
+                id = d.Id,
+                lastValue = d.Values.Count == 0 ? "-": d.Values[d.Values.Count - 1].Value,
+            }).ToList();
+
+            return Ok(digitalOutputsToSend);
         }
 
         [HttpGet("DigitalOutputs/{id}")]
@@ -144,15 +151,32 @@ namespace webapi.Controllers
                 };
 
                 _digitalOutputService.CreateDigitalOutput(digitalOutput);
+                var digitalOutputToSend = new
+                {
+                    description = digitalOutput.Description,
+                    id = digitalOutput.Id,
+                    lastValue = digitalOutput.Values.Count == 0 ? "-" : digitalOutput.Values[digitalOutput.Values.Count - 1].Value
+                };
 
-                return Ok(digitalOutput);
+                return Ok(digitalOutputToSend);
             }
             else
                 return NotFound("Address not found");
 
 
         }
-
+        [HttpPost("DigitalOutputs/value")]
+        public ActionResult<DigitalOutput> AddDigitalOutputValue(OutputTagNewValueDTO outputTagNewValue)
+        {
+            DigitalOutput digitalOutput = _digitalOutputService.GetDigitalOutputById(outputTagNewValue.Id);
+            if (digitalOutput != null)
+            {
+                _digitalOutputService.AddNewValue(outputTagNewValue.Id, outputTagNewValue.Value);
+                return Ok();
+            }
+            else
+                return NotFound("Tag not found");
+        }
         [HttpDelete("DigitalOutputs/{id}")]
         public IActionResult DeleteDigitalOutput(int id)
         {
@@ -235,7 +259,17 @@ namespace webapi.Controllers
         public ActionResult<IEnumerable<AnalogOutput>> GetAnalogOutputs()
         {
             var analogOutputs = _analogOutputService.GetAllAnalogOutputs();
-            return Ok(analogOutputs);
+            var analogOutputsToSend = analogOutputs.Select(d => new
+            {
+                description = d.Description,
+                highLimit = d.HighLimit,
+                lowLimit = d.LowLimit,
+                id = d.Id,
+                unit = d.Unit,
+                lastValue = d.Values.Count == 0 ? "-" : d.Values[d.Values.Count - 1].Value,
+            }).ToList();
+
+            return Ok(analogOutputsToSend);
         }
 
         [HttpGet("AnalogOutputs/{id}")]
@@ -272,15 +306,35 @@ namespace webapi.Controllers
                 };
 
                 _analogOutputService.CreateAnalogOutput(analogOutput);
-
-
-                return Ok(analogOutput);
+                var analogOutputToSend = new
+                {
+                    description = analogOutput.Description,
+                    id = analogOutput.Id,
+                    lowLimit = analogOutputDTO.LowLimit,
+                    highLimit = analogOutputDTO.HighLimit,
+                    unit = analogOutputDTO.Unit,
+                    Address = ioAddress,
+                    lastValue = analogOutput.Values.Count == 0 ? "-" : analogOutput.Values[analogOutput.Values.Count - 1].Value
+                };
+                return Ok(analogOutputToSend);
             }
             else
                 return NotFound("Address not found");
             
         }
 
+        [HttpPost("AnalogOutputs/value")]
+        public ActionResult<DigitalOutput> AddAnalogOutputValue(OutputTagNewValueDTO outputTagNewValue)
+        {
+            AnalogOutput analogOutput = _analogOutputService.GetAnalogOutputById(outputTagNewValue.Id);
+            if (analogOutput != null)
+            {
+                _analogOutputService.AddNewValue(outputTagNewValue.Id, outputTagNewValue.Value);
+                return Ok();
+            }
+            else
+                return NotFound("Tag not found");
+        }
         [HttpDelete("AnalogOutputs/{id}")]
         public IActionResult DeleteAnalogOutput(int id)
         {

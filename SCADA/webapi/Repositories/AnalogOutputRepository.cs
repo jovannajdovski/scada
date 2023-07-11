@@ -9,6 +9,7 @@ namespace webapi.Repositories
         AnalogOutput GetById(int id);
         void Add(AnalogOutput analogOutput);
         void Delete(AnalogOutput analogOutput);
+        void Update(AnalogOutput analogOutput);
     }
 
     public class AnalogOutputRepository : IAnalogOutputRepository
@@ -22,12 +23,12 @@ namespace webapi.Repositories
 
         public List<AnalogOutput> GetAll()
         {
-            return _context.AnalogOutputs.ToList();
+            return _context.AnalogOutputs.Include(a=>a.Values).ToList();
         }
 
         public AnalogOutput GetById(int id)
         {
-            return _context.AnalogOutputs.Find(id);
+            return _context.AnalogOutputs.Include(a => a.Values).FirstOrDefault(a => a.Id == id); ;
         }
 
         public void Add(AnalogOutput analogOutput)
@@ -39,6 +40,12 @@ namespace webapi.Repositories
         public void Delete(AnalogOutput analogOutput)
         {
             _context.AnalogOutputs.Remove(analogOutput);
+            _context.SaveChanges();
+        }
+
+        public void Update(AnalogOutput analogOutput)
+        {
+            _context.AnalogOutputs.Update(analogOutput);
             _context.SaveChanges();
         }
     }

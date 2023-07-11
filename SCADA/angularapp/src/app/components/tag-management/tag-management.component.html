@@ -57,13 +57,17 @@
           <tr>
             <td>DO</td>
             <td>{{ digitalOutput.description }}</td>
-            <td>{{ digitalOutput.initialValue }}</td>
+            <td>{{ digitalOutput.lastValue }}</td>
             <td>-</td>
             <td>-</td>
             <td>-</td>
             <td>-</td>
             <td style="text-align: center;">-</td>
-            <td></td>
+            <td>
+              <button class="scan" (click)="changeDigitalOutput(digitalOutput)">
+                {{ digitalOutput.lastValue == 'true' ? 'Turn Value OFF' : 'Turn Value ON' }}
+              </button>
+            </td>
             <td>
               <button class="remove" (click)="deleteDigitalOutput(digitalOutput.id)">Remove</button>
             </td>
@@ -98,13 +102,20 @@
           <tr>
             <td>AO</td>
             <td>{{ analogOutput.description }}</td>
-            <td>{{ analogOutput.initialValue }}</td>
+            <td>{{ analogOutput.lastValue }}</td>
             <td>{{ analogOutput.lowLimit }}</td>
             <td>{{ analogOutput.highLimit }}</td>
             <td>{{ analogOutput.unit }}</td>
             <td>-</td>
             <td style="text-align: center;">-</td>
-            <td></td>
+            <td>
+              <button class="math" (click)="minus(analogOutput)">
+                -
+              </button>
+              <button class="math" (click)="plus(analogOutput)">
+                +
+              </button>
+            </td>
             <td>
               <button class="remove" (click)="deleteAnalogOutput(analogOutput.id)">Remove</button>
             </td>

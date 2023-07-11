@@ -19,20 +19,64 @@ namespace webapi.Services
     public class TagProcessingService:ITagProcessingService
     {
         public ScadaDBContext dbContext { get; set; }
-        public object analogInputValuesLockObj { get; set; }
-        public object digitalInputValuesLockObj { get; set; }
-        public Dictionary<int, Timer> timers { get; set; }
+        
+        
         private readonly IConfigurationFileService _configuationFileService;
 
         public TagProcessingService(ScadaDBContext scadaDBContext, IConfigurationFileService configurationFileService)
         {
-            this.analogInputValuesLockObj = new object();
-            this.digitalInputValuesLockObj = new object();
+            
             this.dbContext = scadaDBContext;
-            this.timers = new Dictionary<int, Timer>();
+            
             _configuationFileService = configurationFileService;
         }
         public void Process()
+        {
+            TagProcessingSingleton.GetInstance().Process(dbContext, _configuationFileService);
+        }
+        public void CreateAnalogTimer(AnalogInput analogInput)
+        {
+            TagProcessingSingleton.GetInstance().CreateAnalogTimer(analogInput, _configuationFileService);
+        }
+        public void CreateDigitalTimer(DigitalInput digitalInput)
+        {
+            TagProcessingSingleton.GetInstance().CreateDigitalTimer(digitalInput, _configuationFileService);
+        }
+        public void QuitTimer(int tagId)
+        {
+            TagProcessingSingleton.GetInstance().QuitTimer(tagId);
+        }
+        public void QuitTimers()
+        {
+            TagProcessingSingleton.GetInstance().QuitTimers();
+        }
+    }
+
+    public class TagProcessingSingleton
+    {
+        public object analogInputValuesLockObj { get; set; }
+        public object digitalInputValuesLockObj { get; set; }
+        public Dictionary<int, Timer> timers { get; set; }
+
+        private static TagProcessingSingleton instance;
+
+        private TagProcessingSingleton()
+        {
+            this.analogInputValuesLockObj = new object();
+            this.digitalInputValuesLockObj = new object();
+            this.timers = new Dictionary<int, Timer>();
+        }
+
+        public static TagProcessingSingleton GetInstance()
+        {
+            if (instance == null)
+            {
+                instance = new TagProcessingSingleton();
+            }
+
+            return instance;
+        }
+        public void Process(ScadaDBContext dbContext, IConfigurationFileService _configuationFileService)
         {
             List<AnalogInput> analogInputs = dbContext.AnalogInputs.Include(ai => ai.Values).Include(ai => ai.Address)
                 .Where(ai => ai.IsScanning).ToList();
@@ -40,35 +84,35 @@ namespace webapi.Services
                 .Where(di => di.IsScanning).ToList();
 
             foreach (var analogInput in analogInputs)
-                CreateAnalogTimer(analogInput);
+                CreateAnalogTimer(analogInput, _configuationFileService);
             foreach (var digitalInput in digitalInputs)
-                CreateDigitalTimer(digitalInput);
+                CreateDigitalTimer(digitalInput, _configuationFileService);
 
         }
-        public void CreateAnalogTimer(AnalogInput analogInput)
+        public void CreateAnalogTimer(AnalogInput analogInput, IConfigurationFileService _configuationFileService)
         {
             Timer timer = new Timer(state =>
             {
-                AnalogTimerCallback(analogInput.Address.Id, analogInput.Id);
+                AnalogTimerCallback(analogInput.Address.Id, analogInput.Id, _configuationFileService);
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(analogInput.ScanTime));
             timers.Add(analogInput.Id, timer);
         }
-        public void CreateDigitalTimer(DigitalInput digitalInput)
+        public void CreateDigitalTimer(DigitalInput digitalInput, IConfigurationFileService _configuationFileService)
         {
             Timer timer = new Timer(state =>
             {
-                DigitalTimerCallback(digitalInput.Address.Id, digitalInput.Id);
+                DigitalTimerCallback(digitalInput.Address.Id, digitalInput.Id, _configuationFileService);
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(digitalInput.ScanTime));
             timers.Add(digitalInput.Id, timer);
         }
-        private void AnalogTimerCallback(int addressId, int analogInputId)
+        private void AnalogTimerCallback(int addressId, int analogInputId, IConfigurationFileService _configuationFileService)
         {
             lock (analogInputValuesLockObj)
             {
-                dbContext = new ScadaDBContext();
- 
+                ScadaDBContext dbContext = new ScadaDBContext();
+
                 IOAddress address = dbContext.Addresses.FirstOrDefault(a => a.Id == addressId);
-                AnalogInput analogInput = dbContext.AnalogInputs.Include(a => a.Values).FirstOrDefault(a=>a.Id == analogInputId);
+                AnalogInput analogInput = dbContext.AnalogInputs.Include(a => a.Values).FirstOrDefault(a => a.Id == analogInputId);
 
                 List<AnalogOutput> analogOutputs = dbContext.AnalogOutputs.Include(a => a.Values).Where(ao => ao.Address.Id == addressId).ToList();
                 double sum = analogOutputs.Sum(output => output.Values.Sum(val => double.Parse(val.Value)));
@@ -80,10 +124,10 @@ namespace webapi.Services
                         TagValue inTagValue = new TagValue();
                         TagValue outTagValue;
                         double nextValue = double.Parse(address.Value) + analogInput.ScanTime * sum;
-                        
+
                         if (nextValue < analogInput.LowLimit) nextValue = analogInput.LowLimit;
-                        if(nextValue> analogInput.HighLimit) nextValue=analogInput.HighLimit;
-                        
+                        if (nextValue > analogInput.HighLimit) nextValue = analogInput.HighLimit;
+
                         inTagValue.Value = nextValue.ToString();
                         inTagValue.Type = "double";
                         inTagValue.Date = DateTime.Now;
@@ -95,9 +139,9 @@ namespace webapi.Services
                         dbContext.AnalogInputs.Update(analogInput);
                         _configuationFileService.AddTag(analogInput);
 
-                        foreach(var analogOutput in analogOutputs)
+                        foreach (var analogOutput in analogOutputs)
                         {
-                            if(analogOutput.Values.Count>0)
+                            if (analogOutput.Values.Count > 0)
                             {
                                 string lastElement = analogOutput.Values[analogOutput.Values.Count - 1].Value;
                                 outTagValue = new TagValue();
@@ -110,26 +154,26 @@ namespace webapi.Services
                                 dbContext.AnalogOutputs.Update(analogOutput);
                                 _configuationFileService.AddTag(analogOutput);
                             }
-                            
+
                         }
 
                         dbContext.SaveChanges();
                     }
-                    
+
                 }
             }
         }
-        private void DigitalTimerCallback(int addressId, int digitalInputId)
+        private void DigitalTimerCallback(int addressId, int digitalInputId, IConfigurationFileService _configuationFileService)
         {
             lock (analogInputValuesLockObj)
             {
-                dbContext = new ScadaDBContext();
+                ScadaDBContext dbContext = new ScadaDBContext();
 
                 IOAddress address = dbContext.Addresses.FirstOrDefault(a => a.Id == addressId);
                 DigitalInput digitalInput = dbContext.DigitalInputs.Include(a => a.Values).FirstOrDefault(a => a.Id == digitalInputId);
 
                 DigitalOutput digitalOutput = dbContext.DigitalOutputs.Include(a => a.Values).FirstOrDefault(ao => ao.Address.Id == addressId);
-                
+
 
                 if (address != null && address.Value != null && digitalInput != null)
                 {
@@ -137,7 +181,7 @@ namespace webapi.Services
                     {
                         TagValue inTagValue = new TagValue();
                         TagValue outTagValue;
-                        string nextValue = digitalOutput==null || digitalOutput.Values.Count==0 ? address.Value : digitalOutput.Values[digitalOutput.Values.Count-1].Value;
+                        string nextValue = digitalOutput == null || digitalOutput.Values.Count == 0 ? address.Value : digitalOutput.Values[digitalOutput.Values.Count - 1].Value;
 
                         inTagValue.Value = nextValue;
                         inTagValue.Type = "boolean";
@@ -165,7 +209,7 @@ namespace webapi.Services
                             _configuationFileService.AddTag(digitalOutput);
                         }
 
-                        
+
                         dbContext.SaveChanges();
                     }
 

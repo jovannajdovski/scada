@@ -7,5 +7,5 @@ using System.Net;
 
 namespace webapi.Enum
 {
-    public enum DigitalValueType { ON, OFF }
+    public enum DigitalValueType { OFF, ON }
 }

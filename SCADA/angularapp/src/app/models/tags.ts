@@ -8,7 +8,7 @@ export interface DigitalInput {
   export interface DigitalOutput {
     id: number;
     description: string;
-    initialValue: boolean;
+    lastValue: string;
   }
 
   export interface AnalogInput {
@@ -24,7 +24,7 @@ export interface DigitalInput {
   export interface AnalogOutput {
     id: number;
     description: string;
-    initialValue: number;
+    lastValue: string;
     lowLimit: number;
     highLimit: number;
     unit: string;

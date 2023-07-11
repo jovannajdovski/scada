@@ -7,21 +7,27 @@
     <Timestamp>19:34:36:015 10.07.2023</Timestamp>
   </digitalInput>
   <analogInput>
+    <Id>7</Id>
+    <Description>vodaaaa</Description>
+    <Value>10</Value>
+    <Timestamp>22:58:22:671 10.07.2023</Timestamp>
+  </analogInput>
+  <analogInput>
     <Id>3</Id>
     <Description>Coal amount in furnace</Description>
-    <Value>98.9725965195704</Value>
-    <Timestamp>20:41:28:261 10.07.2023</Timestamp>
+    <Value>99.81285221093272</Value>
+    <Timestamp>02:37:15:010 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>102.10067951765673</Value>
-    <Timestamp>20:54:39:509 10.07.2023</Timestamp>
+    <Value>758.5993351549957</Value>
+    <Timestamp>02:37:16:964 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>2</Id>
     <Description>Gas volume in pool</Description>
-    <Value>860.5278471180784</Value>
-    <Timestamp>20:54:39:515 10.07.2023</Timestamp>
+    <Value>866.9003239274849</Value>
+    <Timestamp>02:37:18:957 11.07.2023</Timestamp>
   </analogInput>
 </Scada>

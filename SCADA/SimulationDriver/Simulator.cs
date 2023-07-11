@@ -178,7 +178,7 @@ namespace SimulationDriver
                         if (existingEntity != null)
                         {
                             existingEntity.Type = "boolean";
-                            existingEntity.Value = Math.Abs(Math.Sin(2 * Math.PI * time * frequency)) > 0.5 ? "ON" : "OFF";
+                            existingEntity.Value = Math.Abs(Math.Sin(2 * Math.PI * time * frequency)) > 0.5 ? "true" : "false";
                             dbContext.Update(existingEntity);
                         }
 
