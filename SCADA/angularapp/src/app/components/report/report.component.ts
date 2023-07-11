@@ -302,7 +302,7 @@ export class ReportComponent {
         console.log(this.digitalInputs);
         this.reportType = 'lastDigitalInputs';
         this.showPopup = false;
-        this.initializeCharts();
+        this.chartDisplay = false;
       },
       (error) => {
         console.log(error);

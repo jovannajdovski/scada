@@ -15,19 +15,19 @@
   <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>748.0718627308339</Value>
-    <Timestamp>11:17:02:264 11.07.2023</Timestamp>
+    <Value>989.9377487931241</Value>
+    <Timestamp>11:58:05:612 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>2</Id>
     <Description>Gas volume in pool</Description>
-    <Value>857.0866773597564</Value>
-    <Timestamp>11:17:05:233 11.07.2023</Timestamp>
+    <Value>690.5087385466691</Value>
+    <Timestamp>11:58:05:634 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>3</Id>
     <Description>Coal amount in furnace</Description>
-    <Value>35.79152325858162</Value>
-    <Timestamp>11:17:05:253 11.07.2023</Timestamp>
+    <Value>99.76786039628546</Value>
+    <Timestamp>11:58:05:675 11.07.2023</Timestamp>
   </analogInput>
 </Scada>
