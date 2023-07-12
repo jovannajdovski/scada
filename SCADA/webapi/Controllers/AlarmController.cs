@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using webapi.DTO;
 using webapi.model;
+using webapi.Model;
+using webapi.Repositories;
 using webapi.Services;
 
 namespace webapi.Controllers
@@ -10,10 +12,12 @@ namespace webapi.Controllers
     public class AlarmController : ControllerBase
     {
         private IAlarmService _alarmService;
+        private IAlarmTriggerRepository _alarmTrggerRepository;
 
-        public AlarmController(IAlarmService alarmService)
+        public AlarmController(IAlarmService alarmService, IAlarmTriggerRepository alarmTriggerRepository)
         {
             _alarmService = alarmService;
+            _alarmTrggerRepository = alarmTriggerRepository;
         }
 
         [HttpPut("/mute/{id}")]
@@ -36,6 +40,12 @@ namespace webapi.Controllers
                 return NotFound();
             }
             return Ok();
+        }
+
+        [HttpGet("/triggers")]
+        public ActionResult<List<AlarmTrigger>> GetTriggers(DateTime from, DateTime to)
+        {
+            return Ok(_alarmTrggerRepository.GetAlarmsTriggers(from, to));
         }
     }
 }
