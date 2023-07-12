@@ -47,5 +47,11 @@ namespace webapi.Controllers
         {
             return Ok(_alarmTrggerRepository.GetUnmutedTriggers(from, to));
         }
+
+        [HttpGet("/all-triggers")]
+        public ActionResult<List<AlarmTrigger>> GetAllTriggers(DateTime from, DateTime to)
+        {
+            return Ok(_alarmTrggerRepository.GetAlarmsTriggers(from, to));
+        }
     }
 }
