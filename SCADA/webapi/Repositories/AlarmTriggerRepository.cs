@@ -11,6 +11,8 @@ namespace webapi.Repositories
 
         List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority);
 
+        List<AlarmTrigger> GetUnmutedTriggers(DateTime startTime, DateTime endTime);
+
         void AddTrigger(AlarmTrigger trigger);
     }
 
@@ -52,6 +54,12 @@ namespace webapi.Repositories
         {
             _context.AlarmsTriggers.Add(trigger);
             _context.SaveChanges();
+        }
+
+        public List<AlarmTrigger> GetUnmutedTriggers(DateTime startTime, DateTime endTime)
+        {
+            return this.GetAlarmsTriggers(startTime, endTime)
+                .Where(trigger => trigger.Alarm.isMuted == false).ToList();
         }
     }
 }
