@@ -36,20 +36,21 @@ namespace webapi.Controllers
 
         // Alarm reports
 
-        [HttpGet("alarms")]
-        public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
-        {
-            List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
+        //[HttpGet("alarms")]
+        //public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        //{
+        //    //List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
 
-            List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
+        //    //List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
-            foreach (Alarm alarm in alarms)
-            {
-                AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
-                reportDTOs.Add(reportDTO);
-            }
-            return Ok(reportDTOs);
-        }
+        //    //foreach (Alarm alarm in alarms)
+        //    //{
+        //    //    AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
+        //    //    reportDTOs.Add(reportDTO);
+        //    //}
+        //    //return Ok(reportDTOs);
+
+        //}
 
         [HttpGet("alarms/priority")]
         public IActionResult GetAlarmsByPriority(int priority, bool isAscending = true)
@@ -58,17 +59,20 @@ namespace webapi.Controllers
             if (priority == 1)
             {
                 priorityEnum = AlarmPriority.NORMAL_PRIORITY;
-            } else if (priority == 2)
+            }
+            else if (priority == 2)
             {
                 priorityEnum = AlarmPriority.HIGH_PRIORITY;
-            } else if (priority == 0)
+            }
+            else if (priority == 0)
             {
                 priorityEnum = AlarmPriority.LOW_PRIORITY;
-            } else
+            }
+            else
             {
                 return BadRequest();
             }
-            List <Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum, isAscending);
+            List<Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum);
             List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
             foreach (Alarm alarm in alarms)
@@ -78,7 +82,6 @@ namespace webapi.Controllers
             }
             return Ok(reportDTOs);
         }
-
 
         // Tag reports
 

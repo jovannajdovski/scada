@@ -10,6 +10,8 @@ namespace webapi.Repositories
         List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime);
 
         List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority);
+
+        void AddTrigger(AlarmTrigger trigger);
     }
 
     public class AlarmTriggerRepository : IAlarmTriggerRepository
@@ -44,6 +46,12 @@ namespace webapi.Repositories
                 .Where(trigger => trigger.Alarm.AnalogInput == analogInput)
                 .OrderByDescending(trigger => trigger.DateTime)
                 .ToList().First();
+        }
+
+        public void AddTrigger(AlarmTrigger trigger)
+        {
+            _context.AlarmsTriggers.Add(trigger);
+            _context.SaveChanges();
         }
     }
 }

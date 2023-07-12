@@ -100,7 +100,7 @@ namespace webapi.Migrations
                     Priority = table.Column<int>(type: "INTEGER", nullable: false),
                     Limit = table.Column<double>(type: "REAL", nullable: false),
                     AnalogInputId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    isMuted = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -135,10 +135,30 @@ namespace webapi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AlarmsTriggers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    AlarmId = table.Column<int>(type: "INTEGER", nullable: false),
+                    DateTime = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AlarmsTriggers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AlarmsTriggers_Alarms_AlarmId",
+                        column: x => x.AlarmId,
+                        principalTable: "Alarms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Username", "Password", "Type" },
-                values: new object[] { "admin", "admin", 0 });
+    table: "Users",
+    columns: new[] { "Username", "Password", "Type" },
+    values: new object[] { "admin", "admin", 0 });
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Username", "Password", "Type" },
@@ -176,6 +196,11 @@ namespace webapi.Migrations
                 column: "AnalogInputId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AlarmsTriggers_AlarmId",
+                table: "AlarmsTriggers",
+                column: "AlarmId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RealTimeUnits_AddressId",
                 table: "RealTimeUnits",
                 column: "AddressId");
@@ -195,7 +220,7 @@ namespace webapi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Alarms");
+                name: "AlarmsTriggers");
 
             migrationBuilder.DropTable(
                 name: "RealTimeUnits");
@@ -205,6 +230,9 @@ namespace webapi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Alarms");
 
             migrationBuilder.DropTable(
                 name: "TagBases");

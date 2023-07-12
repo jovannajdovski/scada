@@ -11,7 +11,7 @@ using webapi;
 namespace webapi.Migrations
 {
     [DbContext(typeof(ScadaDBContext))]
-    [Migration("20230710184004_InitialCreate")]
+    [Migration("20230711220305_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,6 +19,25 @@ namespace webapi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.8");
+
+            modelBuilder.Entity("webapi.Model.AlarmTrigger", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AlarmId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlarmId");
+
+                    b.ToTable("AlarmsTriggers");
+                });
 
             modelBuilder.Entity("webapi.Model.TagValue", b =>
                 {
@@ -55,9 +74,6 @@ namespace webapi.Migrations
                     b.Property<int>("AnalogInputId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("TEXT");
-
                     b.Property<double>("Limit")
                         .HasColumnType("REAL");
 
@@ -65,6 +81,9 @@ namespace webapi.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isMuted")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -237,6 +256,17 @@ namespace webapi.Migrations
                     b.HasBaseType("webapi.model.TagBase");
 
                     b.HasDiscriminator().HasValue("DigitalOutput");
+                });
+
+            modelBuilder.Entity("webapi.Model.AlarmTrigger", b =>
+                {
+                    b.HasOne("webapi.model.Alarm", "Alarm")
+                        .WithMany()
+                        .HasForeignKey("AlarmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Alarm");
                 });
 
             modelBuilder.Entity("webapi.Model.TagValue", b =>
