@@ -185,10 +185,11 @@ namespace webapi.Migrations
                table: "TagBases",
                columns: new[] { "Discriminator", "Description", "AddressId", "ScanTime", "IsScanning", "AnalogInput_LowLimit", "AnalogInput_HighLimit", "AnalogInput_Unit" },
                values: new object[] { "AnalogInput", "Coal amount in furnace", 3, 1.0, true, 0.0, 100.0, "kg" });
+
             migrationBuilder.InsertData(
-               table: "TagBases",
-               columns: new[] { "Discriminator", "Description", "AddressId", "LowLimit", "HighLimit", "Unit" },
-               values: new object[] { "AnalogOutput", "outputtt", 3, 0.0, 100.0, "kg" });
+             table: "Alarms",
+             columns: new[] { "Type", "Priority", "Limit", "AnalogInputId", "isMuted" },
+             values: new object[] { 0, 0, 3, 1, true });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",
