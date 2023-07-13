@@ -101,6 +101,11 @@ namespace webapi.Controllers
 
             digitalInput.IsScanning = scan.IsScanning;
             _digitalInputService.UpdateDigitalInput(digitalInput);
+            if (scan.IsScanning)
+                _tagProcessingService.CreateDigitalTimer(digitalInput);
+            else
+                _tagProcessingService.QuitTimer(digitalInput.Id);
+
 
             return NoContent();
         }
@@ -247,9 +252,13 @@ namespace webapi.Controllers
                 return NotFound();
             }
 
+
             analogInput.IsScanning = scan.IsScanning;
             _analogInputService.UpdateAnalogInput(analogInput);
-
+            if (scan.IsScanning)
+                _tagProcessingService.CreateAnalogTimer(analogInput);
+            else
+                _tagProcessingService.QuitTimer(analogInput.Id);
             return NoContent();
         }
 

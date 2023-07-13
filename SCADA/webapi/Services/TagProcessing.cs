@@ -96,6 +96,7 @@ namespace webapi.Services
                 AnalogTimerCallback(analogInput.Address.Id, analogInput.Id, _configuationFileService);
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(analogInput.ScanTime));
             timers.Add(analogInput.Id, timer);
+                
         }
         public void CreateDigitalTimer(DigitalInput digitalInput, IConfigurationFileService _configuationFileService)
         {

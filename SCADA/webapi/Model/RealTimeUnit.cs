@@ -25,7 +25,6 @@ namespace webapi.model
             HighLimit = highLimit;
             LowLimit = lowLimit;
             Address = address;
-            Console.WriteLine("setovan" + address.Id);
             AddressId = address.Id;
         }
     }

@@ -1,57 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Scada>
-  <digitalInput>
-    <Id>5</Id>
-    <Description>digitalni</Description>
-    <Value>True</Value>
-    <Timestamp>19:34:36:015 10.07.2023</Timestamp>
-  </digitalInput>
-  <analogInput>
-    <Id>8</Id>
-    <Description>neka voda25</Description>
-    <Value>100</Value>
-    <Timestamp>03:22:09:437 11.07.2023</Timestamp>
-  </analogInput>
-  <analogOutput>
-    <Id>9</Id>
-    <Description>ventili za neku vodu25</Description>
-    <Value>5</Value>
-    <Timestamp>03:22:09:440 11.07.2023</Timestamp>
-  </analogOutput>
-  <analogInput>
-    <Id>7</Id>
-    <Description>neka voda</Description>
-    <Value>100</Value>
-    <Timestamp>03:22:09:592 11.07.2023</Timestamp>
-  </analogInput>
   <analogOutput>
     <Id>6</Id>
     <Description>ventili za neku vodu</Description>
-    <Value>20</Value>
-    <Timestamp>03:22:09:594 11.07.2023</Timestamp>
+    <Value>5</Value>
+    <Timestamp>11:16:19:372 11.07.2023</Timestamp>
   </analogOutput>
-  <digitalInput>
-    <Id>11</Id>
-    <Description>digitalni4</Description>
-    <Value>true</Value>
-    <Timestamp>03:22:09:638 11.07.2023</Timestamp>
-  </digitalInput>
+  <analogInput>
+    <Id>5</Id>
+    <Description>neka voda</Description>
+    <Value>45.207767193620164</Value>
+    <Timestamp>11:16:29:377 11.07.2023</Timestamp>
+  </analogInput>
   <analogInput>
     <Id>1</Id>
     <Description>Water level in pool</Description>
-    <Value>953.0168024439694</Value>
-    <Timestamp>22:36:49:877 11.07.2023</Timestamp>
+    <Value>989.9377487931241</Value>
+    <Timestamp>11:58:05:612 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>2</Id>
     <Description>Gas volume in pool</Description>
-    <Value>999.9999540558324</Value>
-    <Timestamp>22:36:50:878 11.07.2023</Timestamp>
+    <Value>690.5087385466691</Value>
+    <Timestamp>11:58:05:634 11.07.2023</Timestamp>
   </analogInput>
   <analogInput>
     <Id>3</Id>
     <Description>Coal amount in furnace</Description>
-    <Value>93.40563366665647</Value>
-    <Timestamp>22:36:51:870 11.07.2023</Timestamp>
+    <Value>99.76786039628546</Value>
+    <Timestamp>11:58:05:675 11.07.2023</Timestamp>
   </analogInput>
 </Scada>

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using webapi.DTO;
 using webapi.Enum;
@@ -200,11 +201,39 @@ namespace webapi.Controllers
 
             if (isAscending)
             {
-                tagValues.Sort((x, y) => x.Value.CompareTo(y.Value));
+                tagValues.Sort((x, y) => {
+                    if (x.Type.Equals("double"))
+                    {
+                        double xDouble, yDouble;
+                        if (Double.TryParse(x.Value, out xDouble) && Double.TryParse(y.Value, out yDouble))
+                        {
+                            return xDouble.CompareTo(yDouble);
+                        }
+                        else
+                        {
+                            return x.Value.CompareTo(y.Value);
+                        }
+                    }
+                    return x.Value.CompareTo(y.Value);
+                    });
             }
             else
             {
-                tagValues.Sort((x, y) => y.Value.CompareTo(x.Value));
+                tagValues.Sort((x, y) => {
+                    if (x.Type.Equals("double"))
+                    {
+                        double xDouble, yDouble;
+                        if (Double.TryParse(x.Value, out xDouble) && Double.TryParse(y.Value, out yDouble))
+                        {
+                            return yDouble.CompareTo(xDouble);
+                        }
+                        else
+                        {
+                            return y.Value.CompareTo(x.Value);
+                        }
+                    }
+                    return y.Value.CompareTo(x.Value);
+                });
             }
 
             List<TagValueReportDTO> reportDTOs = new List<TagValueReportDTO>();

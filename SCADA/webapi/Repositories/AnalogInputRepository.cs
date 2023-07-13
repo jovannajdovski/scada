@@ -29,7 +29,7 @@ namespace webapi.Repositories
 
         public AnalogInput GetById(int id)
         {
-            return _context.AnalogInputs.Find(id);
+            return _context.AnalogInputs.Include(ai => ai.Address).FirstOrDefault(ai => ai.Id == id);
         }
 
         public void Add(AnalogInput analogInput)

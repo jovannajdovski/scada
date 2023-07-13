@@ -201,7 +201,6 @@ namespace SimulationDriver
         }
         public void StartSimulation()
         {
-            Console.WriteLine("rtu sim");
             Task.Run(async () =>
             {
                 List<RealTimeUnit> realTimeUnits;
