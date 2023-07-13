@@ -23,7 +23,7 @@
         <ng-container *ngFor="let alarm of alarms">
           <tr>
             <td>{{alarm.id}}</td>
-            <td>{{alarm.analogInputDescription }}</td>
+            <td>{{alarm.description }}</td>
             <td>{{alarm.limit}}</td>
             <td>{{alarm.type}}</td>
             <td>{{alarm.priority}}</td>
@@ -45,13 +45,13 @@
     <label for="limit">Limit</label>
     <input type="number" [(ngModel)]="createAlarmForm.Limit" name="limit" required>
     <label for="priority">Priority:</label>
-    <select class="priority-select" name="priority" id="priority" [(ngModel)]="createAlarmForm.priority" required>
+    <select class="priority-select" name="priority" id="priority" [(ngModel)]="createAlarmForm.Priority" required>
       <option [value]="AlarmPriority.HIGH_PRIORITY">High Priority</option>
       <option [value]="AlarmPriority.NORMAL_PRIORITY">Normal Priority</option>
       <option [value]="AlarmPriority.LOW_PRIORITY">Low Priority</option>
     </select>
     <label for="type">Type:</label>
-    <select class="priority-select" name="type" id="type" [(ngModel)]="createAlarmForm.type" required>
+    <select class="priority-select" name="type" id="type" [(ngModel)]="createAlarmForm.Type" required>
       <option [value]="AlarmType.LOW">Low</option>
       <option [value]="AlarmType.HIGH">High</option>
     </select>

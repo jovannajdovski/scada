@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlarmPriority, AlarmType } from '../../models/alarm';
+import { AlarmPriority, AlarmTypeCreate } from '../../models/alarm';
 
 @Component({
   selector: 'app-alarms',
@@ -11,7 +11,7 @@ import { AlarmPriority, AlarmType } from '../../models/alarm';
 export class AlarmsComponent {
   showPopup: boolean = false;
   AlarmPriority = AlarmPriority;
-  AlarmType = AlarmType;
+  AlarmType = AlarmTypeCreate;
   alarms: Alarm[] = [];
 
   constructor(private http: HttpClient, private router: Router) {
@@ -38,7 +38,7 @@ export class AlarmsComponent {
 
 
   removeAlarm(id: number) {
-    this.http.delete(`/api/alarms/${id}`).subscribe(() => {
+    this.http.delete(`/api/alarms/delete/${id}`).subscribe(() => {
       this.loadAlarms();
     });
   }
@@ -55,7 +55,7 @@ export class AlarmsComponent {
     const url = '/api/alarms';
     this.http.post<Alarm>(url, this.createAlarmForm).subscribe((response) => {
       console.log('Alarm created successfully:', response);
-      this.alarms.push(response); // Update the analogInputs list with the new tag
+      this.loadAlarms();
       this.showPopup = false;
     }, (error) => {
       console.error('Error creating alarm:', error);
@@ -71,8 +71,8 @@ export class AlarmsComponent {
 }
 export interface Alarm {
   id: number;
-  type: AlarmType;
+  type: AlarmTypeCreate;
   priority: AlarmPriority;
   limit: number;
-  analogInputDescription: string;
+  description: string;
 }

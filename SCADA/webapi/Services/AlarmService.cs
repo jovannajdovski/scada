@@ -66,8 +66,10 @@ namespace webapi.Services
                 alarm.Priority = alarmDTO.Priority;
                 alarm.Limit = alarmDTO.Limit;
                 alarm.Type = alarmDTO.Type;
+                _alarmRepository.Add(alarm);
+                _configurationFileService.AddAlarm(alarm, null);
             }
-            _configurationFileService.AddAlarm(alarm, null);
+            
             return alarm;
         }
 

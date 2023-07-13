@@ -34,6 +34,7 @@ namespace webapi.Controllers
         [HttpPost]
         public ActionResult<Alarm> NewAlarm(AlarmDTO alarmDTO)
         {
+            Console.WriteLine("usao");
             var alarm = _alarmService.Create(alarmDTO);
             if (alarm == null)
             {
@@ -67,8 +68,8 @@ namespace webapi.Controllers
             return Ok(alarmsDTOs);
         }
 
-        [HttpDelete("/{id}")]
-        public IActionResult DeleteAlarm(int id)
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteAlarm1(int id)
         {
             _alarmService.Remove(id);
             return NoContent();
