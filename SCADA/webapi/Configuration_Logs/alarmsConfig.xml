@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Alarms>
+  <alarm>
+    <Id>1</Id>
+    <AnalogInput>
+      <Id>1</Id>
+      <Description>Water level in pool</Description>
+    </AnalogInput>
+    <Limit>
+      <Value>3</Value>
+      <Type>HIGH</Type>
+    </Limit>
+    <Priority>HIGH_PRIORITY</Priority>
+    <LastTrigger>04:09:27:976 13.07.2023</LastTrigger>
+  </alarm>
+</Alarms>

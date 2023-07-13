@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <Folder Include="database\" />
-    <Folder Include="Configuration\" />
+    <Folder Include="Configuration_Logs\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 

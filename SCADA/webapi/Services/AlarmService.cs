@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.DTO;
 using webapi.Enum;
 using webapi.model;
@@ -23,12 +24,14 @@ namespace webapi.Services
         private readonly IAlarmRepository _alarmRepository;
         private readonly IAnalogInputRepository _analogInputRepository;
         private readonly IAlarmTriggerRepository _alarmTriggerRepository;
+        private readonly IConfigurationFileService _configurationFileService;
 
-        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputRepository analogInputRepository, IAlarmTriggerRepository alarmTriggerRepository)
+        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputRepository analogInputRepository, IAlarmTriggerRepository alarmTriggerRepository, IConfigurationFileService configurationFileService)
         {
             _alarmRepository = alarmRepository;
             _analogInputRepository = analogInputRepository;
             _alarmTriggerRepository = alarmTriggerRepository;
+            _configurationFileService = configurationFileService;
         }
 
         public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
@@ -60,6 +63,7 @@ namespace webapi.Services
                 alarm.Limit = alarmDTO.Limit;
                 alarm.Type = alarmDTO.Type;
             }
+            _configurationFileService.AddAlarm(alarm, null);
             return alarm;
         }
 
@@ -108,6 +112,7 @@ namespace webapi.Services
             trigger.Alarm = alarm;
             trigger.DateTime = DateTime.Now;
             _alarmTriggerRepository.AddTrigger(trigger);
+            _configurationFileService.AddAlarm(alarm, trigger.DateTime);
         }
     }
 }
