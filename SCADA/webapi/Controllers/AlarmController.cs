@@ -53,5 +53,25 @@ namespace webapi.Controllers
         {
             return Ok(_alarmTrggerRepository.GetAlarmsTriggers(from, to));
         }
+
+        [HttpGet]
+        public ActionResult<List<AlarmTableDTO>> GetAllAlarms()
+        {
+            List<Alarm> alarms = _alarmService.GetAllAlarms();
+            List<AlarmTableDTO> alarmsDTOs = new List<AlarmTableDTO>();
+
+            foreach(Alarm alarm in alarms)
+            {
+                alarmsDTOs.Add(new AlarmTableDTO(alarm));
+            }
+            return Ok(alarmsDTOs);
+        }
+
+        [HttpDelete("/{id}")]
+        public IActionResult DeleteAlarm(int id)
+        {
+            _alarmService.Remove(id);
+            return NoContent();
+        }
     }
 }
