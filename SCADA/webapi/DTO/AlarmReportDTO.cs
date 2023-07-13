@@ -22,7 +22,7 @@ namespace webapi.DTO
             Type = alarm.Type;
             Priority = alarm.Priority;
             Limit = alarm.Limit;
-            Date = alarm.Date;
+            //Date = alarm.Date;
             AnalogInputId = alarm.AnalogInput.Id;
             AnalogInputDescription = alarm.AnalogInput.Description;
             AnalogInputLowLimit = alarm.AnalogInput.LowLimit;

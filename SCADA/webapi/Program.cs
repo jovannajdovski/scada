@@ -18,6 +18,7 @@ builder.Services.AddScoped<IRealTimeUnitRepository, RealTimeUnitRepository>();
 builder.Services.AddScoped<ITagValueRepository, TagValueRepository>();
 builder.Services.AddScoped<IAlarmRepository, AlarmRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAlarmTriggerRepository, AlarmTriggerRepository>();
 
 // Register services
 builder.Services.AddScoped<IDigitalInputService, DigitalInputService>();

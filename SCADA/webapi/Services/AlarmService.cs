@@ -1,70 +1,118 @@
-﻿using webapi.Enum;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using webapi.DTO;
+using webapi.Enum;
 using webapi.model;
+using webapi.Model;
 using webapi.Repositories;
 
 namespace webapi.Services
 {
     public interface IAlarmService
     {
-        List<Alarm> GetAlarms(DateTime startTime, DateTime endTime, bool isAscending = true);
-        List<Alarm> GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true);
+        List<Alarm> GetAlarmsByPriority(AlarmPriority priority);
+
+        public Alarm Mute(int id);
+
+        Alarm Create(AlarmDTO alarmDTO);
+
+        void TriggerAlarms(AnalogInput analogInput);
     }
 
     public class AlarmService : IAlarmService
     {
         private readonly IAlarmRepository _alarmRepository;
+        private readonly IAnalogInputRepository _analogInputRepository;
+        private readonly IAlarmTriggerRepository _alarmTriggerRepository;
+        private readonly IConfigurationFileService _configurationFileService;
 
-        public AlarmService(IAlarmRepository alarmRepository)
+        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputRepository analogInputRepository, IAlarmTriggerRepository alarmTriggerRepository, IConfigurationFileService configurationFileService)
         {
             _alarmRepository = alarmRepository;
+            _analogInputRepository = analogInputRepository;
+            _alarmTriggerRepository = alarmTriggerRepository;
+            _configurationFileService = configurationFileService;
         }
 
-        public List<Alarm> GetAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
         {
-            List<Alarm> alarms = _alarmRepository.GetAlarms(startTime, endTime);
-
-            if (isAscending)
-            {
-                alarms.Sort((x, y) =>
-                {
-                    int priorityComparison = x.Priority.CompareTo(y.Priority);
-                    if (priorityComparison != 0)
-                    {
-                        return priorityComparison;
-                    }
-                    return x.Date.CompareTo(y.Date);
-                });
-            }
-            else
-            {
-                alarms.Sort((x, y) =>
-                {
-                    int priorityComparison = y.Priority.CompareTo(x.Priority);
-                    if (priorityComparison != 0)
-                    {
-                        return priorityComparison;
-                    }
-                    return y.Date.CompareTo(x.Date);
-                });
-            }
-
-            return alarms;
+            return _alarmRepository.GetAlarmsByPriority(priority);
         }
 
-        public List<Alarm> GetAlarmsByPriority(AlarmPriority priority, bool isAscending = true)
+        public Alarm Mute(int id)
         {
-            List<Alarm> alarms = _alarmRepository.GetAlarmsByPriority(priority);
-
-            if (isAscending)
+            var alarm = _alarmRepository.GetAlarmById(id);
+            if (alarm != null)
             {
-                alarms.Sort((x, y) => x.Date.CompareTo(y.Date));
+                alarm.isMuted = true;
+                _alarmRepository.UpdateAlarm(alarm);
             }
-            else
+            return alarm;
+        }
+
+        public Alarm Create(AlarmDTO alarmDTO)
+        {
+            Alarm alarm = null;
+            AnalogInput analogInput = _analogInputRepository.GetById(alarmDTO.AnalogInputId);
+            if (analogInput != null)
             {
-                alarms.Sort((x, y) => y.Date.CompareTo(x.Date));
+                alarm = new Alarm();
+                alarm.AnalogInput = analogInput;
+                alarm.isMuted = false;
+                alarm.Priority = alarmDTO.Priority;
+                alarm.Limit = alarmDTO.Limit;
+                alarm.Type = alarmDTO.Type;
+            }
+            _configurationFileService.AddAlarm(alarm, null);
+            return alarm;
+        }
+
+        public void TriggerAlarms(AnalogInput analogInput)
+        {
+            var lowAlarms = GetLowAlarmByAnalogInput(analogInput.Alarms);
+            var value = analogInput.Values.Last().Value;
+            foreach (var alarm in lowAlarms)
+            {
+                if (alarm.Limit >= Double.Parse(value))
+                {
+                    TriggerAlarm(alarm); break;
+                }
             }
 
-            return alarms;
+            var highAlarms = GetHighAlarmByAnalogInput(analogInput.Alarms);
+            value = analogInput.Values.Last().Value;
+            foreach (var alarm in lowAlarms)
+            {
+                if (alarm.Limit <= Double.Parse(value))
+                {
+                    TriggerAlarm(alarm); break;
+                }
+            }
+        }
+
+        public List<Alarm> GetLowAlarmByAnalogInput(List<Alarm> alarms)
+        {
+            return alarms
+                .Where(alarm => alarm.Type == AlarmType.LOW)
+                .OrderByDescending(alarm => alarm.Priority)
+                .ThenBy(alarm => alarm.Limit).ToList();
+        }
+
+        public List<Alarm> GetHighAlarmByAnalogInput(List<Alarm> alarms)
+        {
+            return alarms
+                .Where(alarm => alarm.Type == AlarmType.HIGH)
+                .OrderByDescending(alarm => alarm.Priority)
+                .ThenByDescending(alarm => alarm.Limit).ToList();
+        }
+
+        public void TriggerAlarm(Alarm alarm)
+        {
+            var trigger = new AlarmTrigger();
+            trigger.Alarm = alarm;
+            trigger.DateTime = DateTime.Now;
+            _alarmTriggerRepository.AddTrigger(trigger);
+            _configurationFileService.AddAlarm(alarm, trigger.DateTime);
         }
     }
 }

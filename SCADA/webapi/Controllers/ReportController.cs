@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using webapi.DTO;
 using webapi.Enum;
@@ -36,20 +37,21 @@ namespace webapi.Controllers
 
         // Alarm reports
 
-        [HttpGet("alarms")]
-        public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
-        {
-            List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
+        //[HttpGet("alarms")]
+        //public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        //{
+        //    //List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
 
-            List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
+        //    //List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
-            foreach (Alarm alarm in alarms)
-            {
-                AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
-                reportDTOs.Add(reportDTO);
-            }
-            return Ok(reportDTOs);
-        }
+        //    //foreach (Alarm alarm in alarms)
+        //    //{
+        //    //    AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
+        //    //    reportDTOs.Add(reportDTO);
+        //    //}
+        //    //return Ok(reportDTOs);
+
+        //}
 
         [HttpGet("alarms/priority")]
         public IActionResult GetAlarmsByPriority(int priority, bool isAscending = true)
@@ -58,17 +60,20 @@ namespace webapi.Controllers
             if (priority == 1)
             {
                 priorityEnum = AlarmPriority.NORMAL_PRIORITY;
-            } else if (priority == 2)
+            }
+            else if (priority == 2)
             {
                 priorityEnum = AlarmPriority.HIGH_PRIORITY;
-            } else if (priority == 0)
+            }
+            else if (priority == 0)
             {
                 priorityEnum = AlarmPriority.LOW_PRIORITY;
-            } else
+            }
+            else
             {
                 return BadRequest();
             }
-            List <Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum, isAscending);
+            List<Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum);
             List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
             foreach (Alarm alarm in alarms)
@@ -78,7 +83,6 @@ namespace webapi.Controllers
             }
             return Ok(reportDTOs);
         }
-
 
         // Tag reports
 
@@ -197,11 +201,39 @@ namespace webapi.Controllers
 
             if (isAscending)
             {
-                tagValues.Sort((x, y) => x.Value.CompareTo(y.Value));
+                tagValues.Sort((x, y) => {
+                    if (x.Type.Equals("double"))
+                    {
+                        double xDouble, yDouble;
+                        if (Double.TryParse(x.Value, out xDouble) && Double.TryParse(y.Value, out yDouble))
+                        {
+                            return xDouble.CompareTo(yDouble);
+                        }
+                        else
+                        {
+                            return x.Value.CompareTo(y.Value);
+                        }
+                    }
+                    return x.Value.CompareTo(y.Value);
+                    });
             }
             else
             {
-                tagValues.Sort((x, y) => y.Value.CompareTo(x.Value));
+                tagValues.Sort((x, y) => {
+                    if (x.Type.Equals("double"))
+                    {
+                        double xDouble, yDouble;
+                        if (Double.TryParse(x.Value, out xDouble) && Double.TryParse(y.Value, out yDouble))
+                        {
+                            return yDouble.CompareTo(xDouble);
+                        }
+                        else
+                        {
+                            return y.Value.CompareTo(x.Value);
+                        }
+                    }
+                    return y.Value.CompareTo(x.Value);
+                });
             }
 
             List<TagValueReportDTO> reportDTOs = new List<TagValueReportDTO>();

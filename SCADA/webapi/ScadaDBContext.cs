@@ -8,6 +8,7 @@ namespace webapi
     {
         public DbSet<TagBase> TagBases { get; set; }
         public DbSet<Alarm> Alarms { get; set; }
+        public DbSet<AlarmTrigger> AlarmsTriggers { get; set; }
         public DbSet<IOAddress> Addresses { get; set; }
         public DbSet<AnalogInput> AnalogInputs { get; set; }
         public DbSet<AnalogOutput> AnalogOutputs { get; set; }
@@ -21,8 +22,5 @@ namespace webapi
         {
             optionsBuilder.UseSqlite("Data Source=database\\database.sqlite");
         }
-
-
-
     }
 }

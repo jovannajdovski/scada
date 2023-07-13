@@ -22,21 +22,22 @@ namespace webapi.Services
         
         
         private readonly IConfigurationFileService _configuationFileService;
-
-        public TagProcessingService(ScadaDBContext scadaDBContext, IConfigurationFileService configurationFileService)
+        private readonly IAnalogInputService _analogInputService;
+        public TagProcessingService(ScadaDBContext scadaDBContext, IConfigurationFileService configurationFileService, IAnalogInputService analogInputService)
         {
             
             this.dbContext = scadaDBContext;
             
             _configuationFileService = configurationFileService;
+            _analogInputService = analogInputService;
         }
         public void Process()
         {
-            TagProcessingSingleton.GetInstance().Process(dbContext, _configuationFileService);
+            TagProcessingSingleton.GetInstance().Process(dbContext, _configuationFileService, _analogInputService);
         }
         public void CreateAnalogTimer(AnalogInput analogInput)
         {
-            TagProcessingSingleton.GetInstance().CreateAnalogTimer(analogInput, _configuationFileService);
+            TagProcessingSingleton.GetInstance().CreateAnalogTimer(analogInput, _configuationFileService, _analogInputService);
         }
         public void CreateDigitalTimer(DigitalInput digitalInput)
         {
@@ -76,7 +77,7 @@ namespace webapi.Services
 
             return instance;
         }
-        public void Process(ScadaDBContext dbContext, IConfigurationFileService _configuationFileService)
+        public void Process(ScadaDBContext dbContext, IConfigurationFileService _configuationFileService, IAnalogInputService analogInputService)
         {
             List<AnalogInput> analogInputs = dbContext.AnalogInputs.Include(ai => ai.Values).Include(ai => ai.Address)
                 .Where(ai => ai.IsScanning).ToList();
@@ -84,16 +85,16 @@ namespace webapi.Services
                 .Where(di => di.IsScanning).ToList();
 
             foreach (var analogInput in analogInputs)
-                CreateAnalogTimer(analogInput, _configuationFileService);
+                CreateAnalogTimer(analogInput, _configuationFileService,analogInputService);
             foreach (var digitalInput in digitalInputs)
                 CreateDigitalTimer(digitalInput, _configuationFileService);
 
         }
-        public void CreateAnalogTimer(AnalogInput analogInput, IConfigurationFileService _configuationFileService)
+        public void CreateAnalogTimer(AnalogInput analogInput, IConfigurationFileService _configuationFileService, IAnalogInputService _analogInputService)
         {
             Timer timer = new Timer(state =>
             {
-                AnalogTimerCallback(analogInput.Address.Id, analogInput.Id, _configuationFileService);
+                AnalogTimerCallback(analogInput.Address.Id, analogInput.Id, _configuationFileService, _analogInputService);
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(analogInput.ScanTime));
             timers.Add(analogInput.Id, timer);
                 
@@ -106,7 +107,7 @@ namespace webapi.Services
             }, null, TimeSpan.Zero, TimeSpan.FromSeconds(digitalInput.ScanTime));
             timers.Add(digitalInput.Id, timer);
         }
-        private void AnalogTimerCallback(int addressId, int analogInputId, IConfigurationFileService _configuationFileService)
+        private void AnalogTimerCallback(int addressId, int analogInputId, IConfigurationFileService _configuationFileService, AnalogInputService analogInputService)
         {
             lock (analogInputValuesLockObj)
             {
@@ -137,7 +138,8 @@ namespace webapi.Services
                             analogInput.Values = new List<TagValue>();
                         analogInput.Values.Add(inTagValue);
                         dbContext.TagValues.Add(inTagValue);
-                        dbContext.AnalogInputs.Update(analogInput);
+                        //ovde
+                        analogInputService.UpdateAnalogInput(analogInput);
                         _configuationFileService.AddTag(analogInput);
 
                         foreach (var analogOutput in analogOutputs)
