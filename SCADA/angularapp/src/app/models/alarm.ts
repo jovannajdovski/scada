@@ -9,16 +9,17 @@ export interface Alarm {
     date: Date;
   }
   
-  export enum AlarmPriority {
-    HIGH_PRIORITY = 0,
-    NORMAL_PRIORITY = 1,
-    LOW_PRIORITY = 2
-  }
-  
-  export enum AlarmType {
-    LOW = 'low',
-    HIGH = 'high'
+export enum AlarmPriority {
+  HIGH_PRIORITY = 0,
+  NORMAL_PRIORITY = 1,
+  LOW_PRIORITY = 2
 }
+  
+export enum AlarmType {
+  LOW = 'low',
+  HIGH = 'high'
+}
+
 export enum AlarmTypeCreate {
   LOW = 0,
   HIGH = 1

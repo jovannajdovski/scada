@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using webapi.DTO;
+using webapi.Enum;
 using webapi.model;
 using webapi.Model;
 using webapi.Repositories;
@@ -32,9 +33,42 @@ namespace webapi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Alarm> NewAlarm(AlarmDTO alarmDTO)
+        public ActionResult<Alarm> NewAlarm(AlarmCreateDTO alarmCreateDTO)
         {
-            Console.WriteLine("usao");
+            AlarmPriority priorityEnum;
+            if (alarmCreateDTO.Priority == 1)
+            {
+                priorityEnum = AlarmPriority.NORMAL_PRIORITY;
+            }
+            else if (alarmCreateDTO.Priority == 2)
+            {
+                priorityEnum = AlarmPriority.HIGH_PRIORITY;
+            }
+            else if (alarmCreateDTO.Priority == 0)
+            {
+                priorityEnum = AlarmPriority.LOW_PRIORITY;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            AlarmType typeEnum;
+            if (alarmCreateDTO.Type == 1)
+            {
+                typeEnum = AlarmType.HIGH;
+            }
+            else if (alarmCreateDTO.Priority == 0)
+            {
+                typeEnum = AlarmType.LOW;
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+            AlarmDTO alarmDTO = new AlarmDTO(typeEnum, priorityEnum, alarmCreateDTO.Limit, alarmCreateDTO.AnalogInputId);
+
             var alarm = _alarmService.Create(alarmDTO);
             if (alarm == null)
             {

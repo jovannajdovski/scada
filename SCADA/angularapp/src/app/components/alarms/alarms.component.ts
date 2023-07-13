@@ -43,7 +43,7 @@ export class AlarmsComponent {
     });
   }
 
-  createAlarmForm: any = {
+  createAlarmForm: CreateAlarm = {
     AnalogInputId: 0,
     Priority: 0,
     Type: 0,
@@ -75,4 +75,11 @@ export interface Alarm {
   priority: AlarmPriority;
   limit: number;
   description: string;
+}
+
+export interface CreateAlarm {
+  AnalogInputId: number;
+  Type: number;
+  Priority: number;
+  Limit: number;
 }

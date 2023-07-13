@@ -20,6 +20,22 @@
   padding: 0 50px;
 }
 
+.btn {
+  padding: 8px 16px;
+  margin:10px;
+  background-color: lightgray;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: darkgray;
+}
+
   .navbar h2 {
     margin: 0;
   }

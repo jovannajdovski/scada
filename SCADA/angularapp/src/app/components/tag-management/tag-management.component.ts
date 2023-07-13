@@ -306,4 +306,12 @@ export class TagManagementComponent {
         );
     }
   }
+
+  toReports() {
+    this.router.navigate(['/reports']);
+  }
+
+  toAlarms() {
+    this.router.navigate(['/alarms']);
+  }
 }
