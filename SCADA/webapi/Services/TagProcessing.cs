@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SimulationDriver;
 using webapi.Controllers;
+using webapi.Enum;
 using webapi.model;
 using webapi.Model;
 
@@ -22,7 +23,7 @@ namespace webapi.Services
         
         
         private readonly IConfigurationFileService _configuationFileService;
-
+        private readonly IAnalogInputService _analogInputService;
         public TagProcessingService(ScadaDBContext scadaDBContext, IConfigurationFileService configurationFileService)
         {
             
@@ -113,7 +114,7 @@ namespace webapi.Services
                 ScadaDBContext dbContext = new ScadaDBContext();
 
                 IOAddress address = dbContext.Addresses.FirstOrDefault(a => a.Id == addressId);
-                AnalogInput analogInput = dbContext.AnalogInputs.Include(a => a.Values).FirstOrDefault(a => a.Id == analogInputId);
+                AnalogInput analogInput = dbContext.AnalogInputs.Include(a => a.Values).Include(a=> a.Alarms).FirstOrDefault(a => a.Id == analogInputId);
 
                 List<AnalogOutput> analogOutputs = dbContext.AnalogOutputs.Include(a => a.Values).Where(ao => ao.Address.Id == addressId).ToList();
                 double sum = analogOutputs.Sum(output => output.Values.Sum(val => double.Parse(val.Value)));
@@ -137,9 +138,47 @@ namespace webapi.Services
                             analogInput.Values = new List<TagValue>();
                         analogInput.Values.Add(inTagValue);
                         dbContext.TagValues.Add(inTagValue);
-                        dbContext.AnalogInputs.Update(analogInput);
-                        _configuationFileService.AddTag(analogInput);
+                        //ovde
+                        List<Alarm> lowAlarms = analogInput.Alarms.Where(alarm => alarm.Type == AlarmType.LOW)
+                                .OrderByDescending(alarm => alarm.Priority)
+                                .ThenBy(alarm => alarm.Limit).ToList();
 
+                        foreach (var alarm in lowAlarms)
+                        {
+                            if (alarm.Limit >= nextValue)
+                            {
+                                var trigger = new AlarmTrigger();
+                                trigger.Alarm = alarm;
+                                trigger.DateTime = DateTime.Now;
+                                dbContext.AlarmsTriggers.Add(trigger);
+                                dbContext.SaveChanges();
+                                _configuationFileService.AddAlarm(alarm, DateTime.Now);
+                                break;
+                            }
+                        }
+
+                        List<Alarm> highAlarms = analogInput.Alarms.Where(alarm => alarm.Type == AlarmType.HIGH)
+                                .OrderByDescending(alarm => alarm.Priority)
+                                .ThenBy(alarm => alarm.Limit).ToList();
+
+                        foreach (var alarm in highAlarms)
+                        {
+                            if (alarm.Limit <= nextValue)
+                            {
+                                var trigger = new AlarmTrigger();
+                                trigger.Alarm = alarm;
+                                trigger.DateTime = DateTime.Now;
+                                dbContext.AlarmsTriggers.Add(trigger);
+                                dbContext.SaveChanges();
+                                _configuationFileService.AddAlarm(alarm, DateTime.Now);
+                                break;
+                            }
+                        }
+
+                        dbContext.AnalogInputs.Update(analogInput);
+                        dbContext.SaveChanges();
+                        _configuationFileService.AddTag(analogInput);
+                        
                         foreach (var analogOutput in analogOutputs)
                         {
                             if (analogOutput.Values.Count > 0)

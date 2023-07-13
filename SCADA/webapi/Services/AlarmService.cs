@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using webapi.DTO;
 using webapi.Enum;
 using webapi.model;
@@ -16,6 +17,10 @@ namespace webapi.Services
         Alarm Create(AlarmDTO alarmDTO);
 
         void TriggerAlarms(AnalogInput analogInput);
+
+        List<Alarm> GetAllAlarms();
+
+        void Remove(int id);
     }
 
     public class AlarmService : IAlarmService
@@ -23,12 +28,14 @@ namespace webapi.Services
         private readonly IAlarmRepository _alarmRepository;
         private readonly IAnalogInputRepository _analogInputRepository;
         private readonly IAlarmTriggerRepository _alarmTriggerRepository;
+        private readonly IConfigurationFileService _configurationFileService;
 
-        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputRepository analogInputRepository, IAlarmTriggerRepository alarmTriggerRepository)
+        public AlarmService(IAlarmRepository alarmRepository, IAnalogInputRepository analogInputRepository, IAlarmTriggerRepository alarmTriggerRepository, IConfigurationFileService configurationFileService)
         {
             _alarmRepository = alarmRepository;
             _analogInputRepository = analogInputRepository;
             _alarmTriggerRepository = alarmTriggerRepository;
+            _configurationFileService = configurationFileService;
         }
 
         public List<Alarm> GetAlarmsByPriority(AlarmPriority priority)
@@ -59,8 +66,10 @@ namespace webapi.Services
                 alarm.Priority = alarmDTO.Priority;
                 alarm.Limit = alarmDTO.Limit;
                 alarm.Type = alarmDTO.Type;
+                _alarmRepository.Add(alarm);
+                _configurationFileService.AddAlarm(alarm, null);
             }
-            _alarmRepository.Add(alarm);
+            
             return alarm;
         }
 
@@ -109,6 +118,21 @@ namespace webapi.Services
             trigger.Alarm = alarm;
             trigger.DateTime = DateTime.Now;
             _alarmTriggerRepository.AddTrigger(trigger);
+            _configurationFileService.AddAlarm(alarm, trigger.DateTime);
+        }
+
+        public List<Alarm> GetAllAlarms()
+        {
+            return _alarmRepository.GetAllAlarms();
+        }
+
+        public void Remove(int id)
+        {
+            Alarm alarm = _alarmRepository.GetAlarmById(id);
+            if (alarm != null)
+            {
+                _alarmRepository.Remove(alarm);
+            }
         }
     }
 }

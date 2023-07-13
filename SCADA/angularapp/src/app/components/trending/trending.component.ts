@@ -39,4 +39,9 @@ export class TrendingComponent implements OnInit {
     this.webSocketService.disconnect();
     this.router.navigate(['/login']);
   }
+
+  toAlarms() {
+    this.webSocketService.disconnect();
+    this.router.navigate(['/alarm-triggers']);
+  }
 }

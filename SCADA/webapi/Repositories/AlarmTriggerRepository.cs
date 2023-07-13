@@ -30,8 +30,7 @@ namespace webapi.Repositories
         public List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority)
         {
             return _context.AlarmsTriggers
-                .Include(trigger => trigger.Alarm)
-                .Include(trigger => trigger.Alarm.AnalogInput)
+                .Include(trigger => trigger.Alarm).ThenInclude(alarm => alarm.AnalogInput)
                 .Where(trigger => trigger.Alarm.Priority == priority)
                 .ToList();
         }
@@ -39,8 +38,7 @@ namespace webapi.Repositories
         public List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime)
         {
             return _context.AlarmsTriggers
-                .Include(trigger => trigger.Alarm)
-                .Include(trigger => trigger.Alarm.AnalogInput)
+                .Include(alarm => alarm.Alarm).ThenInclude(alarm => alarm.AnalogInput)
                 .Where(alarm => alarm.DateTime >= startTime && alarm.DateTime <= endTime)
                 .ToList();
         }

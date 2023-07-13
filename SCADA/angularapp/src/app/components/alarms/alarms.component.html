@@ -1,0 +1,75 @@
+<div class="db-manager-container">
+  <nav class="navbar">
+    <h2>Alarm Manager</h2>
+    <div class="midDiv">
+      <button (click)="openPopup()">Create alarm</button>
+    </div>
+    <button id="logout-button" (click)="logout()">Logout</button>
+  </nav>
+
+  <div class="content">
+    <table>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Analog input description</th>
+          <th>Limit</th>
+          <th>Type</th>
+          <th>Priority</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let alarm of alarms">
+          <tr>
+            <td>{{alarm.id}}</td>
+            <td>{{alarm.description }}</td>
+            <td>{{alarm.limit}}</td>
+            <td><ng-container *ngIf="alarm.type === 0">
+              Low
+            </ng-container>
+            <ng-container *ngIf="alarm.type === 1">
+              High
+            </ng-container>
+            </td>
+            <td><ng-container *ngIf="alarm.priority === 2">
+              High Priority
+            </ng-container>
+            <ng-container *ngIf="alarm.priority === 1">
+              Normal Priority
+            </ng-container>
+            <ng-container *ngIf="alarm.priority === 0">
+              Low Priority
+            </ng-container></td>
+            <td>
+              <button class="remove" (click)="removeAlarm(alarm.id)">Remove</button>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Popup forms -->
+<div class="popup" *ngIf="showPopup">
+  <h3>Create new alarm</h3>
+  <form (ngSubmit)="createAlarm()">
+    <label for="analogInputId">Analog input:</label>
+    <input type="number" [(ngModel)]="createAlarmForm.AnalogInputId" name="analogInputId" required>
+    <label for="limit">Limit</label>
+    <input type="number" [(ngModel)]="createAlarmForm.Limit" name="limit" required>
+    <label for="priority">Priority:</label>
+    <select class="priority-select" name="priority" id="priority" [(ngModel)]="createAlarmForm.Priority" required>
+      <option [value]="AlarmPriority.HIGH_PRIORITY">High Priority</option>
+      <option [value]="AlarmPriority.NORMAL_PRIORITY">Normal Priority</option>
+      <option [value]="AlarmPriority.LOW_PRIORITY">Low Priority</option>
+    </select>
+    <label for="type">Type:</label>
+    <select class="priority-select" name="type" id="type" [(ngModel)]="createAlarmForm.Type" required>
+      <option [value]="AlarmType.LOW">Low</option>
+      <option [value]="AlarmType.HIGH">High</option>
+    </select>
+    <button type="submit">Create</button>
+    <button (click)="closePopup()">Cancel</button>
+  </form>
+</div>

@@ -5,6 +5,7 @@ using webapi.DTO;
 using webapi.Enum;
 using webapi.model;
 using webapi.Model;
+using webapi.Repositories;
 using webapi.Services;
 
 namespace webapi.Controllers
@@ -19,13 +20,15 @@ namespace webapi.Controllers
         private readonly IDigitalInputService _digitalInputService;
         private readonly ITagValueService _tagValueService;
         private readonly IAlarmService _alarmService;
+        private IAlarmTriggerRepository _alarmTriggerRepository;
 
         public ReportController(IAnalogInputService analogInputService,
             IDigitalInputService digitalInputService,
             IAnalogOutputService analogOutputService,
             IDigitalOutputService digitalOutputService,
             ITagValueService tagValueService,
-            IAlarmService alarmService)
+            IAlarmService alarmService,
+            IAlarmTriggerRepository alarmTriggerRepository)
         {
             _analogInputService = analogInputService;
             _digitalInputService = digitalInputService;
@@ -33,25 +36,51 @@ namespace webapi.Controllers
             _alarmService = alarmService;
             _analogOutputService = analogOutputService;
             _digitalOutputService = digitalOutputService;
+            _alarmTriggerRepository = alarmTriggerRepository;
         }
 
         // Alarm reports
 
-        //[HttpGet("alarms")]
-        //public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
-        //{
-        //    //List<Alarm> alarms = _alarmService.GetAlarms(startTime, endTime, isAscending);
+       [HttpGet("alarms")]
+        public IActionResult GetAllAlarms(DateTime startTime, DateTime endTime, bool isAscending = true)
+        {
+            List<AlarmTrigger> alarmTriggers = _alarmTriggerRepository.GetAlarmsTriggers(startTime, endTime);
 
-        //    //List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
+            if (isAscending)
+            {
+                alarmTriggers.Sort((x, y) =>
+                {
+                    int priorityComparison = x.Alarm.Priority.CompareTo(y.Alarm.Priority);
+                    if (priorityComparison != 0)
+                    {
+                        return priorityComparison;
+                    }
+                    return x.DateTime.CompareTo(y.DateTime);
+                });
+            }
+            else
+            {
+                alarmTriggers.Sort((x, y) =>
+                {
+                    int priorityComparison = y.Alarm.Priority.CompareTo(x.Alarm.Priority);
+                    if (priorityComparison != 0)
+                    {
+                        return priorityComparison;
+                    }
+                    return y.DateTime.CompareTo(x.DateTime);
+                });
+            }
 
-        //    //foreach (Alarm alarm in alarms)
-        //    //{
-        //    //    AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
-        //    //    reportDTOs.Add(reportDTO);
-        //    //}
-        //    //return Ok(reportDTOs);
+            List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
-        //}
+            foreach (AlarmTrigger alarmTrigger in alarmTriggers)
+            {
+                AlarmReportDTO reportDTO = new AlarmReportDTO(alarmTrigger);
+                reportDTOs.Add(reportDTO);
+            }
+            return Ok(reportDTOs);
+
+        }
 
         [HttpGet("alarms/priority")]
         public IActionResult GetAlarmsByPriority(int priority, bool isAscending = true)
@@ -73,12 +102,23 @@ namespace webapi.Controllers
             {
                 return BadRequest();
             }
-            List<Alarm> alarms = _alarmService.GetAlarmsByPriority(priorityEnum);
+
+            List<AlarmTrigger> alarmTriggers = _alarmTriggerRepository.GetAlarmsTriggersByPriority(priorityEnum);
+
+            if (isAscending)
+            {
+                alarmTriggers.Sort((x, y) => x.DateTime.CompareTo(y.DateTime));
+            }
+            else
+            {
+                alarmTriggers.Sort((x, y) => y.DateTime.CompareTo(x.DateTime));
+            }
+
             List<AlarmReportDTO> reportDTOs = new List<AlarmReportDTO>();
 
-            foreach (Alarm alarm in alarms)
+            foreach (AlarmTrigger alarmTrigger in alarmTriggers)
             {
-                AlarmReportDTO reportDTO = new AlarmReportDTO(alarm);
+                AlarmReportDTO reportDTO = new AlarmReportDTO(alarmTrigger);
                 reportDTOs.Add(reportDTO);
             }
             return Ok(reportDTOs);

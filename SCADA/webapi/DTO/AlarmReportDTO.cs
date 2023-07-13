@@ -1,5 +1,6 @@
 ﻿using webapi.Enum;
 using webapi.model;
+using webapi.Model;
 
 namespace webapi.DTO
 {
@@ -16,18 +17,18 @@ namespace webapi.DTO
         public double AnalogInputHighLimit { get; set; }
         public string AnalogInputUnit { get; set; }
 
-        public AlarmReportDTO(Alarm alarm)
+        public AlarmReportDTO(AlarmTrigger alarmTrigger)
         {
-            Id = alarm.Id;
-            Type = alarm.Type;
-            Priority = alarm.Priority;
-            Limit = alarm.Limit;
-            //Date = alarm.Date;
-            AnalogInputId = alarm.AnalogInput.Id;
-            AnalogInputDescription = alarm.AnalogInput.Description;
-            AnalogInputLowLimit = alarm.AnalogInput.LowLimit;
-            AnalogInputHighLimit = alarm.AnalogInput.HighLimit;
-            AnalogInputUnit = alarm.AnalogInput.Unit;
+            Id = alarmTrigger.Alarm.Id;
+            Type = alarmTrigger.Alarm.Type;
+            Priority = alarmTrigger.Alarm.Priority;
+            Limit = alarmTrigger.Alarm.Limit;
+            Date = alarmTrigger.DateTime;
+            AnalogInputId = alarmTrigger.Alarm.AnalogInput.Id;
+            AnalogInputDescription = alarmTrigger.Alarm.AnalogInput.Description;
+            AnalogInputLowLimit = alarmTrigger.Alarm.AnalogInput.LowLimit;
+            AnalogInputHighLimit = alarmTrigger.Alarm.AnalogInput.HighLimit;
+            AnalogInputUnit = alarmTrigger.Alarm.AnalogInput.Unit;
         }
     }
 }

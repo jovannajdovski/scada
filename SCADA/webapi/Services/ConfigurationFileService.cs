@@ -3,17 +3,21 @@ using System.Xml;
 using System.Xml.Linq;
 using webapi.Enum;
 using webapi.model;
+using webapi.Model;
 using webapi.Repositories;
 
 public interface IConfigurationFileService
 {
     void AddTag(TagBase tag);
+    void AddAlarm(Alarm alarm, DateTime? timestamp);
 }
 
 public class ConfigurationFileService : IConfigurationFileService
 {
     XmlWriterSettings XmlWriterSettings { get; set; }
-    string xmlFilePath { get; }
+    string xmlTagsFilePath { get; }
+    string xmlAlarmsFilePath { get; }
+    string logsFilePath { get; }
     public ConfigurationFileService() 
     {
         XmlWriterSettings = new XmlWriterSettings
@@ -21,7 +25,9 @@ public class ConfigurationFileService : IConfigurationFileService
             Indent = true,  // Enable indentation for readability
             OmitXmlDeclaration = false  // Include the XML declaration at the beginning
         };
-        xmlFilePath = "Configuration/dataConfig.xml";
+        xmlTagsFilePath = "Configuration_Logs/dataConfig.xml";
+        xmlAlarmsFilePath = "Configuration_Logs/alarmsConfig.xml";
+        logsFilePath = "Configuration_Logs/alarmsLog.txt";
     }
     public void AddTag(TagBase tag)
     {
@@ -36,13 +42,13 @@ public class ConfigurationFileService : IConfigurationFileService
             xmlTag = "digitalOutput";
 
         XDocument xDoc;
-        if (File.Exists(xmlFilePath))
-            xDoc = XDocument.Load(xmlFilePath);
+        if (File.Exists(xmlTagsFilePath))
+            xDoc = XDocument.Load(xmlTagsFilePath);
         else
         {
             xDoc = new XDocument();
             xDoc.Add(new XElement("Scada"));
-            xDoc.Save(xmlFilePath);
+            xDoc.Save(xmlTagsFilePath);
 
         }
 
@@ -59,6 +65,53 @@ public class ConfigurationFileService : IConfigurationFileService
         );
         xDoc.Root?.Add(newElement);
 
-        xDoc.Save(xmlFilePath);
+        xDoc.Save(xmlTagsFilePath);
+    }
+    public void AddAlarm(Alarm alarm, DateTime? timestamp)
+    {
+        string xmlTag = "alarm";
+        
+        XDocument xDoc;
+        if (File.Exists(xmlAlarmsFilePath))
+            xDoc = XDocument.Load(xmlAlarmsFilePath);
+        else
+        {
+            xDoc = new XDocument();
+            xDoc.Add(new XElement("Alarms"));
+            xDoc.Save(xmlAlarmsFilePath);
+
+        }
+
+        XElement elementToDelete = xDoc.Descendants(xmlTag).FirstOrDefault(e => (int)e.Element("Id") == alarm.Id);
+
+        if (elementToDelete != null)
+            elementToDelete.Remove();
+
+        XElement newElement = new XElement(xmlTag,
+            new XElement("Id", alarm.Id),
+            new XElement("AnalogInput", new XElement("Id", alarm.AnalogInput.Id),
+                                        new XElement("Description", alarm.AnalogInput.Description)),
+            new XElement("Limit", new XElement("Value", alarm.Limit),
+                                  new XElement("Type", alarm.Type.ToString())),
+            new XElement("Priority", alarm.Priority.ToString()),
+
+            new XElement("LastTrigger", timestamp==null ? "/" :timestamp.Value.ToString("HH:mm:ss:fff dd.MM.yyyy"))
+        );
+        xDoc.Root?.Add(newElement);
+
+        xDoc.Save(xmlAlarmsFilePath);
+        LogAlarmTrigger(alarm, timestamp);
+
+    }
+
+    private void LogAlarmTrigger(Alarm alarm, DateTime? timestamp)
+    {
+
+        using (StreamWriter writer = new StreamWriter(logsFilePath, true))
+        {
+            string alarmData = $"{alarm.Id} {alarm.AnalogInput.Description} {alarm.Type.ToString()} {alarm.Priority.ToString()} {alarm.Limit} {timestamp}";
+
+            writer.WriteLine(alarmData);
+        }
     }
 }
