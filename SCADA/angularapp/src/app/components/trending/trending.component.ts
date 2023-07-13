@@ -11,6 +11,7 @@ interface TrendingResponse {
   limit: string;
   unit: string;
   scanTime: number;
+  alarmPriority: string;
 }
 
 @Component({
@@ -26,8 +27,11 @@ export class TrendingComponent implements OnInit {
   ngOnInit(): void {
     this.webSocketService.getResult();
     this.webSocketService.wsResultObs.subscribe((value) => {
-      if(value!=null)
+      if (value != null)
         this.trendingData = value;
+      this.trendingData.forEach(function (v) {
+        console.log(v.alarmPriority);
+      })
     })
   }
 
@@ -36,4 +40,3 @@ export class TrendingComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 }
-

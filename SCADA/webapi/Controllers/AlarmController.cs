@@ -20,7 +20,7 @@ namespace webapi.Controllers
             _alarmTrggerRepository = alarmTriggerRepository;
         }
 
-        [HttpPut("/mute/{id}")]
+        [HttpPut("mute/{id}")]
         public ActionResult<Alarm> MuteAlarm(int id)
         {
             var alarm = _alarmService.Mute(id);
@@ -42,13 +42,22 @@ namespace webapi.Controllers
             return Ok();
         }
 
-        [HttpGet("/triggers")]
-        public ActionResult<List<AlarmTrigger>> GetTriggers(DateTime from, DateTime to)
+        [HttpGet("triggers")]
+        public ActionResult<List<AlarmTrigger>> GetTriggers()
         {
-            return Ok(_alarmTrggerRepository.GetUnmutedTriggers(from, to));
+            List<AlarmTrigger> triggers = _alarmTrggerRepository.GetUnmutedTriggers(DateTime.MinValue, DateTime.MaxValue);
+
+            List<AllAlarmsDTO> all = new List<AllAlarmsDTO>();
+
+            foreach (var trigger in triggers)
+            {
+                all.Add(new AllAlarmsDTO(trigger));
+            }
+
+            return Ok(all);
         }
 
-        [HttpGet("/all-triggers")]
+        [HttpGet("all-triggers")]
         public ActionResult<List<AlarmTrigger>> GetAllTriggers(DateTime from, DateTime to)
         {
             return Ok(_alarmTrggerRepository.GetAlarmsTriggers(from, to));

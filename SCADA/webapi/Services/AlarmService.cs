@@ -60,6 +60,7 @@ namespace webapi.Services
                 alarm.Limit = alarmDTO.Limit;
                 alarm.Type = alarmDTO.Type;
             }
+            _alarmRepository.Add(alarm);
             return alarm;
         }
 

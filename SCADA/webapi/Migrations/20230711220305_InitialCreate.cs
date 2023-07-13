@@ -191,6 +191,11 @@ namespace webapi.Migrations
              columns: new[] { "Type", "Priority", "Limit", "AnalogInputId", "isMuted" },
              values: new object[] { 0, 0, 3, 1, true });
 
+            migrationBuilder.InsertData(
+             table: "AlarmsTriggers",
+             columns: new[] { "AlarmId", "DateTime" },
+             values: new object[] { 1, DateTime.Now });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Alarms_AnalogInputId",
                 table: "Alarms",

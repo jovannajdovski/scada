@@ -13,6 +13,7 @@ import { AdminComponent } from './components/admin/admin.component';
 import { RtuPopupComponent } from './components/rtu-popup/rtu-popup.component';
 import { TagManagementComponent } from './components/tag-management/tag-management.component';
 import { ReportComponent } from './components/report/report.component';
+import { AlarmTriggersComponent } from './components/alarm-triggers/alarm-triggers.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'tags', component: TagManagementComponent },
   { path: 'reports', component: ReportComponent },
   { path: 'trending', component: TrendingComponent },
+  { path: 'alarm-triggers', component: AlarmTriggersComponent }
 ];
 
 @NgModule({
@@ -30,7 +32,8 @@ const routes: Routes = [
     ReportComponent,
     TrendingComponent,
     AdminComponent,
-    RtuPopupComponent
+    RtuPopupComponent,
+    AlarmTriggersComponent
   ],
   imports: [
     BrowserModule,

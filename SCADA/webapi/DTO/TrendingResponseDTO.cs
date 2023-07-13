@@ -1,3 +1,4 @@
+using webapi.Enum;
 using webapi.model;
 
 public class TrendingResponseDTO
@@ -9,6 +10,8 @@ public class TrendingResponseDTO
     public string limit { get; set; }
     public string unit { get; set; }
     public double scanTime { get; set; }
+    public string alarmPriority { get; set; }
+
     public TrendingResponseDTO(int id, string description, int address, string value, string limit, string unit)
     {
         this.id = id;
@@ -18,7 +21,8 @@ public class TrendingResponseDTO
         this.limit = limit;
         this.unit = unit;
     }
-    public TrendingResponseDTO(AnalogInput analogInput)
+
+    public TrendingResponseDTO(AnalogInput analogInput, string priority)
     {
         this.id = analogInput.Id;
         this.scanTime = analogInput.ScanTime;
@@ -32,7 +36,9 @@ public class TrendingResponseDTO
             this.value = analogInput.Values[analogInput.Values.Count - 1].Value;
         this.limit = analogInput.LowLimit.ToString() + " - " + analogInput.HighLimit.ToString();
         this.unit = analogInput.Unit;
+        this.alarmPriority = priority;
     }
+
     public TrendingResponseDTO(DigitalInput digitalInput)
     {
         this.id = digitalInput.Id;

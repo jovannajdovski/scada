@@ -29,7 +29,7 @@ builder.Services.AddScoped<ITagValueService, TagValueService>();
 builder.Services.AddScoped<IAlarmService, AlarmService>();
 builder.Services.AddScoped<ITagProcessingService, TagProcessingService>();
 builder.Services.AddScoped<IConfigurationFileService, ConfigurationFileService>();
-
+builder.Services.AddScoped<IAlarmTriggerService, AlarmTriggerService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

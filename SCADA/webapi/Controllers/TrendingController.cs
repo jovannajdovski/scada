@@ -22,46 +22,43 @@ namespace webapi.Controllers
     [Route("scada/trending")]
     public class TrendingController : ControllerBase
     {
-
         private readonly IDigitalInputService _digitalInputService;
         private readonly IDigitalOutputService _digitalOutputService;
         private readonly IAnalogInputService _analogInputService;
         private readonly IAnalogOutputService _analogOutputService;
         private readonly IIOAddressRepository _ioAddressRepository;
+        private readonly IAlarmTriggerService _alarmTriggerService;
 
         public TrendingController(
             IDigitalInputService digitalInputService,
             IDigitalOutputService digitalOutputService,
             IAnalogInputService analogInputService,
             IAnalogOutputService analogOutputService,
-            IIOAddressRepository ioAddressRepository)
+            IIOAddressRepository ioAddressRepository,
+            IAlarmTriggerService alarmTriggerService)
         {
             _digitalInputService = digitalInputService;
             _digitalOutputService = digitalOutputService;
             _analogInputService = analogInputService;
             _analogOutputService = analogOutputService;
             _ioAddressRepository = ioAddressRepository;
+            _alarmTriggerService = alarmTriggerService;
         }
+
         [HttpGet()]
         public IActionResult GetAllTrending()
         {
-            
             List<AnalogInput> analogInputs = _analogInputService.GetAllScanningAnalogInputs();
             List<DigitalInput> digitalInputs = _digitalInputService.GetAllScanningDigitalInputs();
             List<TrendingResponseDTO> trendingData = new List<TrendingResponseDTO>();
-
+            Console.WriteLine("Trending");
             foreach (var analogInput in analogInputs)
-                trendingData.Add(new TrendingResponseDTO(analogInput));
+                trendingData.Add(new TrendingResponseDTO(analogInput, _alarmTriggerService.GetAnalogInputPriority(analogInput)));
 
             foreach (var digitalInput in digitalInputs)
                 trendingData.Add(new TrendingResponseDTO(digitalInput));
-            
+
             return Ok(trendingData);
         }
-
     }
-
-
 }
-
-

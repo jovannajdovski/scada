@@ -9,6 +9,8 @@ namespace webapi.Repositories
     {
         List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime);
 
+        List<AlarmTrigger> GetAlarmsTriggersForAnalogInput(DateTime startTime, DateTime endTime, AnalogInput analogInput);
+
         List<AlarmTrigger> GetAlarmsTriggersByPriority(AlarmPriority priority);
 
         List<AlarmTrigger> GetUnmutedTriggers(DateTime startTime, DateTime endTime);
@@ -29,6 +31,7 @@ namespace webapi.Repositories
         {
             return _context.AlarmsTriggers
                 .Include(trigger => trigger.Alarm)
+                .Include(trigger => trigger.Alarm.AnalogInput)
                 .Where(trigger => trigger.Alarm.Priority == priority)
                 .ToList();
         }
@@ -36,7 +39,8 @@ namespace webapi.Repositories
         public List<AlarmTrigger> GetAlarmsTriggers(DateTime startTime, DateTime endTime)
         {
             return _context.AlarmsTriggers
-                .Include(alarm => alarm.Alarm)
+                .Include(trigger => trigger.Alarm)
+                .Include(trigger => trigger.Alarm.AnalogInput)
                 .Where(alarm => alarm.DateTime >= startTime && alarm.DateTime <= endTime)
                 .ToList();
         }
@@ -60,6 +64,14 @@ namespace webapi.Repositories
         {
             return this.GetAlarmsTriggers(startTime, endTime)
                 .Where(trigger => trigger.Alarm.isMuted == false).ToList();
+        }
+
+        public List<AlarmTrigger> GetAlarmsTriggersForAnalogInput(DateTime startTime, DateTime endTime, AnalogInput analogInput)
+        {
+            return this.GetAlarmsTriggers(startTime, endTime)
+               .Where(trigger => trigger.Alarm.AnalogInput == analogInput)
+               .OrderByDescending(trigger => trigger.DateTime)
+               .ThenByDescending(trigger => trigger.Alarm.Priority).ToList();
         }
     }
 }

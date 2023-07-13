@@ -1,23 +1,23 @@
-import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, interval, Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs/operators';
-interface TrendingResponse {
+import { Injectable } from '@angular/core';
+import { Alarm, AlarmPriority, AlarmType } from '../models/alarm';
+
+export interface AlarmTriggerDTO {
   id: number;
+  dateTime: Date;
+  priority: AlarmPriority;
+  type: AlarmType;
+  limit: number;
   description: string;
-  address: number;
-  value: string;
-  limit: string;
-  unit: string;
-  scanTime: number;
-  alarmPriority: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
-  private wsResult = new BehaviorSubject<TrendingResponse[] | null>(null);
+export class AlarmServiceService {
+  private wsResult = new BehaviorSubject<AlarmTriggerDTO[] | null>(null);
   wsResultObs = this.wsResult.asObservable();
   private subscription: Subscription | undefined;
 
@@ -27,22 +27,17 @@ export class WebSocketService {
     console.log("get result");
     this.subscription = interval(1000) // Emit value every 1 second
       .pipe(
-        switchMap(() => this.http.get<TrendingResponse[]>('/scada/trending'))
+        switchMap(() => this.http.get<AlarmTriggerDTO[]>('api/alarms/triggers'))
       )
       .subscribe(
         response => {
-          this.handleResult(response);
+          this.wsResult.next(response);
+          console.log(response);
         },
         error => {
           console.error('An error occurred during the request:', error);
         }
       );
-  }
-
-  handleResult(message: TrendingResponse[]) {
-    this.wsResult.next(message)
-    const minScanTime = Math.min(...message.map(item => item.scanTime));
-    return minScanTime * 1000;
   }
   disconnect() {
     if (this.subscription) {

@@ -16,17 +16,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of trendingData"
+        <tr *ngFor="let item of triggers"
             [ngClass]="
-            {'low': item.alarmPriority === 'LOW_PRIORITY',
-            'mid': item.alarmPriority === 'NORMAL_PRIORITY',
-            'high': item.alarmPriority === 'HIGH_PRIORITY'}">
+            {'low': item.priority == 2,
+            'mid': item.priority == 1,
+            'high': item.priority == 0}">
           <td>{{ item.id }}</td>
           <td>{{ item.description }}</td>
-          <td>{{ item.address }}</td>
-          <td>{{ item.value }}</td>
+          <td>{{ item.type }}</td>
           <td>{{ item.limit }}</td>
-          <td>{{ item.unit }}</td>
+          <td>{{ item.priority }}</td>
+          <td>{{ item.dateTime }}</td>
         </tr>
       </tbody>
     </table>
