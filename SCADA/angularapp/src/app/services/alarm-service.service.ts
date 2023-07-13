@@ -11,6 +11,7 @@ export interface AlarmTriggerDTO {
   type: AlarmType;
   limit: number;
   description: string;
+  isMuted: boolean;
 }
 
 @Injectable({
@@ -43,5 +44,12 @@ export class AlarmServiceService {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+  }
+
+  muteButton(id: number) {
+    this.http.put(`api/alarms/mute/${id}`, null).subscribe(
+      response => {
+        console.log(response);
+      });
   }
 }

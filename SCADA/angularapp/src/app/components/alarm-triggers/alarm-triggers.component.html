@@ -27,6 +27,11 @@
           <td>{{ item.limit }}</td>
           <td>{{ item.priority }}</td>
           <td>{{ item.dateTime }}</td>
+          <td>
+            <button class="scan" (click)="MuteButton(item)">
+              {{ item.isMuted ? 'Unmute' : 'Mute' }}
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

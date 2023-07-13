@@ -26,7 +26,6 @@ export class AlarmsComponent {
     });
   }
 
-
   openPopup() {
     this.showPopup = true;
   }
@@ -35,8 +34,6 @@ export class AlarmsComponent {
     this.showPopup = false;
   }
 
-
-
   removeAlarm(id: number) {
     this.http.delete(`/api/alarms/delete/${id}`).subscribe(() => {
       this.loadAlarms();
@@ -44,15 +41,29 @@ export class AlarmsComponent {
   }
 
   createAlarmForm: CreateAlarm = {
-    AnalogInputId: 0,
-    Priority: 0,
-    Type: 0,
-    Limit: 0
+    analogInputId: 0,
+    priority: 0,
+    type: 0,
+    limit: 0
   };
-
 
   createAlarm() {
     const url = '/api/alarms';
+    if (this.createAlarmForm.priority.toString() === "1") {
+      this.createAlarmForm.priority = 1;
+    }
+    if (this.createAlarmForm.priority.toString() === "0") {
+      this.createAlarmForm.priority = 0;
+    }
+    if (this.createAlarmForm.priority.toString() === "2") {
+      this.createAlarmForm.priority = 2;
+    }
+    if (this.createAlarmForm.type.toString() === "1") {
+      this.createAlarmForm.type = 1;
+    }
+    if (this.createAlarmForm.type.toString() === "0") {
+      this.createAlarmForm.type = 0;
+    }
     this.http.post<Alarm>(url, this.createAlarmForm).subscribe((response) => {
       console.log('Alarm created successfully:', response);
       this.loadAlarms();
@@ -61,11 +72,11 @@ export class AlarmsComponent {
       console.error('Error creating alarm:', error);
     });
     // Reset the form inputs
-    this.createAlarmForm= {
-      AnalogInputId: 0,
-      Priority: 0,
-      Type: 0,
-      Limit: 0
+    this.createAlarmForm = {
+      analogInputId: 0,
+      priority: 0,
+      type: 0,
+      limit: 0
     };
   }
 }
@@ -78,8 +89,8 @@ export interface Alarm {
 }
 
 export interface CreateAlarm {
-  AnalogInputId: number;
-  Type: number;
-  Priority: number;
-  Limit: number;
+  analogInputId: number;
+  type: number;
+  priority: number;
+  limit: number;
 }

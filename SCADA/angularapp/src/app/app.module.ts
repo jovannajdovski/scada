@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: 'tags', component: TagManagementComponent },
   { path: 'reports', component: ReportComponent },
   { path: 'trending', component: TrendingComponent },
-  { path: 'alarms', component: AlarmsComponent }
+  { path: 'alarms', component: AlarmsComponent },
   { path: 'alarm-triggers', component: AlarmTriggersComponent }
 ];
 

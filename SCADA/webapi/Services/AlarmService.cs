@@ -48,7 +48,7 @@ namespace webapi.Services
             var alarm = _alarmRepository.GetAlarmById(id);
             if (alarm != null)
             {
-                alarm.isMuted = true;
+                alarm.isMuted = !alarm.isMuted;
                 _alarmRepository.UpdateAlarm(alarm);
             }
             return alarm;
@@ -69,7 +69,7 @@ namespace webapi.Services
                 _alarmRepository.Add(alarm);
                 _configurationFileService.AddAlarm(alarm, null);
             }
-            
+
             return alarm;
         }
 

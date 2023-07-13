@@ -25,22 +25,25 @@
             <td>{{alarm.id}}</td>
             <td>{{alarm.description }}</td>
             <td>{{alarm.limit}}</td>
-            <td><ng-container *ngIf="alarm.type === 0">
-              Low
-            </ng-container>
-            <ng-container *ngIf="alarm.type === 1">
-              High
-            </ng-container>
+            <td>
+              <ng-container *ngIf="alarm.type === 0">
+                Low
+              </ng-container>
+              <ng-container *ngIf="alarm.type === 1">
+                High
+              </ng-container>
             </td>
-            <td><ng-container *ngIf="alarm.priority === 2">
-              High Priority
-            </ng-container>
-            <ng-container *ngIf="alarm.priority === 1">
-              Normal Priority
-            </ng-container>
-            <ng-container *ngIf="alarm.priority === 0">
-              Low Priority
-            </ng-container></td>
+            <td>
+              <ng-container *ngIf="alarm.priority === 2">
+                High Priority
+              </ng-container>
+              <ng-container *ngIf="alarm.priority === 1">
+                Normal Priority
+              </ng-container>
+              <ng-container *ngIf="alarm.priority === 0">
+                Low Priority
+              </ng-container>
+            </td>
             <td>
               <button class="remove" (click)="removeAlarm(alarm.id)">Remove</button>
             </td>
@@ -55,17 +58,17 @@
   <h3>Create new alarm</h3>
   <form (ngSubmit)="createAlarm()">
     <label for="analogInputId">Analog input:</label>
-    <input type="number" [(ngModel)]="createAlarmForm.AnalogInputId" name="analogInputId" required>
+    <input type="number" [(ngModel)]="createAlarmForm.analogInputId" name="analogInputId" required>
     <label for="limit">Limit</label>
-    <input type="number" [(ngModel)]="createAlarmForm.Limit" name="limit" required>
+    <input type="number" [(ngModel)]="createAlarmForm.limit" name="limit" required>
     <label for="priority">Priority:</label>
-    <select class="priority-select" name="priority" id="priority" [(ngModel)]="createAlarmForm.Priority" required>
+    <select class="priority-select" name="priority" id="priority" [(ngModel)]="createAlarmForm.priority" required>
       <option [value]="AlarmPriority.HIGH_PRIORITY">High Priority</option>
       <option [value]="AlarmPriority.NORMAL_PRIORITY">Normal Priority</option>
       <option [value]="AlarmPriority.LOW_PRIORITY">Low Priority</option>
     </select>
     <label for="type">Type:</label>
-    <select class="priority-select" name="type" id="type" [(ngModel)]="createAlarmForm.Type" required>
+    <select class="priority-select" name="type" id="type" [(ngModel)]="createAlarmForm.type" required>
       <option [value]="AlarmType.LOW">Low</option>
       <option [value]="AlarmType.HIGH">High</option>
     </select>

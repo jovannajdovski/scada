@@ -13,6 +13,7 @@ namespace webapi.DTO
         public double Limit { get; set; }
         public string Description { get; set; }
         public DateTime DateTime { get; set; }
+        public bool IsMuted { get; set; }
 
         public AllAlarmsDTO(AlarmTrigger trigger)
         {
@@ -22,6 +23,7 @@ namespace webapi.DTO
             this.Limit = trigger.Alarm.Limit;
             this.Description = trigger.Alarm.AnalogInput.Description;
             this.DateTime = trigger.DateTime;
+            this.IsMuted = trigger.Alarm.isMuted;
         }
     }
 }

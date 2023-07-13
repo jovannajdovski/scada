@@ -25,4 +25,10 @@ export class AlarmTriggersComponent {
     this.webSocketService.disconnect();
     this.router.navigate(['/login']);
   }
+
+  MuteButton(item: AlarmTriggerDTO): void {
+    item.isMuted = !item.isMuted;
+    this.webSocketService.muteButton(item.id);
+    this.triggers = this.triggers;
+  }
 }
