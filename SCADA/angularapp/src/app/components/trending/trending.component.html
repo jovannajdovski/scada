@@ -1,0 +1,35 @@
+<div class="trending-container">
+  <nav class="navbar">
+    <h2>Trending Data</h2>
+    <button class="btn" (click)="toAlarms()">Alarms</button>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </nav>
+  <div class="content">
+    <table class="trending-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Address</th>
+          <th>Value</th>
+          <th>Limit</th>
+          <th>Unit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of trendingData"
+            [ngClass]="
+            {'low': item.alarmPriority === 'LOW_PRIORITY',
+            'mid': item.alarmPriority === 'NORMAL_PRIORITY',
+            'high': item.alarmPriority === 'HIGH_PRIORITY'}">
+          <td>{{ item.id }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.address }}</td>
+          <td>{{ item.value }}</td>
+          <td>{{ item.limit }}</td>
+          <td>{{ item.unit }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

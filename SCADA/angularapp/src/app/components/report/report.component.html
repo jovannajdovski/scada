@@ -1,0 +1,306 @@
+<div class="report-container">
+  <div class="nav-container">
+    <div class="nav-title">Alarm Reports</div>
+    <div class="nav-line"></div>
+    <div class="report-buttons">
+      <button class="nav-button alarm-button" (click)="openDialog('getAllAlarms')">Get All Alarms</button>
+      <button class="nav-button alarm-button" (click)="openDialog('getAlarmsByPriority')">Get Alarms By Priority</button>
+    </div>
+    <div class="nav-line"></div>
+    <div class="nav-title">Tag Reports</div>
+    <div class="nav-line"></div>
+    <div class="report-buttons">
+      <button class="nav-button" (click)="openDialog('getAllTagValues')">Get All Tag Values</button>
+      <button class="nav-button" (click)="openDialog('getLastAnalogInputs')">Get Last Analog Inputs</button>
+      <button class="nav-button" (click)="openDialog('getLastDigitalInputs')">Get Last Digital Inputs</button>
+      <button class="nav-button" (click)="openDialog('getTagValuesById')">Get Tag Values By ID</button>
+    </div>
+  </div>
+
+  
+  <div class="results-container">
+    <h3>Report</h3>
+
+    <div [class.hide]="!chartDisplay"
+    [class.show]="chartDisplay" class="charts">
+      <canvas id="canvas" width="400" height="500">{{chart}}</canvas>
+    </div>
+      
+    <div *ngIf="reportType === 'alarms'">
+      <h4>All Alarms:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Limit</th>
+            <th>Analog Input ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Input Unit</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alarm of alarms">
+            <td>{{ alarm.id }}</td>
+            <td>{{ alarm.type }}</td>
+            <td>{{ alarm.priority }}</td>
+            <td>{{ alarm.limit }}</td>
+            <td>{{ alarm.analogInputId }}</td>
+            <td>{{ alarm.analogInputDescription }}</td>
+            <td>{{ alarm.analogInputLowLimit }}</td>
+            <td>{{ alarm.analogInputHighLimit }}</td>
+            <td>{{ alarm.analogInputUnit }}</td>
+            <td>{{ alarm.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ alarm.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="reportType === 'alarmsByPriority'">
+      <h4>Alarms By Priority:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Priority</th>
+            <th>Limit</th>
+            <th>Analog Input ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Input Unit</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let alarm of alarms">
+            <td>{{ alarm.id }}</td>
+            <td>{{ alarm.type }}</td>
+            <td>{{ alarm.priority }}</td>
+            <td>{{ alarm.limit }}</td>
+            <td>{{ alarm.analogInputId }}</td>
+            <td>{{ alarm.analogInputDescription }}</td>
+            <td>{{ alarm.analogInputLowLimit }}</td>
+            <td>{{ alarm.analogInputHighLimit }}</td>
+            <td>{{ alarm.analogInputUnit }}</td>
+            <td>{{ alarm.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ alarm.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="reportType === 'tagValues'">
+      <h4>All Tag Values:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Tag ID</th>
+            <th>Tag Type</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tagValue of tagValues">
+            <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.tagType }}</td>
+            <td>{{ tagValue.description }}</td>
+            <td>{{ tagValue.type }}</td>
+            <td>{{ tagValue.value }}</td>
+            <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ tagValue.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="reportType === 'lastAnalogInputs'">
+      <h4>Last Analog Inputs:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Input Low Limit</th>
+            <th>Input High Limit</th>
+            <th>Unit</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let analogInput of analogInputs">
+            <td>{{ analogInput.id }}</td>
+            <td>{{ analogInput.description }}</td>
+            <td>{{ analogInput.lowLimit }}</td>
+            <td>{{ analogInput.highLimit }}</td>
+            <td>{{ analogInput.unit }}</td>
+            <td>{{ analogInput.value }}</td>
+            <td>{{ analogInput.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ analogInput.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="reportType === 'lastDigitalInputs'">
+      <h4>Last Digital Inputs:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let digitalInput of digitalInputs">
+            <td>{{ digitalInput.id }}</td>
+            <td>{{ digitalInput.description }}</td>
+            <td>{{ digitalInput.value }}</td>
+            <td>{{ digitalInput.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ digitalInput.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div *ngIf="reportType === 'tagValuesById'">
+      <h4>Tag Values By ID:</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Tag ID</th>
+            <th>Tag Type</th>
+            <th>Tag Description</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Date</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tagValue of tagValues">
+            <td>{{ tagValue.tagId }}</td>
+            <td>{{ tagValue.tagType }}</td>
+            <td>{{ tagValue.description }}</td>
+            <td>{{ tagValue.type }}</td>
+            <td>{{ tagValue.value }}</td>
+            <td>{{ tagValue.date | date:'dd.MM.yyyy' }}</td>
+            <td>{{ tagValue.date | date:'HH:mm:ss' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+  <!-- Popup forms -->
+
+<!--  Get All Alarms Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAllAlarms'">
+    <h3>Get All Alarms </h3>
+    <form (ngSubmit)="getAllAlarms()">
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" name="startTime" id="startTime" [(ngModel)]="getAllAlarmsForm.startTime" required>
+        <label for="endTime">End Time:</label>
+        <input type="datetime-local" name="endTime" id="endTime" [(ngModel)]="getAllAlarmsForm.endTime" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllAlarmsForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get All Alarms By Priority Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAlarmsByPriority'">
+    <h3>Get All Alarms By Priority</h3>
+    <form (ngSubmit)="getAlarmsByPriority()">
+        <label for="priority">Priority:</label>
+        <select class="priority-select" name="priority" id="priority" [(ngModel)]="getAlarmsByPriorityForm.priority" required>
+        <option [value]="AlarmPriority.HIGH_PRIORITY">High Priority</option>
+        <option [value]="AlarmPriority.NORMAL_PRIORITY">Normal Priority</option>
+        <option [value]="AlarmPriority.LOW_PRIORITY">Low Priority</option>
+        </select>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAlarmsByPriorityForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get All Tag Values Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getAllTagValues'">
+    <h3>Get All Tag Values </h3>
+    <form (ngSubmit)="getAllTagValues()">
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" name="startTime" id="startTime" [(ngModel)]="getAllTagValuesForm.startTime" required>
+        <label for="endTime">End Time:</label>
+        <input type="datetime-local" name="endTime" id="endTime" [(ngModel)]="getAllTagValuesForm.endTime" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllTagValuesForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Last Analog Inputs Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getLastAnalogInputs'">
+    <h3>Get Last Analog Inputs </h3>
+    <form (ngSubmit)="getLastAnalogInputs()">
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getAllTagValuesForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Last Digital Inputs Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getLastDigitalInputs'">
+    <h3>Get Last Digital Inputs </h3>
+    <form (ngSubmit)="getLastDigitalInputs()">
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getLastDigitalInputsForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>
+
+<!--  Get Tag Values By ID Form -->
+<div class="popup" *ngIf="showPopup && reportPopupType === 'getTagValuesById'">
+    <h3>Get Tag Values By ID </h3>
+    <form (ngSubmit)="getTagValuesById()">
+        <label for="diId">Tag ID:</label>
+        <input type="number" name="diId" id="diId" [(ngModel)]="getTagValuesByIdForm.id" required>
+        <div class="asc">
+        <label for="isAscending">Ascending Order</label>
+        <input type="checkbox" name="isAscending" id="isAscending" [(ngModel)]="getTagValuesByIdForm.isAscending">
+    </div>
+        <button type="submit">Show</button>
+        <button (click)="closePopup()">Cancel</button>
+    </form>
+</div>

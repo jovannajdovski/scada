@@ -1,0 +1,15 @@
+<div class="popup-overlay">
+  <div class="popup-form">
+    <h2>Create Real Time Unit</h2>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <form >
+      <input type="number" [(ngModel)]="formData.LowLimit" name="field1" placeholder="Low limit" required>
+      <input type="number" [(ngModel)]="formData.HighLimit" name="field2" placeholder="High limit" required>
+      <input type="number" [(ngModel)]="formData.AddressId" name="field3" placeholder="I/O Address (from 10 to 100)" required>
+      <div class="button-container">
+        <button type="button" (click)="onSubmit()">Submit</button>
+        <button type="button" class="close-button" (click)="onClose()">Close</button>
+      </div>
+    </form>
+  </div>
+</div>

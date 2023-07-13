@@ -1,0 +1,39 @@
+<div class="trending-container">
+  <nav class="navbar">
+    <h2>Trending Data</h2>
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </nav>
+  <div class="content">
+    <table class="trending-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Description</th>
+          <th>Type</th>
+          <th>Limit</th>
+          <th>Priority</th>
+          <th>DateTime</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of triggers"
+            [ngClass]="
+            {'low': item.priority == 2,
+            'mid': item.priority == 1,
+            'high': item.priority == 0}">
+          <td>{{ item.id }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.type }}</td>
+          <td>{{ item.limit }}</td>
+          <td>{{ item.priority }}</td>
+          <td>{{ item.dateTime }}</td>
+          <td>
+            <button class="scan" (click)="MuteButton(item)">
+              {{ item.isMuted ? 'Unmute' : 'Mute' }}
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
