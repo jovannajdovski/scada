@@ -51,7 +51,7 @@ namespace webapi.Controllers
             List<AnalogInput> analogInputs = _analogInputService.GetAllScanningAnalogInputs();
             List<DigitalInput> digitalInputs = _digitalInputService.GetAllScanningDigitalInputs();
             List<TrendingResponseDTO> trendingData = new List<TrendingResponseDTO>();
-            Console.WriteLine("Trending");
+
             foreach (var analogInput in analogInputs)
                 trendingData.Add(new TrendingResponseDTO(analogInput, _alarmTriggerService.GetAnalogInputPriority(analogInput)));
 

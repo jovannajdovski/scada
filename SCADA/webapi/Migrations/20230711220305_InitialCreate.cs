@@ -189,7 +189,15 @@ namespace webapi.Migrations
             migrationBuilder.InsertData(
              table: "Alarms",
              columns: new[] { "Type", "Priority", "Limit", "AnalogInputId", "isMuted" },
-             values: new object[] { 0, 0, 3, 1, true });
+             values: new object[] { 1, 2, 950, 1, false });
+            migrationBuilder.InsertData(
+             table: "Alarms",
+             columns: new[] { "Type", "Priority", "Limit", "AnalogInputId", "isMuted" },
+             values: new object[] { 1, 1, 950, 2, false });
+            migrationBuilder.InsertData(
+             table: "Alarms",
+             columns: new[] { "Type", "Priority", "Limit", "AnalogInputId", "isMuted" },
+             values: new object[] { 0, 0, 150, 1, false });
 
             migrationBuilder.InsertData(
              table: "AlarmsTriggers",

@@ -93,9 +93,6 @@ td {
   font-weight: bold;
 }
 
-tr:nth-child(even) {
-  background-color: rgba(229, 229, 229, 0.2);
-}
 
 tr:hover {
   background-color: rgba(197, 197, 197, 0.2);

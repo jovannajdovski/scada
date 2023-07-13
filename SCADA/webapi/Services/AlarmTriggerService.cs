@@ -22,10 +22,9 @@ namespace webapi.Services
         public string GetAnalogInputPriority(AnalogInput analogInput)
         {
             List<AlarmTrigger> alarmTriggers = _alarmTriggerRepository.GetAlarmsTriggersForAnalogInput(DateTime.Now.AddMinutes(-5), DateTime.Now, analogInput);
-            Console.WriteLine("Priority");
+            
             if (alarmTriggers.Count > 0)
             {
-                Console.WriteLine("Priority" + alarmTriggers.First().Alarm.Priority.ToString());
                 return alarmTriggers.First().Alarm.Priority.ToString();
             }
             else

@@ -52,7 +52,7 @@ namespace webapi.Services
         public void UpdateAnalogInput(AnalogInput analogInput)
         {
             _analogInputRepository.Update(analogInput);
-            _alarmService.TriggerAlarms(analogInput);
+            //_alarmService.TriggerAlarms(analogInput);
         }
 
         public void DeleteAnalogInput(int id)
