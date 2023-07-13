@@ -17,6 +17,10 @@ namespace webapi.Services
         Alarm Create(AlarmDTO alarmDTO);
 
         void TriggerAlarms(AnalogInput analogInput);
+
+        List<Alarm> GetAllAlarms();
+
+        void Remove(int id);
     }
 
     public class AlarmService : IAlarmService
@@ -113,6 +117,20 @@ namespace webapi.Services
             trigger.DateTime = DateTime.Now;
             _alarmTriggerRepository.AddTrigger(trigger);
             _configurationFileService.AddAlarm(alarm, trigger.DateTime);
+        }
+
+        public List<Alarm> GetAllAlarms()
+        {
+            return _alarmRepository.GetAllAlarms();
+        }
+
+        public void Remove(int id)
+        {
+            Alarm alarm = _alarmRepository.GetAlarmById(id);
+            if (alarm != null)
+            {
+                _alarmRepository.Remove(alarm);
+            }
         }
     }
 }
